@@ -1,6 +1,6 @@
 #/*============================================================================
 #
-#  MyProject: A software package for whatever....
+#  MyProject: A software package for whatever.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #

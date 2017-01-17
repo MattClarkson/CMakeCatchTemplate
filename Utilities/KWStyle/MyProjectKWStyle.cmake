@@ -1,6 +1,6 @@
 #/*============================================================================
 #
-#  MyProject: A software platform for medical image computing.
+#  MyProject: A software package for whatever.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #

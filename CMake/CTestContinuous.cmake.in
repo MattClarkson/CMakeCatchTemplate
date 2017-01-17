@@ -1,11 +1,23 @@
+#/*============================================================================
+#
+#  MyProject: A software package for whatever.
+#
+#  Copyright (c) University College London (UCL). All rights reserved.
+#
+#  This software is distributed WITHOUT ANY WARRANTY; without even
+#  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+#  PURPOSE.
+#
+#  See LICENSE.txt in the top level directory for details.
+#
+#============================================================================*/
+
 set(CTEST_SOURCE_DIRECTORY "@CMAKE_SOURCE_DIR@")
 set(CTEST_BINARY_DIRECTORY "@CMAKE_BINARY_DIR@")
 set(CTEST_CMAKE_GENERATOR "@CMAKE_GENERATOR@")
 set(CTEST_BUILD_NAME "@CTEST_BUILD_NAME@")
 set(CTEST_GIT_COMMAND "@GIT_EXECUTABLE@")
 set(MYPROJECT_BRANCH_NAME "@MYPROJECT_BRANCH_NAME@")
-
-set(ENV{MYPROJECT_DRC_ANALYZE} "ON")
 
 find_program(HOSTNAME_CMD NAMES hostname)
 exec_program("${HOSTNAME_CMD}" ARGS OUTPUT_VARIABLE HOSTNAME)
@@ -129,24 +141,6 @@ if ("${CTEST_CMAKE_GENERATOR}" STREQUAL "Unix Makefiles")
 endif()
 
 set(PARALLEL_LEVEL ${cpu_cores})
-
-# Excluded from the continuous tests because of the long running time.
-# They are tested by the nightly builds.
-set(tests_to_exclude "FFD-Reg-MR")
-
-# Tests excluded on Windows because of concurrency bugs in ITK output window.
-# See #3497 for details.
-if (WIN32)
-  set(tests_to_exclude "${tests_to_exclude}|CTE-Stream-Int")
-endif()
-
-if (APPLE)
-  exec_program("sw_vers" ARGS "-productVersion" OUTPUT_VARIABLE osx_version)
-  if (osx_version VERSION_LESS "10.10")
-    message("Disabling microservices module autoloading feature on Mac OS X ${osx_version}. See #4230 for details.")
-    set(ENV{US_DISABLE_AUTOLOADING} "1")
-  endif()
-endif()
 
 ctest_start(Continuous TRACK ${group_name})
 ctest_build()

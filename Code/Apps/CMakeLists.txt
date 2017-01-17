@@ -1,6 +1,6 @@
 #/*============================================================================
 #
-#  MyProject: A software package for camera calibration.
+#  MyProject: A software package for whatever.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #
@@ -11,6 +11,7 @@
 #  See LICENSE.txt in the top level directory for details.
 #
 #============================================================================*/
+
 set(MYPROJECT_APPS
   mpMyFirstApp
 )

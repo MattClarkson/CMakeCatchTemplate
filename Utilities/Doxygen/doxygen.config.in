@@ -251,18 +251,18 @@ WARN_FORMAT           = "$file:$line: $text"
 #---------------------------------------------------------------------------
 
 # The INPUT tag can be used to specify the files and/or directories that
-# contain documented source files. You may enter file names like "myfile.cxx"
+# contain documented source files. You may enter file names like "myfile.cpp"
 # or directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
 INPUT    = @CMAKE_SOURCE_DIR@/Documentation @CMAKE_SOURCE_DIR@/Code @CMAKE_BINARY_DIR@/Doxygen
 
 # If the value of the INPUT tag contains directories, you can use the 
-# FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cxx 
+# FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
 # and *.h) to filter out the source-files in the directories. If left 
 # blank all files are included. 
 
-FILE_PATTERNS         = *.h *.cxx *.dox
+FILE_PATTERNS         = *.h *.cpp *.dox
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories 
 # should be searched for input files as well. Possible values are YES and NO. 
@@ -274,7 +274,7 @@ RECURSIVE             = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag. 
 
-EXCLUDE               = @CMAKE_SOURCE_DIR@/Code/Internal
+EXCLUDE               =
               
 # If the value of the INPUT tag contains directories, you can use the 
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude 
@@ -287,13 +287,10 @@ EXCLUDE_PATTERNS      = *_p.h
 # the \include command). 
 
 EXAMPLE_PATH     = @CMAKE_BINARY_DIR@/LICENSE.txt \
-                   @CMAKE_BINARY_DIR@/LICENSE_OpenCV.txt \
-                   @CMAKE_BINARY_DIR@/LICENSE_Eigen.txt \
-                   @CMAKE_BINARY_DIR@/LICENSE_AprilTags.txt \
-                   @CMAKE_BINARY_DIR@/LICENSE_ITK.txt \
+                   @CMAKE_BINARY_DIR@/LICENSE_Eigen.txt
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the 
-# EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cxx 
+# EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
 # and *.h) to filter out the source-files in the directories. If left 
 # blank all files are included. 
 
@@ -522,107 +519,7 @@ INCLUDE_PATH          =
 # or name=definition (no spaces). If the definition and the = are 
 # omitted =1 is assumed. 
 
-PREDEFINED  =  "itkNotUsed(x)="\
-               "itkSetMacro(name,type)= \
-                  virtual void Set##name (type _arg);" \
-               "itkGetMacro(name,type)= \
-                  virtual type Get##name ();" \
-               "itkGetConstMacro(name,type)= \
-                  virtual type Get##name () const;" \
-               "itkSetStringMacro(name)= \
-                  virtual void Set##name (const char* _arg);" \
-               "itkGetStringMacro(name)= \
-                  virtual const char* Get##name () const;" \
-               "itkSetClampMacro(name,type,min,max)= \
-                  virtual void Set##name (type _arg);" \
-               "itkSetObjectMacro(name,type)= \
-                  virtual void Set##name (type* _arg);" \
-               "itkGetObjectMacro(name,type)= \
-                  virtual type* Get##name ();" \
-               "itkSetConstObjectMacro(name,type)= \
-                  virtual void Set##name ( const type* _arg);" \
-               "itkGetConstObjectMacro(name,type)= \
-                  virtual const type* Get##name ();" \
-               "itkGetConstReferenceMacro(name,type)= \
-                  virtual const type& Get##name ();" \
-               "itkGetConstReferenceObjectMacro(name,type)= \
-                  virtual const type::Pointer& Get##name () const;" \
-               "itkBooleanMacro(name)= \
-                  virtual void name##On (); \
-                  virtual void name##Off ();" \
-               "itkSetVector2Macro(name,type)= \
-                  virtual void Set##name (type _arg1, type _arg2) \
-                  virtual void Set##name (type _arg[2]);" \
-               "itkGetVector2Macro(name,type)= \
-                  virtual type* Get##name () const; \
-                  virtual void Get##name (type& _arg1, type& _arg2) const; \
-                  virtual void Get##name (type _arg[2]) const;" \
-               "itkSetVector3Macro(name,type)= \
-                  virtual void Set##name (type _arg1, type _arg2, type _arg3) \
-                  virtual void Set##name (type _arg[3]);" \
-               "itkGetVector3Macro(name,type)= \
-                  virtual type* Get##name () const; \
-                  virtual void Get##name (type& _arg1, type& _arg2, type& _arg3) const; \
-                  virtual void Get##name (type _arg[3]) const;" \
-               "itkSetVector4Macro(name,type)= \
-                  virtual void Set##name (type _arg1, type _arg2, type _arg3, type _arg4) \
-                  virtual void Set##name (type _arg[4]);" \
-               "itkGetVector4Macro(name,type)= \
-                  virtual type* Get##name () const; \
-                  virtual void Get##name (type& _arg1, type& _arg2, type& _arg3, type& _arg4) const; \
-                  virtual void Get##name (type _arg[4]) const;" \
-               "itkSetVector6Macro(name,type)= \
-                  virtual void Set##name (type _arg1, type _arg2, type _arg3, type _arg4, type _arg5, type _arg6) \
-                  virtual void Set##name (type _arg[6]);" \
-               "itkGetVector6Macro(name,type)= \
-                  virtual type* Get##name () const; \
-                  virtual void Get##name (type& _arg1, type& _arg2, type& _arg3, type& _arg4, type& _arg5, type& _arg6) const; \
-                  virtual void Get##name (type _arg[6]) const;" \
-               "itkSetVectorMacro(name,type,count)= \
-                  virtual void Set##name(type data[]);" \
-               "itkGetVectorMacro(name,type,count)= \
-                  virtual type* Get##name () const;" \
-               "itkNewMacro(type)= \
-                  static Pointer New();" \
-               "itkTypeMacro(thisClass,superclass)= \
-                  virtual const char *GetClassName() const;" \
-               "itkConceptMacro(name,concept)= \
-                  enum { name = 0 };" \
-               "ITK_NUMERIC_LIMITS= \
-                  std::numeric_limits" \
-               "ITK_TYPENAME= \
-                  typename" \
-               "FEM_ABSTRACT_CLASS(thisClass,parentClass)= \
-                  public:                                               \
-                    /** Standard "Self" typedef.*/                      \
-                    typedef thisClass Self;                             \
-                    /** Standard "Superclass" typedef. */               \
-                    typedef parentClass Superclass;                     \
-                    /** Pointer or SmartPointer to an object. */        \
-                    typedef Self* Pointer;                              \
-                    /** Const pointer or SmartPointer to an object. */  \
-                    typedef const Self* ConstPointer;                   \
-                  private:"                                             \
-               "FEM_CLASS(thisClass,parentClass)= \
-                  FEM_ABSTRACT_CLASS(thisClass,parentClass)             \
-                  public:                                               \
-                    /** Create a new object from the existing one  */   \
-                    virtual Baseclass::Pointer Clone() const;           \
-                    /** Class ID for FEM object factory */              \
-                    static const int CLID;                              \
-                    /** Virtual function to access the class ID */      \
-                    virtual int ClassID() const                         \
-                      { return CLID; }                                  \
-                    /** Object creation in an itk compatible way */     \
-                    static Self::Pointer New()                          \
-                      { return new Self(); }                            \
-                  private:"                                             \
-    "FREEVERSION" "ERROR_CHECKING"                          \
-                "HAS_TIFF" "HAS_JPEG" "HAS_NETLIB" "HAS_PNG" "HAS_ZLIB" \
-                "HAS_GLUT" "HAS_QT"                                     \
-               "VCL_USE_NATIVE_STL=1" "VCL_USE_NATIVE_COMPLEX=1"        \
-               "VCL_HAS_BOOL=1" "VXL_BIG_ENDIAN=1" "VXL_LITTLE_ENDIAN=0"\
-               "VNL_DLL_DATA=" "size_t=vcl_size_t"
+PREDEFINED  =
 
 # If the EXPAND_ONLY_PREDEF and MACRO_EXPANSION tags are both set to YES 
 # then the macro expansion is limited to the macros specified with the 
