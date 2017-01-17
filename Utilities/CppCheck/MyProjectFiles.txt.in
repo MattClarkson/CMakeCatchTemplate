@@ -1,0 +1,2 @@
+@CMAKE_SOURCE_DIR@/Code/mp*.h
+@CMAKE_SOURCE_DIR@/Code/mp*.cpp

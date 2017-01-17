@@ -1,0 +1,2 @@
+@CMAKE_SOURCE_DIR@/Code/niftk*.h
+@CMAKE_SOURCE_DIR@/Code/mp*.cpp

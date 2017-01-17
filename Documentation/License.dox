@@ -1,0 +1,14 @@
+/**
+\page MyProjectLicense MyProject Licenses
+
+\li \ref LicenseEigen
+
+\section LicenseMyProject The MyProject License
+
+\include LICENSE.txt
+
+\section LicenseEigen The Eigen License
+
+\include LICENSE_Eigen.txt
+
+*/
