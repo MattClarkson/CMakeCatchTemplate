@@ -8,6 +8,8 @@ You can either
  1. Clone this repo, and use directly
  2. Export the project (without a .git folder), and then rename all instances of MYPROJECT,
  myproject, MyProject with names of your choice, and then create your own project.
+ Do this by editing `rename.sh` with the relevant names then running with `./rename.sh`.
+ _NOTE: Will not work (reliably) after running CMake in the directory for the first time._   
 
 Overview
 --------

@@ -30,7 +30,7 @@ OLD_NAMESPACE='mp';
 #### Replacements ###
 
 find_and_replace_string(){
-    git grep -lz "$1" './*' ':!/*.sh'  | xargs -0 perl -i'' -pE 's/'"$1"'/'"$2"'/g';
+    git grep -lz "$1" './*' ':!/*.sh' | xargs -0 perl -i'' -pE 's/'"$1"'/'"$2"'/g';
 }
 
 find_and_replace_filename(){
