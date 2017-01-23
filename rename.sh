@@ -33,6 +33,15 @@ find_and_replace_string(){
     git grep -lz "$1" './*' ':!/*.sh'  | xargs -0 perl -i'' -pE 's/'"$1"'/'"$2"'/g';
 }
 
+find_and_replace_filename(){
+    find . -name *$1* | sed -e "p;s/$1/$2/" | xargs -n2 mv
+}
+
+find_and_replace_filename_and_string(){
+    find_and_replace_filename $1 $2
+    find_and_replace_string $1 $2
+}
+
 # Change comment at top of each file describing project
 find_and_replace_string "${OLD_SHORT_DESCRIPTION}" "${NEW_PROJECT_NAME_CAMEL_CASE}"": ""${NEW_SHORT_DESCRIPTION}" ;
 
@@ -45,12 +54,27 @@ find_and_replace_string "$OLD_PROJECT_NAME_LOWER_CASE" "$NEW_PROJECT_NAME_LOWER_
 find_and_replace_string "$OLD_PROJECT_NAME_CAPS" "$NEW_PROJECT_NAME_CAPS"
 
 # namespace
-## Need to do summat clever here
-#find_and_replace_string "$OLD_NAMESPACE" "$NEW_NAMESPACE"
+find_and_replace_string "namespace $OLD_NAMESPACE" "namespace $NEW_NAMESPACE"
 
 # Filename replacements
-find . -name *${OLD_PROJECT_NAME_CAMEL_CASE}* | sed -e "p;s/${OLD_PROJECT_NAME_CAMEL_CASE}/${NEW_PROJECT_NAME_CAMEL_CASE}/" | xargs -n2 mv
-find . -name *${OLD_PROJECT_NAME_LOWER_CASE}* | sed -e "p;s/${OLD_PROJECT_NAME_LOWER_CASE}/${NEW_PROJECT_NAME_LOWER_CASE}/" | xargs -n2 mv
-find . -name *${OLD_PROJECT_NAME_CAPS}* | sed -e "p;s/${OLD_PROJECT_NAME_CAPS}/${NEW_PROJECT_NAME_CAPS}/" | xargs -n2 mv
+find_and_replace_filename "$OLD_PROJECT_NAME_CAMEL_CASE" "$NEW_PROJECT_NAME_CAMEL_CASE"
+find_and_replace_filename "$OLD_PROJECT_NAME_LOWER_CASE" "$NEW_PROJECT_NAME_LOWER_CASE"
+find_and_replace_filename "$OLD_PROJECT_NAME_CAPS" "$NEW_PROJECT_NAME_CAPS"
+
+# mp prefixes
+declare -a file_names=("BasicTypes.cpp" "BasicTypes.h"
+                "MyFunctions.cpp" "MyFunctions.h"
+                "Win32ExportHeader.h"
+                "BasicTest.cpp"
+                "CatchMain.cpp" "CatchMain.h"
+                "CommandLineArgsTest.cpp"
+                "BasicTest" "CommandLineArgsTest"
+                )
+
+for i in "${file_names[@]}"
+do
+    find_and_replace_filename_and_string "${OLD_NAMESPACE}${i}" "${NEW_NAMESPACE}${i}"
+done
+
 
 #mv ../CMakeCatchTemplate ../"${NEW_PROJECT_NAME}"
