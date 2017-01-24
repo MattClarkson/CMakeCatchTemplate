@@ -14,3 +14,6 @@
 /CMakeLists.txt.user*
 # Mac Finder:
 .DS_Store
+# CLion/IntelliJ
+*cmake-build-debug
+.idea/*
