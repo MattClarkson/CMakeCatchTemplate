@@ -30,7 +30,7 @@ OLD_NAMESPACE='mp';
 #### Replacements ###
 
 find_and_replace_string(){
-    git grep -lz "$1" './*' ':!/*.sh' | xargs -0 perl -i'' -pE 's/'"$1"'/'"$2"'/g';
+    git grep -lz --untracked "$1" './*' ':!/*.sh' | xargs -0 perl -i'' -pE 's/'"$1"'/'"$2"'/g';
 }
 
 find_and_replace_filename(){
@@ -55,6 +55,7 @@ find_and_replace_string "$OLD_PROJECT_NAME_CAPS" "$NEW_PROJECT_NAME_CAPS"
 
 # namespace
 find_and_replace_string "namespace $OLD_NAMESPACE" "namespace $NEW_NAMESPACE"
+find_and_replace_string "${OLD_NAMESPACE}::" "${NEW_NAMESPACE}::"
 
 # Filename replacements
 find_and_replace_filename "$OLD_PROJECT_NAME_CAMEL_CASE" "$NEW_PROJECT_NAME_CAMEL_CASE"
@@ -62,13 +63,15 @@ find_and_replace_filename "$OLD_PROJECT_NAME_LOWER_CASE" "$NEW_PROJECT_NAME_LOWE
 find_and_replace_filename "$OLD_PROJECT_NAME_CAPS" "$NEW_PROJECT_NAME_CAPS"
 
 # mp prefixes
-declare -a file_names=("BasicTypes.cpp" "BasicTypes.h"
+declare -a file_names=("BasicTypes.cpp" "BasicTypes_h" "BasicTypes.h"
+                "MyFunctions_h" "CatchMain_h"
                 "MyFunctions.cpp" "MyFunctions.h"
-                "Win32ExportHeader.h"
+                "Win32ExportHeader_h" "Win32ExportHeader.h"
                 "BasicTest.cpp"
                 "CatchMain.cpp" "CatchMain.h"
                 "CommandLineArgsTest.cpp"
                 "BasicTest" "CommandLineArgsTest"
+                "MyFirstApp"
                 )
 
 for i in "${file_names[@]}"
