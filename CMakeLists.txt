@@ -55,21 +55,90 @@ endif()
 
 
 ######################################################################
+# Make sure Git is available.
+######################################################################
+find_package(Git REQUIRED)
+if (WIN32)
+  set(GITCOMMAND ${GIT_EXECUTABLE})
+endif()
+
+
+######################################################################
 # Setup the path to load CMake macros, and extra CMake files.
 ######################################################################
 set(CMAKE_MODULE_PATH
+    ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_BINARY_DIR}
     ${CMAKE_MODULE_PATH}
    )
+include(mitkFunctionCheckCompilerFlags)
+
+
+
+######################################################################
+# Choose C++ standard
+######################################################################
+set(MYPROJECT_CXX_STANDARD 11)
+set(CMAKE_CXX_EXTENSIONS 0)
+set(CMAKE_CXX_STANDARD ${MYPROJECT_CXX_STANDARD})
+set(CMAKE_CXX_STANDARD_REQUIRED 1)
+
+# This is necessary to avoid problems with compile feature checks.
+# CMAKE_CXX_STANDARD seems to only set the -std=c++11 flag for targets.
+# However, compile flag checks also need to be done with -std=c++11.
+# The MYPROJECT_CXX11_FLAG variable is also used for external projects
+# build during the MYPROJECT super-build.
+mitkFunctionCheckCompilerFlags("-std=c++11" MYPROJECT_CXX11_FLAG)
+if(NOT MYPROJECT_CXX11_FLAG)
+  # Older gcc compilers use -std=c++0x
+  mitkFunctionCheckCompilerFlags("-std=c++0x" MYPROJECT_CXX11_FLAG)
+endif()
 
 
 ######################################################################
 # Build options.
 ######################################################################
 option(BUILD_TESTING "Build Unit tests." ON)
-option(BUILD_SHARED_LIBS "Build Shared Libraries" ON)
+option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 if(WIN32 AND NOT BUILD_SHARED_LIBS)
   add_definitions(-DMYPROJECT_STATIC)
+endif()
+
+
+######################################################################
+# Force MSVC runtime. Depends on BUILD_SHARED_LIBS
+######################################################################
+if(MSVC)
+  set(variables
+    CMAKE_C_FLAGS_DEBUG
+    CMAKE_C_FLAGS_MINSIZEREL
+    CMAKE_C_FLAGS_RELEASE
+    CMAKE_C_FLAGS_RELWITHDEBINFO
+    CMAKE_CXX_FLAGS_DEBUG
+    CMAKE_CXX_FLAGS_MINSIZEREL
+    CMAKE_CXX_FLAGS_RELEASE
+    CMAKE_CXX_FLAGS_RELWITHDEBINFO
+  )
+  if(BUILD_SHARED_LIBS)
+    message(STATUS "Forcing MSVC to use dynamic runtime variables.")
+    foreach(variable ${variables})
+      if(${variable} MATCHES "/MT")
+        string(REGEX REPLACE "/MT" "/MD" ${variable} "${${variable}}")
+      endif()
+    endforeach()
+  else()
+    message(STATUS "Forcing MSVC to use static runtime variables.")
+    foreach(variable ${variables})
+      if(${variable} MATCHES "/MD")
+        string(REGEX REPLACE "/MD" "/MT" ${variable} "${${variable}}")
+      endif()
+    endforeach()
+  endif()
+  message(STATUS "Initial build flags:")
+  foreach(variable ${variables})
+    message(STATUS "  '${variable}': ${${variable}}")
+  endforeach()
+  message(STATUS "")
 endif()
 
 
