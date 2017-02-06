@@ -209,7 +209,7 @@ include(mpExternalProjectHelperMacros)
 ######################################################################
 # External projects
 ######################################################################
-foreach(p OpenCV)
+foreach(p Eigen OpenCV)
   include("CMake/ExternalProjects/${p}.cmake")
 endforeach()
 
@@ -220,7 +220,7 @@ endforeach()
 if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET)
 
   set(proj MyProject)
-  set(proj_DEPENDENCIES ${OpenCV_DEPENDS})
+  set(proj_DEPENDENCIES ${OpenCV_DEPENDS} ${Eigen_DEPENDS})
 
   ExternalProject_Add(${proj}
     LIST_SEPARATOR ^^
@@ -245,6 +245,10 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DCMAKE_VERBOSE_MAKEFILE:BOOL=${CMAKE_VERBOSE_MAKEFILE}
       -DBUILD_TESTING:BOOL=${BUILD_TESTING} # The value set in EP_COMMON_ARGS normally forces this off, but we may need MyProject to be on.
       -DBUILD_SUPERBUILD:BOOL=OFF           # Must force this to be off, or else you will loop forever.
+      -DBUILD_Eigen:BOOL=${BUILD_Eigen}
+      -DBUILD_OpenCV:BOOL=${BUILD_OpenCV}
+      -DEigen_ROOT:PATH=${Eigen_DIR}
+      -DEigen_INCLUDE_DIR:PATH=${Eigen_INCLUDE_DIR}
       -DOpenCV_DIR:PATH=${OpenCV_DIR}
       -DOPENCV_WITH_FFMPEG:BOOL=${OPENCV_WITH_FFMPEG}
       -DOPENCV_WITH_NONFREE:BOOL=${OPENCV_WITH_NONFREE}

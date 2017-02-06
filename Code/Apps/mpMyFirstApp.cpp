@@ -15,8 +15,15 @@
 #include <mpMyFunctions.h>
 #include <iostream>
 
+#ifdef BUILD_Eigen
+#include <Eigen/Dense>
+#endif
+
 int main(int argc, char** argv)
 {
+#ifdef BUILD_Eigen
+  Eigen::MatrixXd m(2,2);
+#endif
   std::cout << "Calculating ... " << mp::MyFirstFunction(1) << std::endl;
   return 0;
 }

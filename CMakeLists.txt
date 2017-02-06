@@ -42,7 +42,8 @@ set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
 # We have a super-build option. (Terminology comes from Kitware/ITK/MITK etc).
 ##############################################################################
 option(BUILD_SUPERBUILD "Build MyProject and the projects it depends on via SuperBuild.cmake." OFF)
-option(BUILD_OPENCV "Build OpenCV." OFF)
+option(BUILD_OpenCV "Build OpenCV." OFF)
+option(BUILD_Eigen "Build Eigen." OFF)
 
 if (BUILD_SUPERBUILD)
   project(MyProject-superbuild)
@@ -227,20 +228,27 @@ set(ALL_THIRD_PARTY_LIBRARIES)
 ######################################################################
 # Add Optional Requirements
 ######################################################################
-if(BUILD_OPENCV)
+if(BUILD_Eigen)
+  find_package(Eigen REQUIRED)
+  include_directories(${Eigen_INCLUDE_DIR})
+  add_definitions(-DBUILD_Eigen)
+  message("Matt, eigen should be on")
+endif()
+if(BUILD_OpenCV)
   find_package(OpenCV REQUIRED)
   include_directories(${OpenCV_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${OpenCV_LIBS})
+  add_definitions(-DBUILD_OpenCV)
 endif()
 
 set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})
-
 
 ######################################################################
 # Copy some reference files to output.
 ######################################################################
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/License.dox ${CMAKE_BINARY_DIR}/Doxygen/License.dox)
 configure_file(${CMAKE_SOURCE_DIR}/LICENSE.txt ${CMAKE_BINARY_DIR}/LICENSE.txt @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMake/FindEigen.cmake ${CMAKE_BINARY_DIR}/FindEigen.cmake @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt)
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/OpenCV.txt ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt)
 configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY)
