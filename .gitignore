@@ -2,6 +2,8 @@
 *~
 # Mercurial:
 .hg*
+# IntelliJ config files:
+/.idea
 # Eclipse config files:
 /.cproject
 /.project

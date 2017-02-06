@@ -211,6 +211,23 @@ include(${CMAKE_SOURCE_DIR}/Utilities/CppCheck/MyProjectCppCheck.cmake)
 
 
 ######################################################################
+# If we are under Windows, create batch files which correctly
+# set up the environment for Visual Studio. These are only used to
+# start VS when developing. Not used in the final installation package.
+######################################################################
+if(WIN32)
+  include(mitkFunctionCreateWindowsBatchScript)
+  set(VS_SOLUTION_FILE "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.sln")
+  foreach(VS_BUILD_TYPE ${CMAKE_CONFIGURATION_TYPES})
+    mitkFunctionCreateWindowsBatchScript("${CMAKE_SOURCE_DIR}/CMake/StartVS.bat.in"
+      ${PROJECT_BINARY_DIR}/StartVS_${VS_BUILD_TYPE}.bat
+      ${VS_BUILD_TYPE})
+    message( "CreateWindowsBatchScript: Creating ${PROJECT_BINARY_DIR}/StartVS_${VS_BUILD_TYPE}.bat" )
+  endforeach()
+endif(WIN32)
+
+
+######################################################################
 # Add code folders.
 ######################################################################
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
