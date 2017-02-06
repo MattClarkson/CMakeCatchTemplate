@@ -288,6 +288,7 @@ EXCLUDE_PATTERNS      = *_p.h
 
 EXAMPLE_PATH     = @CMAKE_BINARY_DIR@/LICENSE.txt \
                    @CMAKE_BINARY_DIR@/LICENSE_Eigen.txt \
+                   @CMAKE_BINARY_DIR@/LICENSE_Boost.txt \
                    @CMAKE_BINARY_DIR@/LICENSE_OpenCV.txt
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the 

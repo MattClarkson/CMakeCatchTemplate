@@ -13,6 +13,7 @@
 /*.creator.user
 /*.files
 /*.includes
+/*.autosave
 /CMakeLists.txt.user*
 # Mac Finder:
 .DS_Store

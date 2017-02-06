@@ -11,6 +11,10 @@
 
 \include LICENSE_Eigen.txt
 
+\section LicenseBoost The Boost License
+
+\include LICENSE_Boost.txt
+
 \section LicenseOpenCV The OpenCV License
 
 \include LICENSE_OpenCV.txt

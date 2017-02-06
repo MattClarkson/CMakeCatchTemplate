@@ -20,7 +20,8 @@ The features provided are:
 Build Instructions
 -----------------------------
 
-
+This project contains a Meta-Build (a.k.a SuperBuild) to build Eigen, Boost and OpenCV. The Meta-Build
+defaults to OFF.
 Preferred Branching Workflow
 ----------------------------
 
