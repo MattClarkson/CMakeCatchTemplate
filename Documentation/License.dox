@@ -1,7 +1,10 @@
 /**
 \page MyProjectLicense MyProject Licenses
 
+\li \ref LicenseMyProject
 \li \ref LicenseEigen
+\li \ref LicenseBoost
+\li \ref LicenseOpenCV
 
 \section LicenseMyProject The MyProject License
 
