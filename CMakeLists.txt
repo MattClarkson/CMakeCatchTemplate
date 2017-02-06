@@ -41,10 +41,10 @@ set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
 ##############################################################################
 # We have a super-build option. (Terminology comes from Kitware/ITK/MITK etc).
 ##############################################################################
-option(BUILD_SUPERBUILD "Build MyProject and the projects it depends on via SuperBuild.cmake." OFF)
+option(BUILD_SUPERBUILD "Build MyProject and the projects it depends on via SuperBuild.cmake." ON)
 option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_Eigen "Build Eigen." OFF)
-option(BUILD_Boost "Build Boost." OFF)
+option(BUILD_Boost "Build Boost." ON)
 
 if (BUILD_SUPERBUILD)
   project(MyProject-superbuild)
