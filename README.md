@@ -20,8 +20,39 @@ The features provided are:
 Build Instructions
 -----------------------------
 
-This project contains a Meta-Build (a.k.a SuperBuild) to build Eigen, Boost and OpenCV. The Meta-Build
-defaults to OFF.
+This project can be configured to build against Eigen, Boost and OpenCV.
+These were chosen as an example on how to use CMake, and some common
+C++ projects. These dependencies are optional, and this project
+will compile without them.
+
+Furthermore, these dependencies can be downloaded and built,
+or the user can specify directories of previously compiled
+libraries.
+
+To download and build dependencies, use CMake to configure:
+
+  * BUILD_SUPERBUILD:BOOL=ON
+
+Then to select any of Eigen, Boost or OpenCV, use CMake to set:
+
+  * BUILD_Eigen:BOOL=ON|OFF
+  * BUILD_Boost:BOOL=ON|OFF
+  * BUILD_OpenCV:BOOL=ON|OFF
+
+So, if BUILD_SUPERBUILD=OFF, then CMake will just try finding
+locally installed versions rather then downloading them.
+
+To switch between static/dynamic linking, use CMake to set:
+
+  * BUILD_SHARED_LIBS:BOOL=ON|OFF
+
+To switch between Debug and Release mode, use CMake to set:
+
+  * CMAKE_BUILD_TYPE:STRING=Debug|Release
+
+Note: Only Debug and Release are supported.
+
+
 Preferred Branching Workflow
 ----------------------------
 
