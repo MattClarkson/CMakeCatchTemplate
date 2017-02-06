@@ -25,7 +25,6 @@
 
 #ifdef BUILD_OpenCV
 #include <cv.h>
-
 #endif
 
 int main(int argc, char** argv)
