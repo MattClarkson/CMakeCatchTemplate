@@ -16,7 +16,17 @@ The features provided are:
  1. Some feature
  2. Another feature
  
- 
+
+Tested On
+-----------------------------
+
+ * Windows - Windows 8, VS2012, CMake 3.3.1
+ * Linux - Centos 7, g++ 4.8.5, CMake 3.5.1
+ * Mac - OSX 10.10.5, clang 6.0, CMake 3.6.3
+
+With all other versions - good luck.
+
+
 Build Instructions
 -----------------------------
 
