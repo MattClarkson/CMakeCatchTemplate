@@ -228,7 +228,11 @@ endif(WIN32)
 # Add code folders.
 ######################################################################
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+foreach(type LIBRARY RUNTIME ARCHIVE)
+  set(output_dir ${CMAKE_BINARY_DIR}/bin)
+  set(CMAKE_${type}_OUTPUT_DIRECTORY ${output_dir} CACHE INTERNAL "Single output directory for building all libraries.")
+  mark_as_advanced(CMAKE_${type}_OUTPUT_DIRECTORY)
+endforeach()
 include_directories(${CMAKE_SOURCE_DIR}/Code/)
 add_subdirectory(Code)
 add_subdirectory(Documentation)
