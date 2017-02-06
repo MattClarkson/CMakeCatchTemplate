@@ -28,10 +28,10 @@
   </Header>
   <Typedefs>[A-Z],false</Typedefs>
   <IfNDefDefine>[NameOfClass]_[Extension]</IfNDefDefine>
-  <Namespace>niftk</Namespace>
+  <Namespace>mp</Namespace>
   <NameOfClass>
     <name>[NameOfClass]</name>
-    <prefix>niftk</prefix>
+    <prefix>mp</prefix>
   </NameOfClass>
   <Comments>
     <begin>/**</begin>
