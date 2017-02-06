@@ -15,7 +15,6 @@
 set(MYPROJECT_SRCS
   mpBasicTypes.cpp
   mpMyFunctions.cpp
-
 )
 
 add_library(myproject ${MYPROJECT_SRCS})

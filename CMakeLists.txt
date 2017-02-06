@@ -30,7 +30,27 @@ foreach(policy ${project_policies})
   endif()
 endforeach()
 
-project(MyProject VERSION 00.00.1)
+
+##############################################################################
+# Further variables for the external project names and locations are defined
+# in the external project CMake files under CMake/ExternalProjects.
+##############################################################################
+set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
+
+
+##############################################################################
+# We have a super-build option. (Terminology comes from Kitware/ITK/MITK etc).
+##############################################################################
+option(BUILD_SUPERBUILD "Build MyProject and the projects it depends on via SuperBuild.cmake." OFF)
+option(BUILD_OPENCV "Build OpenCV." OFF)
+
+if (BUILD_SUPERBUILD)
+  project(MyProject-superbuild)
+  set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
+  set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
+else()
+  project(MyProject VERSION 00.00.1)
+endif()
 
 
 ######################################################################
@@ -71,6 +91,7 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_BINARY_DIR}
     ${CMAKE_MODULE_PATH}
    )
+include(mitkMacroEmptyExternalProject)
 include(mitkFunctionCheckCompilerFlags)
 
 
@@ -164,22 +185,55 @@ endif(BUILD_TESTING)
 
 
 ######################################################################
+# Now, if required, do the SuperBuild
+# If we are doing SuperBuild
+#   We configure up to this point (see the return() statement)
+#   and then we call SuperBuild.cmake, which builds all the
+#   dependencies as CMake ExternalProjects, and then also builds
+#   MyProject as an ExternalProject. However instead of downloading
+#   a tar file, you set the SOURCE_DIR to be THIS project, and force
+#   the BUILD_SUPERBUILD flag to be off (to avoid infinite loop).
+#
+# If we are NOT doing superbuild, then the next statement has no
+# effect, and the build goes on the same as before.
+######################################################################
+if(BUILD_SUPERBUILD)
+  include("CMake/SuperBuild.cmake")
+  return()
+endif(BUILD_SUPERBUILD)
+
+
+######################################################################
+# End of SuperBuild. Print out where the source and binary folders
+# are, just to make it really explicit... well, explicit to the user
+# that bothers to read these messages! :-)
+######################################################################
+message("CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}")
+message("CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
+
+
+######################################################################
+# Organise module/plugin/etc projects better within the IDE.
+######################################################################
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+
+######################################################################
 # Add Mandatory Requirements
 ######################################################################
 set(ALL_THIRD_PARTY_LIBRARIES)
-
-# e.g. for OpenCV
-# find_package(OpenCV REQUIRED)
-# include_directories(${OpenCV_INCLUDE_DIRS})
-# list(APPEND ALL_THIRD_PARTY_LIBRARIES ${OpenCV_LIBS})
 
 
 ######################################################################
 # Add Optional Requirements
 ######################################################################
+if(BUILD_OPENCV)
+  find_package(OpenCV REQUIRED)
+  include_directories(${OpenCV_INCLUDE_DIRS})
+  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${OpenCV_LIBS})
+endif()
+
 set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})
-# e.g. for ITK
-# find_package(ITK REQUIRED)
 
 
 ######################################################################
@@ -188,6 +242,7 @@ set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/License.dox ${CMAKE_BINARY_DIR}/Doxygen/License.dox)
 configure_file(${CMAKE_SOURCE_DIR}/LICENSE.txt ${CMAKE_BINARY_DIR}/LICENSE.txt @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt)
+configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/OpenCV.txt ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt)
 configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY)
 
 

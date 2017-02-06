@@ -11,4 +11,8 @@
 
 \include LICENSE_Eigen.txt
 
+\section LicenseOpenCV The OpenCV License
+
+\include LICENSE_OpenCV.txt
+
 */
