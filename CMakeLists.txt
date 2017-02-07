@@ -264,7 +264,13 @@ if(BUILD_Boost)
   include_directories(${Boost_INCLUDE_DIRS})
   link_directories(${Boost_LIBRARY_DIRS})
   if(WIN32)
-    list(APPEND ALL_COMPILE_OPTIONS -DBOOST_ALL_DYN_LINK)
+    if(WITHIN_SUPERBUILD)
+      add_definitions(-DBoost_LIB_DIAGNOSTIC_DEFINITIONS)  # To get debug messages
+      add_definitions(-DBOOST_ALL_NO_LIB)                  # To stop auto-linking, which seems to be adding "lib" as library prefix in .obj files.
+    endif()
+    if(BUILD_SHARED)
+      list(APPEND ALL_COMPILE_OPTIONS -DBOOST_ALL_DYN_LINK)
+    endif()
   endif()
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${Boost_LIBRARIES})
   add_definitions(-DBUILD_Boost)
@@ -299,16 +305,14 @@ configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/doxygen.config.in ${CMAKE_B
 
 
 ######################################################################
-# If we are under Windows, create batch files which correctly
-# set up the environment for Visual Studio. These are only used to
-# start VS when developing. Not used in the final installation package.
+# Compilation specific stuff, like flags etc.
 ######################################################################
 if(WIN32)
-  set(VS_SOLUTION_FILE "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.sln")
-  foreach(VS_BUILD_TYPE ${CMAKE_CONFIGURATION_TYPES})
-    configure_file("${CMAKE_SOURCE_DIR}/CMake/StartVS.bat.in" ${PROJECT_BINARY_DIR}/StartVS_${VS_BUILD_TYPE}.bat @ONLY)
-    message( "CreateWindowsBatchScript: Creating ${PROJECT_BINARY_DIR}/StartVS_${VS_BUILD_TYPE}.bat" )
-  endforeach()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX /W2")
+  set(CMAKE_CXX_WARNING_LEVEL 2)
+  if(WITHIN_SUPERBUILD)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_LIB_PREFIX=\"\"")
+  endif(WITHIN_SUPERBUILD)
 endif(WIN32)
 
 
@@ -329,3 +333,18 @@ if(BUILD_TESTING)
   include_directories(${CMAKE_SOURCE_DIR}/Testing/)
   add_subdirectory(Testing)
 endif()
+
+
+######################################################################
+# If we are under Windows, create batch files which correctly
+# set up the environment for Visual Studio. These are only used to
+# start VS when developing. Not used in the final installation package.
+######################################################################
+if(WIN32)
+  set(VS_SOLUTION_FILE "${PROJECT_BINARY_DIR}/${PROJECT_NAME}.sln")
+  foreach(VS_BUILD_TYPE ${CMAKE_CONFIGURATION_TYPES})
+    configure_file("${CMAKE_SOURCE_DIR}/CMake/StartVS.bat.in" ${PROJECT_BINARY_DIR}/StartVS_${VS_BUILD_TYPE}.bat @ONLY)
+    message( "CreateWindowsBatchScript: Creating ${PROJECT_BINARY_DIR}/StartVS_${VS_BUILD_TYPE}.bat" )
+  endforeach()
+endif(WIN32)
+

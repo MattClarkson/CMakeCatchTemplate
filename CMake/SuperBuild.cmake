@@ -246,6 +246,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DCMAKE_VERBOSE_MAKEFILE:BOOL=${CMAKE_VERBOSE_MAKEFILE}
       -DBUILD_TESTING:BOOL=${BUILD_TESTING} # The value set in EP_COMMON_ARGS normally forces this off, but we may need MYPROJECT to be on.
       -DBUILD_SUPERBUILD:BOOL=OFF           # Must force this to be off, or else you will loop forever.
+      -DWITHIN_SUPERBUILD:BOOL=ON
       -DBUILD_Eigen:BOOL=${BUILD_Eigen}
       -DBUILD_Boost:BOOL=${BUILD_Boost}
       -DBUILD_OpenCV:BOOL=${BUILD_OpenCV}
