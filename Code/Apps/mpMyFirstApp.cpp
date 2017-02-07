@@ -21,6 +21,8 @@
 
 #ifdef BUILD_Boost
 #include <boost/math/special_functions/round.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/filesystem/path.hpp>
 #endif
 
 #ifdef BUILD_OpenCV
@@ -37,6 +39,8 @@ int main(int argc, char** argv)
 
 #ifdef BUILD_Boost
   std::cout << "Rounding to ... " << boost::math::round(0.123) << std::endl;
+  boost::posix_time::ptime startTime = boost::posix_time::second_clock::local_time();
+  boost::filesystem::path pathname( "/tmp/tmp.txt" );
 #endif
 
 #ifdef BUILD_OpenCV
