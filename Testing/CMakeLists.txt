@@ -33,4 +33,4 @@ endforeach()
 ##################################################################################################
 
 add_test(NoArgs ${EXECUTABLE_OUTPUT_PATH}/mpBasicTest)
-add_test(1File ${EXECUTABLE_OUTPUT_PATH}/mpCommandLineArgsTest input.txt)
+add_test(1File ${EXECUTABLE_OUTPUT_PATH}/mpCommandLineArgsTest ${DATA_DIR}/input.txt)
