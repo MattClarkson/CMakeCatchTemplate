@@ -27,7 +27,6 @@ The features provided are:
 Points 5 and 6 require you to have KWStyle and CppCheck installed and available
 on your system PATH.
 
-
 Tested On
 -----------------------------
 
@@ -74,6 +73,15 @@ To switch between Debug and Release mode, use CMake to set:
   * CMAKE_BUILD_TYPE:STRING=Debug|Release
 
 Note: Only Debug and Release are supported. 
+
+As mentioned in lectures, CMake will find 3rd party libraries using either
+  1. a Find<Module>.cmake included within CMake's distribution, e.g. Boost
+  2. a custom made Find<Module>.cmake, e.g. Eigen
+  3. using <Module>_DIR variable, e.g. OpenCV
+
+However, your host system is very likely to have a version of Boost that
+is different to the one assumed here. So if you want to turn Boost on,
+you should probably try and use the one provided by this SuperBuild.
 
 
 Preferred Branching Workflow
