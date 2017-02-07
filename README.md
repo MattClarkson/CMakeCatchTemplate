@@ -73,9 +73,11 @@ To switch between Debug and Release mode, use CMake to set:
 Note: Only Debug and Release are supported. 
 
 As mentioned in lectures, CMake will find 3rd party libraries using either
-  1. a Find<Module>.cmake included within CMake's distribution, e.g. Boost
-  2. a custom made Find<Module>.cmake, e.g. Eigen
-  3. using <Module>_DIR variable, e.g. OpenCV
+  1. a FindModule.cmake included within CMake's distribution, e.g. Boost
+  2. a custom made FindModule.cmake, e.g. Eigen
+  3. using Module_DIR variable, e.g. OpenCV
+
+(where Module is the name of your module, e.g. OpenCV, Boost).
 
 However, your host system is very likely to have a version of Boost that
 is different to the one assumed here. So if you want to turn Boost on,
