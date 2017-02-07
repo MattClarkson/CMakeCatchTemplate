@@ -23,9 +23,7 @@ The features provided are:
  4. A single command line application - to give the end user a functioning program.
  5. KWStyle to check some basic code style - for consistency
  6. CppCheck to check some code features - for performance, style and correctness
-
-Points 5 and 6 require you to have KWStyle and CppCheck installed and available
-on your system PATH.
+ 7. Doxygen config - for documentation
 
 Tested On
 -----------------------------
