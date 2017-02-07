@@ -1,6 +1,6 @@
 #/*============================================================================
 #
-#  NifTK: A software platform for medical image computing.
+#  MYPROJECT: A software package for whatever.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #
