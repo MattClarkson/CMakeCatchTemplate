@@ -37,6 +37,8 @@ Tested On
 
 With all other versions - good luck.
 
+Note: Installation and Packaging are not ready yet.
+
 
 Build Instructions
 -----------------------------
