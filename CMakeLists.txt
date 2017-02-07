@@ -242,11 +242,17 @@ set(ALL_THIRD_PARTY_LIBRARIES)
 # Add Optional Requirements
 ######################################################################
 if(BUILD_Eigen)
+  # Example of:
+  #   (a) Header only library
   find_package(Eigen REQUIRED)
   include_directories(${Eigen_INCLUDE_DIR})
   add_definitions(-DBUILD_Eigen)
 endif()
 if(BUILD_Boost)
+  # Example of:
+  #   (b) Standard, widely used library
+  #   (c) Mostly header library, some compiled libraries
+  #   (d) CMake probably has a standard FindBoost.cmake in its distribution.
   set(Boost_NO_BOOST_CMAKE ON)
   set(Boost_NO_SYSTEM_PATHS ON)
   if(BUILD_SHARED_LIBS)
@@ -264,6 +270,8 @@ if(BUILD_Boost)
   add_definitions(-DBUILD_Boost)
 endif()
 if(BUILD_OpenCV)
+  # Example of:
+  #   (e) CMake doesn't include OpenCV, but OpenCV_DIR passed in from SuperBuild.
   find_package(OpenCV REQUIRED)
   include_directories(${OpenCV_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${OpenCV_LIBS})
@@ -277,7 +285,6 @@ set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})
 ######################################################################
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/License.dox ${CMAKE_BINARY_DIR}/Doxygen/License.dox)
 configure_file(${CMAKE_SOURCE_DIR}/LICENSE.txt ${CMAKE_BINARY_DIR}/LICENSE.txt @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/CMake/FindEigen.cmake ${CMAKE_BINARY_DIR}/FindEigen.cmake @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt)
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Boost.txt ${CMAKE_BINARY_DIR}/LICENSE_Boost.txt)
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/OpenCV.txt ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt)

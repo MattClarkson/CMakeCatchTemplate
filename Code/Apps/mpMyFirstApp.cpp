@@ -29,6 +29,9 @@
 #include <cv.h>
 #endif
 
+/**
+ * \brief Demo file to check that #includes and library linkage is correct.
+ */
 int main(int argc, char** argv)
 {
 
