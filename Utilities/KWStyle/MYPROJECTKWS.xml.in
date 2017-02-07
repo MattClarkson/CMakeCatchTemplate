@@ -22,7 +22,7 @@
     <allowBlockLine>true</allowBlockLine>
   </Indent-->
   <Header>
-    <location>@CMAKE_SOURCE_DIR@/Utilities/KWStyle/MyProjectHeader.h</location>
+    <location>@CMAKE_SOURCE_DIR@/Utilities/KWStyle/MYPROJECTHeader.h</location>
     <checkSpacesEndOfLine>true</checkSpacesEndOfLine>
     <cvsFormat>false</cvsFormat>
   </Header>

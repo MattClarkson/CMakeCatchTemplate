@@ -1,6 +1,6 @@
 #/*============================================================================
 #
-#  MyProject: A software package for whatever.
+#  MYPROJECT: A software package for whatever.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #
@@ -67,23 +67,23 @@ IF(KWSTYLE_FOUND)
 #  Define file names
 #
 SET(KWSTYLE_CONFIGURATION_FILE 
-  ${PROJECT_BINARY_DIR}/Utilities/KWStyle/MyProjectKWS.xml)
+  ${PROJECT_BINARY_DIR}/Utilities/KWStyle/MYPROJECTKWS.xml)
 
 SET(KWSTYLE_MYPROJECT_FILES_LIST
-  ${PROJECT_BINARY_DIR}/Utilities/KWStyle/MyProjectFiles.txt)
+  ${PROJECT_BINARY_DIR}/Utilities/KWStyle/MYPROJECTFiles.txt)
 
 SET(KWSTYLE_MYPROJECT_OVERWRITE_FILE
-  ${PROJECT_SOURCE_DIR}/Utilities/KWStyle/MyProjectOverwrite.txt )
+  ${PROJECT_SOURCE_DIR}/Utilities/KWStyle/MYPROJECTOverwrite.txt )
 
 #
 # Configure the files
 #
 CONFIGURE_FILE(
-  ${PROJECT_SOURCE_DIR}/Utilities/KWStyle/MyProjectFiles.txt.in
+  ${PROJECT_SOURCE_DIR}/Utilities/KWStyle/MYPROJECTFiles.txt.in
   ${KWSTYLE_MYPROJECT_FILES_LIST})
 
 CONFIGURE_FILE(
-  ${PROJECT_SOURCE_DIR}/Utilities/KWStyle/MyProjectKWS.xml.in
+  ${PROJECT_SOURCE_DIR}/Utilities/KWStyle/MYPROJECTKWS.xml.in
   ${KWSTYLE_CONFIGURATION_FILE})
 
 

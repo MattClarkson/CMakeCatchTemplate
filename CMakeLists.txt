@@ -1,6 +1,6 @@
 #/*============================================================================
 #
-#  MyProject: A software package for whatever.
+#  MYPROJECT: A software package for whatever.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #
@@ -41,17 +41,17 @@ set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
 ##############################################################################
 # We have a super-build option. (Terminology comes from Kitware/ITK/MITK etc).
 ##############################################################################
-option(BUILD_SUPERBUILD "Build MyProject and the projects it depends on via SuperBuild.cmake." ON)
+option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via SuperBuild.cmake." ON)
 option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_Eigen "Build Eigen." OFF)
 option(BUILD_Boost "Build Boost." ON)
 
 if (BUILD_SUPERBUILD)
-  project(MyProject-superbuild)
+  project(MYPROJECT-superbuild)
   set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
   set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
 else()
-  project(MyProject VERSION 00.00.1)
+  project(MYPROJECT VERSION 00.00.1)
 endif()
 
 
@@ -174,7 +174,7 @@ mark_as_advanced(TCL_TCLSH DART_ROOT)
 enable_testing()
 
 if(BUILD_TESTING)
-  set(BUILDNAME "MyProject" CACHE STRING "Name of build on the dashboard")
+  set(BUILDNAME "MYPROJECT" CACHE STRING "Name of build on the dashboard")
   mark_as_advanced(BUILDNAME)
 
   # Setup file for setting custom ctest vars
@@ -192,7 +192,7 @@ endif(BUILD_TESTING)
 #   We configure up to this point (see the return() statement)
 #   and then we call SuperBuild.cmake, which builds all the
 #   dependencies as CMake ExternalProjects, and then also builds
-#   MyProject as an ExternalProject. However instead of downloading
+#   MYPROJECT as an ExternalProject. However instead of downloading
 #   a tar file, you set the SOURCE_DIR to be THIS project, and force
 #   the BUILD_SUPERBUILD flag to be off (to avoid infinite loop).
 #
@@ -272,15 +272,15 @@ configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/doxygen.config.in ${CMAKE_B
 
 
 ######################################################################
-# MyProject uses KWStyle for checking the coding style
+# MYPROJECT uses KWStyle for checking the coding style
 ######################################################################
-include(${CMAKE_SOURCE_DIR}/Utilities/KWStyle/MyProjectKWStyle.cmake)
+include(${CMAKE_SOURCE_DIR}/Utilities/KWStyle/MYPROJECTKWStyle.cmake)
 
 
 ######################################################################
-# MyProject uses CppCheck for static analysis
+# MYPROJECT uses CppCheck for static analysis
 ######################################################################
-include(${CMAKE_SOURCE_DIR}/Utilities/CppCheck/MyProjectCppCheck.cmake)
+include(${CMAKE_SOURCE_DIR}/Utilities/CppCheck/MYPROJECTCppCheck.cmake)
 
 
 ######################################################################

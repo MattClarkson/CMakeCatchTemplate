@@ -1,14 +1,14 @@
 /**
 
-\mainpage The MyProject (@MyProject_VERSION_MAJOR@.@MyProject_VERSION_MINOR@.@MyProject_VERSION_PATCH@) Documentation
+\mainpage The MYPROJECT (@MYPROJECT_VERSION_MAJOR@.@MYPROJECT_VERSION_MINOR@.@MYPROJECT_VERSION_PATCH@) Documentation
 
 Copyright (C) 2017 University College London (UCL). All rights reserved.
 
-\subpage MyProjectLicense
+\subpage MYPROJECTLicense
 
 \section MainPageIntro Introduction
 
-MyProject is a software library to perform whatever.
+MYPROJECT is a software library to perform whatever.
 
 Further information can be obtained via
 

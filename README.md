@@ -7,7 +7,7 @@ structure for a cmake/ctest and Catch based projects.
 You can either
  1. Clone this repo, and use directly
  2. Export the project (without a .git folder), and then rename all instances of MYPROJECT,
- myproject, MyProject with names of your choice, and then create your own project.
+ myproject, MYPROJECT with names of your choice, and then create your own project.
 
 Overview
 --------

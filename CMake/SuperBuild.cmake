@@ -1,6 +1,6 @@
 #/*============================================================================
 #
-#  MyProject: A software package for whatever.
+#  MYPROJECT: A software package for whatever.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #
@@ -46,12 +46,12 @@ set(EP_BASE "${CMAKE_BINARY_DIR}" CACHE PATH "Directory where the external proje
 set_property(DIRECTORY PROPERTY EP_BASE ${EP_BASE})
 
 # This option makes different versions of the same external project build in separate directories.
-# This allows switching branches in the MyProject source code and build MyProject quickly, even if the
+# This allows switching branches in the MYPROJECT source code and build MYPROJECT quickly, even if the
 # branches use different versions of the same library. A given version of an EP will be built only
 # once. A drawback is that the EP_BASE directory can become big easily.
 # Note:
 # If you switch branches that need different versions of EPs, you might need to delete the
-# MyProject-configure timestamp manually before doing a superbuild. Without that the CMake cache is
+# MYPROJECT-configure timestamp manually before doing a superbuild. Without that the CMake cache is
 # not regenerated and it may still store the paths to the EP versions that belong to the original
 # branch (from which you switched). You have been warned.
 
@@ -215,11 +215,11 @@ endforeach()
 
 
 ######################################################################
-# Now compile MyProject, using the packages we just provided.
+# Now compile MYPROJECT, using the packages we just provided.
 ######################################################################
 if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET)
 
-  set(proj MyProject)
+  set(proj MYPROJECT)
   set(proj_DEPENDENCIES ${OpenCV_DEPENDS} ${Eigen_DEPENDS} ${Boost_DEPENDS})
 
   ExternalProject_Add(${proj}
@@ -243,7 +243,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DMYPROJECT_USE_CPPCHECK:BOOL=${MYPROJECT_USE_CPPCHECK}
       -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
       -DCMAKE_VERBOSE_MAKEFILE:BOOL=${CMAKE_VERBOSE_MAKEFILE}
-      -DBUILD_TESTING:BOOL=${BUILD_TESTING} # The value set in EP_COMMON_ARGS normally forces this off, but we may need MyProject to be on.
+      -DBUILD_TESTING:BOOL=${BUILD_TESTING} # The value set in EP_COMMON_ARGS normally forces this off, but we may need MYPROJECT to be on.
       -DBUILD_SUPERBUILD:BOOL=OFF           # Must force this to be off, or else you will loop forever.
       -DBUILD_Eigen:BOOL=${BUILD_Eigen}
       -DBUILD_Boost:BOOL=${BUILD_Boost}

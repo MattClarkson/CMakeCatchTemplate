@@ -1,6 +1,6 @@
 #/*============================================================================
 #
-#  MyProject: A software package for whatever.
+#  MYPROJECT: A software package for whatever.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #
@@ -56,13 +56,13 @@ IF(MYPROJECT_USE_CPPCHECK)
       #  Define file names
       #
       SET(CPPCHECK_MYPROJECT_FILES_LIST
-        ${PROJECT_BINARY_DIR}/Utilities/CppCheck/MyProjectFiles.txt)
+        ${PROJECT_BINARY_DIR}/Utilities/CppCheck/MYPROJECTFiles.txt)
 
       #
       # Configure the files
       #
       CONFIGURE_FILE(
-        ${PROJECT_SOURCE_DIR}/Utilities/CppCheck/MyProjectFiles.txt.in
+        ${PROJECT_SOURCE_DIR}/Utilities/CppCheck/MYPROJECTFiles.txt.in
         ${CPPCHECK_MYPROJECT_FILES_LIST})
 
       SET(CPPCHECK_ARGUMENTS_CODE
