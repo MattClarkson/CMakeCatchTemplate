@@ -56,6 +56,18 @@ endif()
 
 
 ######################################################################
+# MYPROJECT uses KWStyle for checking the coding style
+######################################################################
+include(${CMAKE_SOURCE_DIR}/Utilities/KWStyle/MYPROJECTKWStyle.cmake)
+
+
+######################################################################
+# MYPROJECT uses CppCheck for static analysis
+######################################################################
+include(${CMAKE_SOURCE_DIR}/Utilities/CppCheck/MYPROJECTCppCheck.cmake)
+
+
+######################################################################
 # Setting supported build types. Should ONLY be Release or Debug.
 ######################################################################
 if(NOT CMAKE_BUILD_TYPE)
@@ -269,18 +281,6 @@ configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY
 ######################################################################
 configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/myprojectdoxygen.pl.in ${CMAKE_BINARY_DIR}/myprojectdoxygen.pl)
 configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/doxygen.config.in ${CMAKE_BINARY_DIR}/doxygen.config)
-
-
-######################################################################
-# MYPROJECT uses KWStyle for checking the coding style
-######################################################################
-include(${CMAKE_SOURCE_DIR}/Utilities/KWStyle/MYPROJECTKWStyle.cmake)
-
-
-######################################################################
-# MYPROJECT uses CppCheck for static analysis
-######################################################################
-include(${CMAKE_SOURCE_DIR}/Utilities/CppCheck/MYPROJECTCppCheck.cmake)
 
 
 ######################################################################
