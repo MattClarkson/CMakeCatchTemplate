@@ -2,20 +2,31 @@ CMakeCatchTemplate
 ------------------
 
 This is a simple project to demonstrate a reasonable
-structure for a cmake/ctest and Catch based projects.
+structure for CMake/CTest and Catch based projects.
 
 You can either
  1. Clone this repo, and use directly
- 2. Export the project (without a .git folder), and then rename all instances of MYPROJECT,
- myproject, MYPROJECT with names of your choice, and then create your own project.
+ 2. Export the project (without a .git folder), and then rename all instances of MYPROJECT
+ and myproject with names of your choice, and then create your own project. 
+
+For example the project name could be MyAlgorithm, so you would need to rename all instances
+and filenames with MYPROJECT into MyAlgorithm. In addition, some things are normally 
+lower case (e.g. library names) so, there is also the need to rename myproject to myalgorithm.
 
 Overview
 --------
 
 The features provided are:
- 1. Some feature
- 2. Another feature
- 
+ 1. Meta-Build, a.k.a. SuperBuild to download and build Boost, Eigen and OpenCV.
+ 2. A single library for the main functionality - called myproject, so you should rename it.
+ 3. Unit tests, using Catch, and run with CTest - to demonstrate correctness and regression.
+ 4. A single command line application - to give the end user a functioning program.
+ 5. KWStyle to check some basic code style - for consistency
+ 6. CppCheck to check some code features - for performance, style and correctness
+
+Points 5 and 6 require you to have KWStyle and CppCheck installed and available
+on your system PATH.
+
 
 Tested On
 -----------------------------
@@ -31,7 +42,7 @@ Build Instructions
 -----------------------------
 
 This project can be configured to build against Eigen, Boost and OpenCV.
-These were chosen as an example on how to use CMake, and some common
+These were chosen as an example of how to use CMake, and some common
 C++ projects. These dependencies are optional, and this project
 will compile without them.
 
@@ -60,7 +71,7 @@ To switch between Debug and Release mode, use CMake to set:
 
   * CMAKE_BUILD_TYPE:STRING=Debug|Release
 
-Note: Only Debug and Release are supported.
+Note: Only Debug and Release are supported. 
 
 
 Preferred Branching Workflow
