@@ -253,12 +253,17 @@ if(BUILD_Boost)
   #   (b) Standard, widely used library
   #   (c) Mostly header library, some compiled libraries
   #   (d) CMake probably has a standard FindBoost.cmake in its distribution.
+  set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib)
+  set(BOOST_INCLUDEDIR ${BOOST_ROOT}/include)
   set(Boost_NO_BOOST_CMAKE ON)
   set(Boost_NO_SYSTEM_PATHS ON)
+  #set(Boost_DEBUG ON)
   if(BUILD_SHARED_LIBS)
     set(Boost_USE_STATIC_LIBS OFF)
+    set(Boost_USE_STATIC_RUNTIME OFF)
   else()
     set(Boost_USE_STATIC_LIBS ON)
+    set(Boost_USE_STATIC_RUNTIME ON) 
   endif()
   find_package(Boost 1.56 COMPONENTS filesystem system date_time regex thread REQUIRED)
   include_directories(${Boost_INCLUDE_DIRS})
