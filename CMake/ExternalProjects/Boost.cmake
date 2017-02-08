@@ -156,7 +156,7 @@ if(NOT DEFINED BOOST_ROOT AND NOT MYPROJECT_USE_SYSTEM_Boost)
       ${_boost_linkflags}
       ${_boost_address_model}
       threading=multi
-      runtime-link=shared
+      runtime-link=${_boost_link}
       --ignore-site-config
       -q
   )
