@@ -84,6 +84,16 @@ is different to the one assumed here. So if you want to turn Boost on,
 you should probably try and use the one provided by this SuperBuild.
 
 
+Windows Users
+-------------
+
+If you build the project with shared libraries (BUILD_SHARED_LIBS:BOOL=ON)
+then when you run executables, you should look for the batch file
+StartVS_Debug.bat or StartVS_Release.bat in the MYPROJECT-build folder.
+This sets the path before launching Visual Studio, so that dynamically
+loaded libraries are found at run time.
+
+
 Preferred Branching Workflow
 ----------------------------
 
