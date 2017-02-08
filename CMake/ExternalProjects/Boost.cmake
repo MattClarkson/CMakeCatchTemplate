@@ -13,7 +13,7 @@
 #============================================================================*/
 
 set(MYPROJECT_USE_Boost 1)
-set(MYPROJECT_USE_Boost_LIBRARIES "filesystem;system;date_time;regex;thread;iostreams")
+set(MYPROJECT_USE_Boost_LIBRARIES "filesystem;system;date_time;regex")
 
 #-----------------------------------------------------------------------------
 # Boost
