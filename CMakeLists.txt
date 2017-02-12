@@ -229,6 +229,19 @@ message("CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 
 
 ######################################################################
+# Copy some reference files to output.
+######################################################################
+configure_file(${CMAKE_SOURCE_DIR}/Documentation/License.dox ${CMAKE_BINARY_DIR}/Doxygen/License.dox)
+configure_file(${CMAKE_SOURCE_DIR}/LICENSE.txt ${CMAKE_BINARY_DIR}/LICENSE.txt @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt)
+configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Boost.txt ${CMAKE_BINARY_DIR}/LICENSE_Boost.txt)
+configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/OpenCV.txt ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt)
+configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMake/Findglog.cmake ${CMAKE_BINARY_DIR}/Findglog.cmake @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMake/Findgflags.cmake ${CMAKE_BINARY_DIR}/Findgflags.cmake @ONLY)
+
+
+######################################################################
 # Organise module/plugin/etc projects better within the IDE.
 ######################################################################
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -295,17 +308,6 @@ endif()
 
 set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})
 
-######################################################################
-# Copy some reference files to output.
-######################################################################
-configure_file(${CMAKE_SOURCE_DIR}/Documentation/License.dox ${CMAKE_BINARY_DIR}/Doxygen/License.dox)
-configure_file(${CMAKE_SOURCE_DIR}/LICENSE.txt ${CMAKE_BINARY_DIR}/LICENSE.txt @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt)
-configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Boost.txt ${CMAKE_BINARY_DIR}/LICENSE_Boost.txt)
-configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/OpenCV.txt ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt)
-configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/CMake/Findglog.cmake ${CMAKE_BINARY_DIR}/Findglog.cmake @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/CMake/Findgflags.cmake ${CMAKE_BINARY_DIR}/Findgflags.cmake @ONLY)
 
 ######################################################################
 # Provide support for manually running Doxygen in build folder.
