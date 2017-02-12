@@ -103,8 +103,8 @@ endif()
 # Setup the path to load CMake macros, and extra CMake files.
 ######################################################################
 set(CMAKE_MODULE_PATH
-    ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_BINARY_DIR}
+    ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH}
    )
 include(mitkMacroEmptyExternalProject)
@@ -237,8 +237,8 @@ configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINA
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Boost.txt ${CMAKE_BINARY_DIR}/LICENSE_Boost.txt)
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/OpenCV.txt ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt)
 configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/CMake/Findglog.cmake ${CMAKE_BINARY_DIR}/Findglog.cmake @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/CMake/Findgflags.cmake ${CMAKE_BINARY_DIR}/Findgflags.cmake @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMake/Findglog.cmake.in ${CMAKE_BINARY_DIR}/Findglog.cmake @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMake/Findgflags.cmake.in ${CMAKE_BINARY_DIR}/Findgflags.cmake @ONLY)
 
 
 ######################################################################
@@ -251,11 +251,34 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Add Mandatory Requirements
 ######################################################################
 set(ALL_THIRD_PARTY_LIBRARIES)
+set(ADDITIONAL_SEARCH_PATHS ${CMAKE_BINARY_DIR}/bin/${VS_BUILD_TYPE})
 
 
 ######################################################################
 # Add Optional Requirements
 ######################################################################
+if(WIN32)
+  set(_library_sub_dir "/bin")
+else()
+  set(_library_sub_dir "/lib")
+endif()
+
+if(BUILD_gflags)
+  find_package(gflags REQUIRED)
+  include_directories(${gflags_INCLUDE_DIR})
+  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${gflags_LIBRARY})
+  add_definitions(-DBUILD_gflags)
+  set(ADDITIONAL_SEARCH_PATHS "${gflags_DIR}${_library_sub_dir};${ADDITIONAL_SEARCH_PATHS}")
+endif()
+
+if(BUILD_glog)
+  find_package(glog REQUIRED)
+  include_directories(${glog_INCLUDE_DIR})
+  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${glog_LIBRARY})
+  add_definitions(-DBUILD_glog)
+  set(ADDITIONAL_SEARCH_PATHS "${glog_DIR}${_library_sub_dir};${ADDITIONAL_SEARCH_PATHS}")
+endif()
+
 if(BUILD_Eigen)
   # Example of:
   #   (a) Header only library
@@ -263,6 +286,7 @@ if(BUILD_Eigen)
   include_directories(${Eigen_INCLUDE_DIR})
   add_definitions(-DBUILD_Eigen)
 endif()
+
 if(BUILD_Boost)
   # Example of:
   #   (b) Standard, widely used library
@@ -296,14 +320,18 @@ if(BUILD_Boost)
   endif()
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${Boost_LIBRARIES})
   add_definitions(-DBUILD_Boost)
+  set(ADDITIONAL_SEARCH_PATHS "${BOOST_ROOT}/bin;${ADDITIONAL_SEARCH_PATHS}")
 endif()
+
 if(BUILD_OpenCV)
   # Example of:
-  #   (e) CMake doesn't include OpenCV, but OpenCV_DIR passed in from SuperBuild.
+  #   (e) CMake doesn't include an OpenCV FindModule.cmake,
+  #       but OpenCV_DIR passed in from SuperBuild.
   find_package(OpenCV REQUIRED)
   include_directories(${OpenCV_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${OpenCV_LIBS})
   add_definitions(-DBUILD_OpenCV)
+  set(ADDITIONAL_SEARCH_PATHS "${OpenCV_LIB_DIR}/../bin;${ADDITIONAL_SEARCH_PATHS}")
 endif()
 
 set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})

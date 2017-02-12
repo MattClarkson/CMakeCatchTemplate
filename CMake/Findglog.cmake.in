@@ -34,7 +34,7 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
 
 elseif(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 
-  find_library(glog_LIBRARY NAMES glog${NIFTK_SUPERBUILD_DEBUG_POSTFIX}
+  find_library(glog_LIBRARY NAMES glog${MYPROJECT_SUPERBUILD_DEBUG_POSTFIX}
                PATHS ${glog_LIBRARY_DIR}
                PATH_SUFFIXES Debug
                NO_DEFAULT_PATH)

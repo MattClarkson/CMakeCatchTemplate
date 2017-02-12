@@ -34,7 +34,7 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
 
 elseif(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 
-  find_library(gflags_LIBRARY NAMES gflags${NIFTK_SUPERBUILD_DEBUG_POSTFIX}
+  find_library(gflags_LIBRARY NAMES gflags${MYPROJECT_SUPERBUILD_DEBUG_POSTFIX}
                PATHS ${gflags_LIBRARY_DIR}
                PATH_SUFFIXES Debug
                NO_DEFAULT_PATH)
