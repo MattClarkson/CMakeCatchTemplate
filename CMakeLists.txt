@@ -100,6 +100,21 @@ endif()
 
 
 ######################################################################
+# Check for Qt up-front, as VTK may need it in SuperBuild.
+######################################################################
+find_package(Qt5 5.4.2 QUIET COMPONENTS Concurrent OpenGL PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
+if(Qt5_DIR)
+  message(STATUS "Found Qt5: ${Qt5_DIR}")
+  get_filename_component(_Qt5_DIR "${Qt5_DIR}/../../../" ABSOLUTE)
+  list(FIND CMAKE_PREFIX_PATH "${_Qt5_DIR}" _result)
+  if(_result LESS 0)
+    set(CMAKE_PREFIX_PATH "${_Qt5_DIR};${CMAKE_PREFIX_PATH}" CACHE PATH "" FORCE)
+  endif()
+  set(MYPROJECT_PREFIX_PATH ${_Qt5_DIR})
+endif()
+
+
+######################################################################
 # Setup the path to load CMake macros, and extra CMake files.
 ######################################################################
 set(CMAKE_MODULE_PATH
