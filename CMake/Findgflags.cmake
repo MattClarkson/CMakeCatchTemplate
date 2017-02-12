@@ -1,0 +1,52 @@
+#/*============================================================================
+#
+#  MYPROJECT: A software package for whatever.
+#
+#  Copyright (c) University College London (UCL). All rights reserved.
+#
+#  This software is distributed WITHOUT ANY WARRANTY; without even
+#  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+#  PURPOSE.
+#
+#  See LICENSE.txt in the top level directory for details.
+#
+#============================================================================*/
+
+set(gflags_FOUND)
+
+set(gflags_DIR @gflags_DIRECTORY@ CACHE PATH "Directory containing gflags installation" FORCE)
+
+find_path(gflags_INC
+  NAME gflags.h
+  PATHS ${gflags_DIR}/include/gflags
+  NO_DEFAULT_PATH
+)
+
+set(gflags_LIBRARY_DIR ${gflags_DIR}/lib)
+set(gflags_LIBRARY )
+
+if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+
+  find_library(gflags_LIBRARY NAMES gflags
+               PATHS ${gflags_LIBRARY_DIR}
+               PATH_SUFFIXES Release
+               NO_DEFAULT_PATH)
+
+elseif(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+
+  find_library(gflags_LIBRARY NAMES gflags${NIFTK_SUPERBUILD_DEBUG_POSTFIX}
+               PATHS ${gflags_LIBRARY_DIR}
+               PATH_SUFFIXES Debug
+               NO_DEFAULT_PATH)
+
+endif()
+
+if(gflags_LIBRARY AND gflags_INC)
+  set(gflags_FOUND 1)
+  get_filename_component(_inc_dir ${gflags_INC} PATH)
+  set(gflags_INCLUDE_DIR ${_inc_dir})
+endif()
+
+message( "MYPROJECT Findgflags.cmake: gflags_INCLUDE_DIR: ${gflags_INCLUDE_DIR}" )
+message( "MYPROJECT Findgflags.cmake: gflags_LIBRARY_DIR: ${gflags_LIBRARY_DIR}" )
+message( "MYPROJECT Findgflags.cmake: gflags_LIBRARY:     ${gflags_LIBRARY}" )

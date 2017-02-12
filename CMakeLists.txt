@@ -42,6 +42,8 @@ set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
 # We have a super-build option. (Terminology comes from Kitware/ITK/MITK etc).
 ##############################################################################
 option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via SuperBuild.cmake." ON)
+option(BUILD_gflags "Build gflags." OFF)
+option(BUILD_glog "Build glog." OFF)
 option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_Eigen "Build Eigen." OFF)
 option(BUILD_Boost "Build Boost." ON)
@@ -302,7 +304,8 @@ configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINA
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Boost.txt ${CMAKE_BINARY_DIR}/LICENSE_Boost.txt)
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/OpenCV.txt ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt)
 configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY)
-
+configure_file(${CMAKE_SOURCE_DIR}/CMake/Findglog.cmake ${CMAKE_BINARY_DIR}/Findglog.cmake @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMake/Findgflags.cmake ${CMAKE_BINARY_DIR}/Findgflags.cmake @ONLY)
 
 ######################################################################
 # Provide support for manually running Doxygen in build folder.
