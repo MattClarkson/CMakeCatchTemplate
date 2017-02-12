@@ -15,6 +15,14 @@
 #include <mpMyFunctions.h>
 #include <iostream>
 
+#ifdef BUILD_gflags
+#include "gflags/gflags.h"
+#endif
+
+#ifdef BUILD_glog
+#include <glog/logging.h>
+#endif
+
 #ifdef BUILD_Eigen
 #include <Eigen/Dense>
 #endif
@@ -34,6 +42,14 @@
  */
 int main(int argc, char** argv)
 {
+
+#ifdef BUILD_glog
+  google::InitGoogleLogging(argv[0]);
+#endif
+
+#ifdef BUILD_gflags
+  gflags::SetVersionString("1.0.0");
+#endif
 
 #ifdef BUILD_Eigen
   Eigen::MatrixXd m(2,2);
