@@ -47,6 +47,11 @@ option(BUILD_glog "Build glog." OFF)
 option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_Eigen "Build Eigen." OFF)
 option(BUILD_Boost "Build Boost." ON)
+option(BUILD_VTK "Build VTK." ON)
+
+if(BUILD_glog AND NOT BUILD_gflags)
+  set(BUILD_glog ON CACHE BOOL "Build glog." FORCE)
+endif()
 
 if (BUILD_SUPERBUILD)
   project(MYPROJECT-superbuild)
@@ -286,6 +291,8 @@ else()
 endif()
 
 if(BUILD_gflags)
+  # Example of: Small library where Findgflags.cmake is
+  #             generated into the build folder to always pick up our one.
   find_package(gflags REQUIRED)
   include_directories(${gflags_INCLUDE_DIR})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${gflags_LIBRARY})
@@ -294,6 +301,8 @@ if(BUILD_gflags)
 endif()
 
 if(BUILD_glog)
+  # Example of: Small library where Findglog.cmake is
+  #             generated into the build folder to always pick up our one.
   find_package(glog REQUIRED)
   include_directories(${glog_INCLUDE_DIR})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${glog_LIBRARY})
@@ -302,8 +311,7 @@ if(BUILD_glog)
 endif()
 
 if(BUILD_Eigen)
-  # Example of:
-  #   (a) Header only library
+  # Example of: Header only library
   find_package(Eigen REQUIRED)
   include_directories(${Eigen_INCLUDE_DIR})
   add_definitions(-DBUILD_Eigen)
@@ -311,9 +319,10 @@ endif()
 
 if(BUILD_Boost)
   # Example of:
-  #   (b) Standard, widely used library
-  #   (c) Mostly header library, some compiled libraries
-  #   (d) CMake probably has a standard FindBoost.cmake in its distribution.
+  #   (1) Standard, widely used library
+  #   (2) Mostly header library, some compiled libraries
+  #   (3) Your CMake probably has a standard FindBoost.cmake in its distribution,
+  #       so Boost is probably found by CMake's own FindBoost.cmake.
   set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib)
   set(Boost_LIBRARY_DIR_DEBUG ${BOOST_ROOT}/lib)
   set(Boost_LIBRARY_DIR_RELEASE ${BOOST_ROOT}/lib) 
@@ -347,13 +356,27 @@ endif()
 
 if(BUILD_OpenCV)
   # Example of:
-  #   (e) CMake doesn't include an OpenCV FindModule.cmake,
+  #   (1) CMake doesn't include an OpenCV FindModule.cmake,
   #       but OpenCV_DIR passed in from SuperBuild.
   find_package(OpenCV REQUIRED)
   include_directories(${OpenCV_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${OpenCV_LIBS})
   add_definitions(-DBUILD_OpenCV)
   set(ADDITIONAL_SEARCH_PATHS "${OpenCV_LIB_DIR}/../bin;${ADDITIONAL_SEARCH_PATHS}")
+endif()
+
+if(BUILD_VTK)
+  # Example of:
+  #   (1) Large Rendering library - oooooh, pretty pictures etc.
+  #   (2) When SuperBuild builds VTK it adds VTK_DIR to CMAKE_PREFIX_PATH
+  #       So, VTK is found using VTK's provided VTKConfig.cmake.
+  #       Its called 'config mode' when running find_package
+  #       Its the preferred approach because VTK can then control what is exposed.
+  find_package(VTK REQUIRED)
+  include_directories(${VTK_INCLUDE_DIRS})
+  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${VTK_LIBRARIES})
+  #add_definitions(${VTK_DEFINITIONS})
+  add_definitions(-DBUILD_VTK)
 endif()
 
 set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})

@@ -207,7 +207,7 @@ include(mpExternalProjectHelperMacros)
 ######################################################################
 # External projects
 ######################################################################
-foreach(p gflags glog Eigen OpenCV Boost)
+foreach(p gflags glog Eigen OpenCV Boost VTK)
   include("CMake/ExternalProjects/${p}.cmake")
 endforeach()
 
@@ -218,7 +218,7 @@ endforeach()
 if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET)
 
   set(proj MYPROJECT)
-  set(proj_DEPENDENCIES ${OpenCV_DEPENDS} ${Eigen_DEPENDS} ${Boost_DEPENDS} ${gflags_DEPENDS} ${glog_DEPENDS})
+  set(proj_DEPENDENCIES ${OpenCV_DEPENDS} ${Eigen_DEPENDS} ${Boost_DEPENDS} ${gflags_DEPENDS} ${glog_DEPENDS} ${VTK_DEPENDS})
 
   ExternalProject_Add(${proj}
     LIST_SEPARATOR ^^
