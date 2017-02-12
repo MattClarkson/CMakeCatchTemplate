@@ -242,6 +242,13 @@ configure_file(${CMAKE_SOURCE_DIR}/CMake/Findgflags.cmake.in ${CMAKE_BINARY_DIR}
 
 
 ######################################################################
+# Provide support for manually running Doxygen in build folder.
+######################################################################
+configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/myprojectdoxygen.pl.in ${CMAKE_BINARY_DIR}/myprojectdoxygen.pl)
+configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/doxygen.config.in ${CMAKE_BINARY_DIR}/doxygen.config)
+
+
+######################################################################
 # Organise module/plugin/etc projects better within the IDE.
 ######################################################################
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -335,13 +342,6 @@ if(BUILD_OpenCV)
 endif()
 
 set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})
-
-
-######################################################################
-# Provide support for manually running Doxygen in build folder.
-######################################################################
-configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/myprojectdoxygen.pl.in ${CMAKE_BINARY_DIR}/myprojectdoxygen.pl)
-configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/doxygen.config.in ${CMAKE_BINARY_DIR}/doxygen.config)
 
 
 ######################################################################
