@@ -24,7 +24,7 @@ if(DEFINED VTK_DIR AND NOT EXISTS ${VTK_DIR})
   message(FATAL_ERROR "VTK_DIR variable is defined but corresponds to non-existing directory")
 endif()
 
-set(version "7.0.0")
+set(version "7.1.0")
 set(location "${NIFTK_EP_TARBALL_LOCATION}/VTK-${version}.tar.gz")
 
 mpMacroDefineExternalProjectVariables(VTK ${version} ${location})
@@ -82,7 +82,7 @@ if(NOT DEFINED VTK_DIR)
     INSTALL_DIR ${proj_INSTALL}
     URL ${proj_LOCATION}
     URL_MD5 ${proj_CHECKSUM}
-    PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/VTK.patch
+#    PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/VTK.patch
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
         ${EP_COMMON_ARGS}
