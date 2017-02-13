@@ -53,4 +53,5 @@ script:
   - cd build
   - CXX="g++-4.8" CC="gcc-4.8" cmake BUILD_SUPERBUILD:BOOL=ON, BUILD_Boost:BOOL=ON, BUILD_Eigen:BOOL=ON and BUILD_OpenCV:BOOL=ON ..
   - make
+  - cd MYPROJECT-build
   - ctest .
