@@ -1,6 +1,8 @@
 CMakeCatchTemplate
 ------------------
 
+[![Build Status](https://travis-ci.org/MattClarkson/CMakeCatchTemplate.svg?branch=master)](https://travis-ci.org/MattClarkson/CMakeCatchTemplate)
+
 This is a simple project to demonstrate a reasonable
 structure for CMake/CTest and Catch based projects.
 
@@ -25,6 +27,7 @@ The features provided are:
  6. CppCheck to check some code features - for performance, style and correctness
  7. Doxygen config - for documentation
  8. CI build with Travis
+
 
 Tested On
 -----------------------------
