@@ -1,0 +1,55 @@
+#/*============================================================================
+#
+#  MYPROJECT: A software package for whatever.
+#
+#  Copyright (c) University College London (UCL). All rights reserved.
+#
+#  This software is distributed WITHOUT ANY WARRANTY; without even
+#  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+#  PURPOSE.
+#
+#  See LICENSE.txt in the top level directory for details.
+#
+#============================================================================*/
+
+version: {build}
+
+image: Visual Studio 2015
+
+init:
+  - git config --global core.autocrlf input
+
+clone_folder: c:\projects\CMakeCatchTemplate
+
+shallow_clone: true
+
+environment:
+  matrix:
+    - COMPILER: "Visual Studio 12 Win64"
+
+platform:
+  - x64
+
+configuration:
+  - Release
+
+before_build:
+  - echo --------------------------------------------------------------------------------
+  - echo Appveyor environment info:
+  - echo COMPILER = %COMPILER%, CONFIGURATION = %CONFIGURATION%
+  - cmake -h
+  - pwd
+  - rem --------------------------------------------------------------------------------
+
+build_script:
+  - echo --------------------------------------------------------------------------------
+  - echo Build CMakeCatchTemplate:
+  - mkdir build
+  - cd build
+  - cmake -G "%COMPILER%" -D CMAKE_PREFIX_PATH=C:\Qt\5.6\msvc2015_64
+  - cmake --build ..\CMakeCatchTemplate --config %CONFIGURATION%
+
+test_script:
+  - cd build
+  - cd MYPROJECT-build
+  - ctest --timeout 10 -C %CONFIGURATION% -E InterProcessLock_test
