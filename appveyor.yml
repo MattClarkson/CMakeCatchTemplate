@@ -14,7 +14,7 @@
 
 version: "{build}"
 
-image: Visual Studio 2015
+os: Visual Studio 2015
 
 init:
   - git config --global core.autocrlf input
@@ -33,6 +33,9 @@ platform:
 configuration:
   - Release
 
+matrix:
+  fast_finish: true
+
 before_build:
   - echo --------------------------------------------------------------------------------
   - echo Appveyor environment info:
@@ -50,5 +53,6 @@ build_script:
   - cmake --build . --config %CONFIGURATION%
 
 test_script:
+  - pwd
   - cd MYPROJECT-build
-  - ctest --timeout 10 -C %CONFIGURATION% -E InterProcessLock_test
+  - ctest --timeout 10 -C %CONFIGURATION%
