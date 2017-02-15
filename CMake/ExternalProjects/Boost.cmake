@@ -150,6 +150,7 @@ if(NOT DEFINED BOOST_ROOT AND NOT MYPROJECT_USE_SYSTEM_Boost)
       ${_with_boost_libs}
       # Use the option below to view the shell commands (for debugging)
       #-d+4
+      -d 0
       variant=${_boost_variant}
       link=${_boost_link}
       ${_boost_cxxflags}
