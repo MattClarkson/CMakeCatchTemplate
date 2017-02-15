@@ -49,7 +49,7 @@ build_script:
   - echo Build CMakeCatchTemplate:
   - mkdir build
   - cd build
-  - cmake -G "%COMPILER%" -DCMAKE_PREFIX_PATH=C:\Qt\5.6\msvc2015_64 -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_OpenCV:BOOL=ON --config %CONFIGURATION% ..
+  - cmake -G "%COMPILER%" -DCMAKE_PREFIX_PATH=C:\Qt\5.6\msvc2015_64 -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=ON -DBUILD_OpenCV:BOOL=ON --config %CONFIGURATION% ..
   - cmake --build . --config %CONFIGURATION%
 
 test_script:

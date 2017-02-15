@@ -47,7 +47,7 @@ option(BUILD_glog "Build glog." OFF)
 option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_Eigen "Build Eigen." OFF)
 option(BUILD_Boost "Build Boost." ON)
-option(BUILD_VTK "Build VTK." ON)
+option(BUILD_VTK "Build VTK." OFF)
 option(BUILD_GUI "Build GUI." OFF)
 option(MYPROJECT_USE_QT "Use Qt, normally for GUI development, but can be for anything." OFF)
 
