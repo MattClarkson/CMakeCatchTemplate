@@ -302,8 +302,9 @@ if(BUILD_gflags)
   # Example of: Small library where Findgflags.cmake is
   #             generated into the build folder to always pick up our one.
   find_package(gflags REQUIRED)
+  find_package(Threads REQUIRED)
   include_directories(${gflags_INCLUDE_DIR})
-  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${gflags_LIBRARY})
+  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${gflags_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
   add_definitions(-DBUILD_gflags)
   set(ADDITIONAL_SEARCH_PATHS "${gflags_DIR}${_library_sub_dir};${ADDITIONAL_SEARCH_PATHS}")
 endif()
