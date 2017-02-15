@@ -42,9 +42,24 @@ set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
 # We have a super-build option. (Terminology comes from Kitware/ITK/MITK etc).
 ##############################################################################
 option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via SuperBuild.cmake." ON)
+option(BUILD_gflags "Build gflags." OFF)
+option(BUILD_glog "Build glog." OFF)
 option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_Eigen "Build Eigen." OFF)
 option(BUILD_Boost "Build Boost." ON)
+option(BUILD_VTK "Build VTK." OFF)
+option(BUILD_GUI "Build GUI." OFF)
+option(MYPROJECT_USE_QT "Use Qt, normally for GUI development, but can be for anything." OFF)
+
+if(BUILD_glog AND NOT BUILD_gflags)
+  message("Forcing BUILD_gflags to ON due to BUILD_glog being ON.")
+  set(BUILD_gflags ON CACHE BOOL "Build gflags." FORCE)
+endif()
+
+if(BUILD_GUI AND NOT MYPROJECT_USE_QT)
+  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_GUI being ON.")
+  set(MYPROJECT_USE_QT ON CACHE BOOL "Build GUI." FORCE)
+endif()
 
 if (BUILD_SUPERBUILD)
   project(MYPROJECT-superbuild)
@@ -98,11 +113,26 @@ endif()
 
 
 ######################################################################
+# Check for Qt up-front, as VTK may need it in SuperBuild.
+######################################################################
+find_package(Qt5 5.4.2 QUIET COMPONENTS Concurrent OpenGL PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
+if(Qt5_DIR)
+  message(STATUS "Found Qt5: ${Qt5_DIR}")
+  get_filename_component(_Qt5_DIR "${Qt5_DIR}/../../../" ABSOLUTE)
+  list(FIND CMAKE_PREFIX_PATH "${_Qt5_DIR}" _result)
+  if(_result LESS 0)
+    set(CMAKE_PREFIX_PATH "${_Qt5_DIR};${CMAKE_PREFIX_PATH}" CACHE PATH "" FORCE)
+  endif()
+  set(MYPROJECT_PREFIX_PATH ${_Qt5_DIR})
+endif()
+
+
+######################################################################
 # Setup the path to load CMake macros, and extra CMake files.
 ######################################################################
 set(CMAKE_MODULE_PATH
-    ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_BINARY_DIR}
+    ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH}
    )
 include(mitkMacroEmptyExternalProject)
@@ -227,6 +257,26 @@ message("CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 
 
 ######################################################################
+# Copy some reference files to output.
+######################################################################
+configure_file(${CMAKE_SOURCE_DIR}/Documentation/License.dox ${CMAKE_BINARY_DIR}/Doxygen/License.dox)
+configure_file(${CMAKE_SOURCE_DIR}/LICENSE.txt ${CMAKE_BINARY_DIR}/LICENSE.txt @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt)
+configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Boost.txt ${CMAKE_BINARY_DIR}/LICENSE_Boost.txt)
+configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/OpenCV.txt ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt)
+configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMake/Findglog.cmake.in ${CMAKE_BINARY_DIR}/Findglog.cmake @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/CMake/Findgflags.cmake.in ${CMAKE_BINARY_DIR}/Findgflags.cmake @ONLY)
+
+
+######################################################################
+# Provide support for manually running Doxygen in build folder.
+######################################################################
+configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/myprojectdoxygen.pl.in ${CMAKE_BINARY_DIR}/myprojectdoxygen.pl)
+configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/doxygen.config.in ${CMAKE_BINARY_DIR}/doxygen.config)
+
+
+######################################################################
 # Organise module/plugin/etc projects better within the IDE.
 ######################################################################
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -236,28 +286,61 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Add Mandatory Requirements
 ######################################################################
 set(ALL_THIRD_PARTY_LIBRARIES)
+set(ADDITIONAL_SEARCH_PATHS ${CMAKE_BINARY_DIR}/bin/${VS_BUILD_TYPE})
 
 
 ######################################################################
 # Add Optional Requirements
 ######################################################################
+if(WIN32)
+  set(_library_sub_dir "/bin")
+else()
+  set(_library_sub_dir "/lib")
+endif()
+
+if(BUILD_gflags)
+  # Example of: Small library where Findgflags.cmake is
+  #             generated into the build folder to always pick up our one.
+  find_package(gflags REQUIRED)
+  find_package(Threads REQUIRED)
+  include_directories(${gflags_INCLUDE_DIR})
+  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${gflags_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+  add_definitions(-DBUILD_gflags)
+  if(WIN32)
+    add_definitions(-DGOOGLE_GLOG_DLL_DECL=)
+    list(APPEND ALL_THIRD_PARTY_LIBRARIES Shlwapi)
+  endif()
+  set(ADDITIONAL_SEARCH_PATHS "${gflags_DIR}${_library_sub_dir};${ADDITIONAL_SEARCH_PATHS}")
+endif()
+
+if(BUILD_glog)
+  # Example of: Small library where Findglog.cmake is
+  #             generated into the build folder to always pick up our one.
+  find_package(glog REQUIRED)
+  include_directories(${glog_INCLUDE_DIR})
+  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${glog_LIBRARY})
+  add_definitions(-DBUILD_glog)
+  set(ADDITIONAL_SEARCH_PATHS "${glog_DIR}${_library_sub_dir};${ADDITIONAL_SEARCH_PATHS}")
+endif()
+
 if(BUILD_Eigen)
-  # Example of:
-  #   (a) Header only library
+  # Example of: Header only library
   find_package(Eigen REQUIRED)
   include_directories(${Eigen_INCLUDE_DIR})
   add_definitions(-DBUILD_Eigen)
 endif()
+
 if(BUILD_Boost)
   # Example of:
-  #   (b) Standard, widely used library
-  #   (c) Mostly header library, some compiled libraries
-  #   (d) CMake probably has a standard FindBoost.cmake in its distribution.
+  #   (1) Standard, widely used library
+  #   (2) Mostly header library, some compiled libraries
+  #   (3) Your CMake probably has a standard FindBoost.cmake in its distribution,
+  #       so Boost is probably found by CMake's own FindBoost.cmake.
   set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib)
   set(Boost_LIBRARY_DIR_DEBUG ${BOOST_ROOT}/lib)
   set(Boost_LIBRARY_DIR_RELEASE ${BOOST_ROOT}/lib) 
   set(BOOST_INCLUDEDIR ${BOOST_ROOT}/include)
-  set(Boost_DEBUG ON)
+  #set(Boost_DEBUG ON)
   set(Boost_NO_SYSTEM_PATHS ON)
   set(Boost_NO_BOOST_CMAKE ON)
   if(BUILD_SHARED_LIBS)
@@ -281,34 +364,35 @@ if(BUILD_Boost)
   endif()
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${Boost_LIBRARIES})
   add_definitions(-DBUILD_Boost)
+  set(ADDITIONAL_SEARCH_PATHS "${BOOST_ROOT}/bin;${ADDITIONAL_SEARCH_PATHS}")
 endif()
+
 if(BUILD_OpenCV)
   # Example of:
-  #   (e) CMake doesn't include OpenCV, but OpenCV_DIR passed in from SuperBuild.
+  #   (1) CMake doesn't include an OpenCV FindModule.cmake,
+  #       but OpenCV_DIR passed in from SuperBuild.
   find_package(OpenCV REQUIRED)
   include_directories(${OpenCV_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${OpenCV_LIBS})
   add_definitions(-DBUILD_OpenCV)
+  set(ADDITIONAL_SEARCH_PATHS "${OpenCV_LIB_DIR}/../bin;${ADDITIONAL_SEARCH_PATHS}")
+endif()
+
+if(BUILD_VTK)
+  # Example of:
+  #   (1) Large Rendering library - oooooh, pretty pictures etc.
+  #   (2) When SuperBuild builds VTK it adds VTK_DIR to CMAKE_PREFIX_PATH
+  #       So, VTK is found using VTK's provided VTKConfig.cmake.
+  #       Its called 'config mode' when running find_package
+  #       Its the preferred approach because VTK can then control what is exposed.
+  find_package(VTK REQUIRED)
+  include_directories(${VTK_INCLUDE_DIRS})
+  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${VTK_LIBRARIES})
+  #add_definitions(${VTK_DEFINITIONS})
+  add_definitions(-DBUILD_VTK)
 endif()
 
 set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})
-
-######################################################################
-# Copy some reference files to output.
-######################################################################
-configure_file(${CMAKE_SOURCE_DIR}/Documentation/License.dox ${CMAKE_BINARY_DIR}/Doxygen/License.dox)
-configure_file(${CMAKE_SOURCE_DIR}/LICENSE.txt ${CMAKE_BINARY_DIR}/LICENSE.txt @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt)
-configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Boost.txt ${CMAKE_BINARY_DIR}/LICENSE_Boost.txt)
-configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/OpenCV.txt ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt)
-configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY)
-
-
-######################################################################
-# Provide support for manually running Doxygen in build folder.
-######################################################################
-configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/myprojectdoxygen.pl.in ${CMAKE_BINARY_DIR}/myprojectdoxygen.pl)
-configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/doxygen.config.in ${CMAKE_BINARY_DIR}/doxygen.config)
 
 
 ######################################################################
@@ -332,7 +416,7 @@ foreach(type LIBRARY RUNTIME ARCHIVE)
   set(CMAKE_${type}_OUTPUT_DIRECTORY ${output_dir} CACHE INTERNAL "Single output directory for building all libraries.")
   mark_as_advanced(CMAKE_${type}_OUTPUT_DIRECTORY)
 endforeach()
-include_directories(${CMAKE_SOURCE_DIR}/Code/)
+include_directories(${CMAKE_SOURCE_DIR}/Code/Lib)
 add_subdirectory(Code)
 add_subdirectory(Documentation)
 if(BUILD_TESTING)

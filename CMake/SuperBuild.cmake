@@ -151,8 +151,6 @@ set(EP_COMMON_ARGS
   -DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}
   -DBUILD_TESTING:BOOL=OFF
   -DBUILD_EXAMPLES:BOOL=OFF
-  -DDESIRED_QT_VERSION:STRING=${DESIRED_QT_VERSION}
-  -DQT_QMAKE_EXECUTABLE:FILEPATH=${QT_QMAKE_EXECUTABLE}
   -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
   -DCMAKE_CONFIGURATION_TYPES:STRING=${CMAKE_CONFIGURATION_TYPES}
   -DCMAKE_VERBOSE_MAKEFILE:BOOL=${CMAKE_VERBOSE_MAKEFILE}
@@ -209,7 +207,7 @@ include(mpExternalProjectHelperMacros)
 ######################################################################
 # External projects
 ######################################################################
-foreach(p Eigen OpenCV Boost)
+foreach(p gflags glog Eigen OpenCV Boost VTK)
   include("CMake/ExternalProjects/${p}.cmake")
 endforeach()
 
@@ -220,7 +218,7 @@ endforeach()
 if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET)
 
   set(proj MYPROJECT)
-  set(proj_DEPENDENCIES ${OpenCV_DEPENDS} ${Eigen_DEPENDS} ${Boost_DEPENDS})
+  set(proj_DEPENDENCIES ${OpenCV_DEPENDS} ${Eigen_DEPENDS} ${Boost_DEPENDS} ${gflags_DEPENDS} ${glog_DEPENDS} ${VTK_DEPENDS})
 
   ExternalProject_Add(${proj}
     LIST_SEPARATOR ^^
@@ -247,9 +245,13 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DBUILD_TESTING:BOOL=${BUILD_TESTING} # The value set in EP_COMMON_ARGS normally forces this off, but we may need MYPROJECT to be on.
       -DBUILD_SUPERBUILD:BOOL=OFF           # Must force this to be off, or else you will loop forever.
       -DWITHIN_SUPERBUILD:BOOL=ON
+      -DBUILD_gflags:BOOL=${BUILD_gflags}
+      -DBUILD_glog:BOOL=${BUILD_glog}
       -DBUILD_Eigen:BOOL=${BUILD_Eigen}
       -DBUILD_Boost:BOOL=${BUILD_Boost}
       -DBUILD_OpenCV:BOOL=${BUILD_OpenCV}
+      -Dgflags_DIRECTORY:PATH=${gflags_DIR}
+      -Dglog_DIRECTORY:PATH=${glog_DIR}
       -DBOOST_ROOT:PATH=${BOOST_ROOT}
       -DEigen_ROOT:PATH=${Eigen_DIR}
       -DEigen_INCLUDE_DIR:PATH=${Eigen_INCLUDE_DIR}
