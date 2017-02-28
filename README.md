@@ -14,9 +14,9 @@ You can either
  myproject, MyProject and the namespace mp with names of your choice, and then create your own project.
  
 
-The second option can be achieved manually or by running `rename.sh` with the relevant names.
-
-_NOTE: Will not work (reliably) after running CMake in the directory for the first time._   
+The second option can be achieved manually or by editing and running `rename.sh`.
+Credit and thanks go to [ddervs](https://github.com/ddervs) for writing `rename.sh`.
+This step should be performed before running CMake for the first time.
 
 Overview
 --------
