@@ -370,7 +370,9 @@ endif()
 if(BUILD_OpenCV)
   # Example of:
   #   (1) CMake doesn't include an OpenCV FindModule.cmake,
-  #       but OpenCV_DIR passed in from SuperBuild.
+  #       but the installed package contains a OpenCVConfig.cmake
+  #       which is found via the CMAKE_PREFIX_PATH. So, this is an
+  #       example of 'config' mode.
   find_package(OpenCV REQUIRED)
   include_directories(${OpenCV_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${OpenCV_LIBS})

@@ -81,7 +81,7 @@ Note: Only Debug and Release are supported.
 As mentioned in lectures, CMake will find 3rd party libraries using either
   1. a FindModule.cmake included within CMake's distribution, e.g. Boost
   2. a custom made FindModule.cmake, e.g. Eigen
-  3. using Module_DIR variable, e.g. OpenCV
+  3. using CMAKE_PREFIX_PATH and 'config mode' e.g. OpenCV
 
 (where Module is the name of your module, e.g. OpenCV, Boost).
 
