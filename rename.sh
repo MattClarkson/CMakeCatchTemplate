@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 
-# Danial Dervovic (2017)
+#/*============================================================================
+#
+#  MYPROJECT: A software package for whatever.
+#
+#  Copyright (c) University College London (UCL). All rights reserved.
+#
+#  This software is distributed WITHOUT ANY WARRANTY; without even
+#  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+#  PURPOSE.
+#
+#  See LICENSE.txt in the top level directory for details.
+#
+#============================================================================*/
+
 # Script which changes generic name MyProject, namespace mp etc to a project name of your choice.
 # USAGE: Just change the variables prefixed by NEW below to an appropriate name then run the script.
 
