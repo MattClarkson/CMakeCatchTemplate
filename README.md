@@ -10,13 +10,14 @@ structure for CMake/CTest and Catch based projects.
 
 You can either
  1. Clone this repo, and use directly
- 2. Export the project (without a .git folder), and then rename all instances of MYPROJECT,
- myproject, MyProject and the namespace mp with names of your choice, and then create your own project.
+ 2. Export the project (download without a .git folder), and then rename all instances of MYPROJECT,
+ myproject, MyProject and the namespace mp with names of your choice, and then rename the top-level project folder.
  
 
-The second option can be achieved manually or by editing and running `rename.sh`.
-Credit and thanks go to [ddervs](https://github.com/ddervs) for writing `rename.sh`.
-This step should be performed before running CMake for the first time.
+The substitutions for the second option can be achieved manually or by editing and running `rename.sh`.
+Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`.
+
+Note: Running `rename.sh` should be performed on a non-git folder and before running CMake for the first time.
 
 Overview
 --------

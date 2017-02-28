@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 
-# Danial Dervovic (2017)
+#/*============================================================================
+#
+#  MYPROJECT: A software package for whatever.
+#
+#  Copyright (c) University College London (UCL). All rights reserved.
+#
+#  This software is distributed WITHOUT ANY WARRANTY; without even
+#  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+#  PURPOSE.
+#
+#  See LICENSE.txt in the top level directory for details.
+#
+#============================================================================*/
+
 # Script which changes generic name MyProject, namespace mp etc to a project name of your choice.
 # USAGE: Just change the variables prefixed by NEW below to an appropriate name then run the script.
 
@@ -30,7 +43,13 @@ OLD_NAMESPACE='mp';
 #### Replacements ###
 
 find_and_replace_string(){
-    git grep -lz --untracked "$1" './*' ':!/*.sh' | xargs -0 perl -i'' -pE 's/'"$1"'/'"$2"'/g';
+    find . -type f > $HOME/tmp.$$.files.txt
+    for f in `cat $HOME/tmp.$$.files.txt`
+    do
+      cat $f | sed s/"${1}"/"${2}"/g > $HOME/tmp.$$.file.txt
+      mv $HOME/tmp.$$.file.txt $f
+    done
+    rm $HOME/tmp.$$.files.txt
 }
 
 find_and_replace_filename(){
@@ -79,5 +98,3 @@ do
     find_and_replace_filename_and_string "${OLD_NAMESPACE}${i}" "${NEW_NAMESPACE}${i}"
 done
 
-
-#mv ../CMakeCatchTemplate ../"${NEW_PROJECT_NAME}"
