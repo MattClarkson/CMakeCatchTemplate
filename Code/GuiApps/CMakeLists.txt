@@ -12,8 +12,6 @@
 #
 #============================================================================*/
 
-add_subdirectory(Lib)
-add_subdirectory(CommandLineApps)
-if(BUILD_GUI)
-  add_subdirectory(GuiApps)
+if(VTK_FOUND AND Qt5_DIR)
+  add_subdirectory(QtVTK)
 endif()

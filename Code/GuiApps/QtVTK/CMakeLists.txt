@@ -12,8 +12,7 @@
 #
 #============================================================================*/
 
-add_subdirectory(Lib)
-add_subdirectory(CommandLineApps)
-if(BUILD_GUI)
-  add_subdirectory(GuiApps)
-endif()
+add_subdirectory(Model)
+add_subdirectory(View)
+add_subdirectory(Controller)
+
