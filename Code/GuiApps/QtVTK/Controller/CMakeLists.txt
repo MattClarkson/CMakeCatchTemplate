@@ -12,4 +12,77 @@
 #
 #============================================================================*/
 
+#########################
+# Put .ui files here.
+#########################
+set(QTVTKCONTROLLER_UIS
+  mpTwinSliderWidget.ui
+)
+
+
+#########################
+# Put .cpp files here.
+#########################
+set(QTVTKCONTROLLER_SRCS
+  mpTwinSliderWidget.cpp
+)
+
+
+###################################
+# Put .h files that need moc here.
+###################################
+SET(QTVTKCONTROLLER_MOC_HDRS
+  mpTwinSliderWidget.h
+)
+
+
+##########################################
+# Put .h files that do not need moc here.
+##########################################
+SET(QTVTKCONTROLLER_HDRS
+  mpQtVTKControllerWin32ExportHeader.h
+)
+
+
+#########################
+# Resource file.
+#########################
+SET(QTVTKCONTROLLER_RES Resources/qtvtkcontroller.qrc)
+
+
+################################
+# Qt commands provided by CMake.
+################################
+qt5_wrap_ui(QT5_UIS ${QTVTKCONTROLLER_UIS} )
+qt5_wrap_cpp(QT5_MOCS ${QTVTKCONTROLLER_MOC_HDRS} )
+qt5_add_resources(QT5_RES ${QTVTKCONTROLLER_RES})
+
+################################
+# Bundle it all together.
+################################
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+add_library(qtvtkcontroller
+  ${QTVTKCONTROLLER_SRCS}
+  ${QTVTKCONTROLLER_HDRS}
+  ${QTVTKCONTROLLER_MOC_HDRS}
+  ${QT5_UIS}
+  ${QT5_MOCS}
+  ${QT5_RES}
+)
+
+
+#################################
+# Stuff for windows shared libs.
+#################################
+if(BUILD_SHARED_LIBS)
+  if(WIN32)
+    add_definitions(-DMYPROJECT_QTVTKCONTROLLER_WINDOWS_EXPORT)
+  endif(WIN32)
+endif(BUILD_SHARED_LIBS)
+
+
+#################################
+# Link the library.
+#################################
+target_link_libraries(qtvtkcontroller PRIVATE ${QT5_LINK_LIBRARIES})
 

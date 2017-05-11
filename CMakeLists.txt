@@ -115,7 +115,9 @@ endif()
 ######################################################################
 # Check for Qt up-front, as VTK may need it in SuperBuild.
 ######################################################################
-find_package(Qt5 5.4.2 QUIET COMPONENTS Concurrent OpenGL PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
+set(_qt_components Concurrent OpenGL PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
+set(QT5_LINK_LIBRARIES)
+find_package(Qt5 5.4.2 QUIET COMPONENTS ${_qt_components})
 if(Qt5_DIR)
   message(STATUS "Found Qt5: ${Qt5_DIR}")
   get_filename_component(_Qt5_DIR "${Qt5_DIR}/../../../" ABSOLUTE)
@@ -124,6 +126,13 @@ if(Qt5_DIR)
     set(CMAKE_PREFIX_PATH "${_Qt5_DIR};${CMAKE_PREFIX_PATH}" CACHE PATH "" FORCE)
   endif()
   set(MYPROJECT_PREFIX_PATH ${_Qt5_DIR})
+  foreach(_component ${_qt_components})
+    find_package(Qt5${_component} REQUIRED QUIET)
+    include_directories(${Qt5${_component}_INCLUDE_DIRS})
+    add_definitions(${Qt5${_component}_DEFINITIONS})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5${_component}_EXECUTABLE_COMPILE_FLAGS}")
+    list(APPEND QT5_LINK_LIBRARIES Qt5::${_component})
+  endforeach()
 endif()
 
 
