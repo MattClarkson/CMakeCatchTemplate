@@ -12,7 +12,11 @@
 
 =============================================================================*/
 #include "mpMainWindow.h"
-#include "mpExceptionMacro.h"
+#include <mpExceptionMacro.h>
+
+#include <QFileDialog>
+
+#include <cassert>
 
 namespace mp
 {
@@ -28,12 +32,27 @@ MainWindow::MainWindow(mp::VolumeRenderingModel* model)
 
   setupUi(this);
   setCentralWidget(m_CentralWidget);
+
+  bool ok = false;
+  ok = connect(actionOpen, SIGNAL(triggered()), this, SLOT(OnFileOpen()));
+  assert(ok);
 }
 
 
 //-----------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
+}
+
+
+//-----------------------------------------------------------------------------
+void MainWindow::OnFileOpen()
+{
+  QString fileName = QFileDialog::getOpenFileName(this);
+  if (!fileName.isEmpty())
+  {
+    m_Model->LoadFile(fileName);
+  }
 }
 
 } // end namespace

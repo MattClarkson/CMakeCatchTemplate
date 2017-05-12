@@ -13,6 +13,15 @@
 #============================================================================*/
 
 add_subdirectory(Model)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Model)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/Model)
+
 add_subdirectory(View)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/View)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/View)
+
 add_subdirectory(Controller)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Controller)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/Controller)
+
 add_subdirectory(App)

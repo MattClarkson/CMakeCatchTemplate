@@ -60,12 +60,12 @@ qt5_add_resources(QT5_RES ${QTVTKVIEW_RES})
 ################################
 # Bundle it all together.
 ################################
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_library(qtvtkview
   ${QTVTKVIEW_SRCS}
   ${QTVTKVIEW_HDRS}
-  ${QTVTKVIEW_MOC_HDRS}
   ${QT5_UIS}
   ${QT5_MOCS}
   ${QT5_RES}

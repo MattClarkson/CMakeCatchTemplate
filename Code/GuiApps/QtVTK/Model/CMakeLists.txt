@@ -58,7 +58,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_library(qtvtkmodel
   ${QTVTKCONTROLLER_SRCS}
   ${QTVTKCONTROLLER_HDRS}
-  ${QTVTKCONTROLLER_MOC_HDRS}
   ${QT5_MOCS}
   ${QT5_RES}
 )

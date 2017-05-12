@@ -29,4 +29,10 @@ VolumeRenderingModel::~VolumeRenderingModel()
 {
 }
 
+
+//-----------------------------------------------------------------------------
+void VolumeRenderingModel::LoadFile(const QString& fileName)
+{
+}
+
 } // end namespace

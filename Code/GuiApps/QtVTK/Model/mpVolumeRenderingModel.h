@@ -17,10 +17,9 @@
 
 #include "mpQtVTKModelWin32ExportHeader.h"
 
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-
 #include <QObject>
+
+class vtkActor;
 
 namespace mp
 {
@@ -33,8 +32,8 @@ namespace mp
 * To further illustrate this point, this class is not a QWidget,
 * it derives from QObject. This class is controlled via Qt signals and slots.
 *
-* It would be possible to make the rendering pipeline part of the View.
-* However, the rendering pipeline contains parameters, which must be set,
+* It would be possible to make some of the rendering pipeline part of the View.
+* However, the VTK rendering pipeline contains parameters, which must be set,
 * and these parameters form part of the data-model. So, for simplicity's sake
 * I have kept it all in the model. The View layer therefore just renders
 * the actors, so should remain quite thin.
@@ -49,9 +48,11 @@ public:
   VolumeRenderingModel();
   virtual ~VolumeRenderingModel();
 
+  void LoadFile(const QString& fileName);
+
 signals:
 
-  void NewActor();
+  void NewActor(vtkActor*);
 
 public slots:
 

@@ -40,16 +40,19 @@ qt5_wrap_cpp(QT5_MOCS ${APP_MOC_HDRS})
 qt5_add_resources(QT5_RES ${APP_RES})
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/../Model)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/../View)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/../Controller)
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../Model)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../View)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../Controller)
 
-add_executable(${APP_NAME} main.cpp ${APP_SRCS} ${APP_HDRS} ${QT5_UIS} ${QT5_MOCS} ${QT5_RES})
+message("Matt, QT5_UIS=${QT5_UIS}")
+message("Matt, QT5_MOCS=${QT5_MOCS}")
+
+add_executable(${APP_NAME}
+  ${APP_SRCS}
+  ${APP_HDRS}
+  ${QT5_UIS}
+  ${QT5_MOCS}
+  ${QT5_RES}
+  main.cpp
+)
 
 set(APP_LIBS
   myproject

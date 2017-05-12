@@ -17,10 +17,13 @@
 
 #include "ui_mpMainWindow.h"
 #include <mpVolumeRenderingModel.h>
+
 #include <QMainWindow>
 
 namespace mp
 {
+
+class VTKViewWidget;
 
 /**
 * \class MainWindow
@@ -35,9 +38,16 @@ public:
   MainWindow(mp::VolumeRenderingModel* model);
   virtual ~MainWindow();
 
+public slots:
+
+private slots:
+
+  void OnFileOpen();
+
 private:
 
   mp::VolumeRenderingModel* m_Model;
+  mp::VTKViewWidget*        m_Viewer;
 
 }; // end class
 
