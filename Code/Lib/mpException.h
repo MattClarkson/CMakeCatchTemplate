@@ -32,14 +32,14 @@ class MYPROJECT_WINEXPORT Exception : public std::exception
 public:
 
   Exception(const std::string& fileName, int lineNumber);
-  virtual ~Exception() throw( );
+  virtual ~Exception();
 
   std::string GetFileName() const;
   int GetLineNumber() const;
 
   std::string GetDescription() const;
   void SetDescription(const std::string& desc);
-  virtual const char* what() const throw();
+  virtual const char* What();
 
   Exception& operator<<(std::ostream& (*func)(std::ostream&))
   {

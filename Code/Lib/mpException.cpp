@@ -29,7 +29,7 @@ Exception::Exception(const std::string& fileName,
 
 
 //-----------------------------------------------------------------------------
-Exception::~Exception() throw( )
+Exception::~Exception()
 {
 
 }
@@ -64,7 +64,7 @@ void Exception::SetDescription(const std::string& desc)
 
 
 //-----------------------------------------------------------------------------
-const char* Exception::what() const throw()
+const char* Exception::What()
 {
   return m_Description.c_str();
 }
