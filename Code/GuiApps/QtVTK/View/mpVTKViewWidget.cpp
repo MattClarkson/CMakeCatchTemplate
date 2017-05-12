@@ -36,7 +36,7 @@ VTKViewWidget::~VTKViewWidget()
 
 
 //-----------------------------------------------------------------------------
-void VTKViewWidget::SetRenderer(vtkRenderer* r)
+void VTKViewWidget::AddRenderer(vtkRenderer* r)
 {
   if (r == nullptr)
   {

@@ -47,15 +47,15 @@ public:
   VolumeRenderingModel();
   virtual ~VolumeRenderingModel();
 
-  vtkRenderer* GetRenderer() const;
-
+  /**
+   * \brief Load file into the pipeline.
+   */
   void LoadFile(const QString& fileName);
 
-signals:
-
-public slots:
-
-private slots:
+  /**
+   * \brief Get hold of the renderer.
+   */
+  vtkRenderer* GetRenderer() const;
 
 private:
 

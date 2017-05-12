@@ -41,7 +41,7 @@ public:
   VTKViewWidget(QWidget* parent);
   virtual ~VTKViewWidget();
 
-  void SetRenderer(vtkRenderer* r);
+  void AddRenderer(vtkRenderer* r);
 
 }; // end class
 

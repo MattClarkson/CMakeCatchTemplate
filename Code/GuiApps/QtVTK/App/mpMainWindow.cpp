@@ -54,7 +54,7 @@ MainWindow::~MainWindow()
 void MainWindow::ConnectRenderer()
 {
   m_Viewer = m_CentralWidget->GetVTKViewWidget();
-  m_Viewer->SetRenderer(m_Model->GetRenderer());
+  m_Viewer->AddRenderer(m_Model->GetRenderer());
 }
 
 

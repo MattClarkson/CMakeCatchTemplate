@@ -30,6 +30,5 @@ int main(int argc, char** argv)
   mainWin.ConnectRenderer();
   mainWin.showMaximized();
 
-  // Starts event loop.
   return app.exec();
 }
