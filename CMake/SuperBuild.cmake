@@ -245,7 +245,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DBUILD_TESTING:BOOL=${BUILD_TESTING} # The value set in EP_COMMON_ARGS normally forces this off, but we may need MYPROJECT to be on.
       -DBUILD_SUPERBUILD:BOOL=OFF           # Must force this to be off, or else you will loop forever.
       -DWITHIN_SUPERBUILD:BOOL=ON
-      -DBUILD_GUI:BOOL=${BUILD_GUI}
+      -DBUILD_QTVTKGUI:BOOL=${BUILD_QTVTKGUI}
       -DBUILD_gflags:BOOL=${BUILD_gflags}
       -DBUILD_glog:BOOL=${BUILD_glog}
       -DBUILD_Eigen:BOOL=${BUILD_Eigen}

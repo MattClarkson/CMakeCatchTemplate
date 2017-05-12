@@ -12,6 +12,8 @@
 #
 #============================================================================*/
 
-if(VTK_FOUND AND Qt5_DIR)
+if(BUILD_QTVTKGUI AND VTK_FOUND AND Qt5_DIR)
   add_subdirectory(QtVTK)
 endif()
+
+# Other GUI architectures coming soon!
