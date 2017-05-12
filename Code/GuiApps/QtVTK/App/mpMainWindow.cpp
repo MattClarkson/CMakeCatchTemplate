@@ -20,6 +20,13 @@ namespace mp
 MainWindow::MainWindow()
 {
   setupUi(this);
+  setCentralWidget(m_CentralWidget);
+}
+
+
+//-----------------------------------------------------------------------------
+MainWindow::~MainWindow()
+{
 }
 
 } // end namespace

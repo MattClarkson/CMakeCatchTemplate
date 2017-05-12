@@ -11,33 +11,22 @@
   See LICENSE.txt in the top level directory for details.
 
 =============================================================================*/
-
-#ifndef mpMainWindow_h
-#define mpMainWindow_h
-
-#include "ui_mpMainWindow.h"
-#include <QMainWindow>
+#include "mpCentralWidget.h"
 
 namespace mp
 {
 
-/**
-* \class MainWindow
-* \brief Demo widget provides main window!
-*/
-class MainWindow : public QMainWindow, public Ui_MainWindow
+//-----------------------------------------------------------------------------
+CentralWidget::CentralWidget(QWidget *parent)
+: QWidget(parent)
 {
-  Q_OBJECT
+  setupUi(this);
+}
 
-public:
 
-  MainWindow();
-  virtual ~MainWindow();
-
-private:
-
-}; // end class
+//-----------------------------------------------------------------------------
+CentralWidget::~CentralWidget()
+{
+}
 
 } // end namespace
-
-#endif

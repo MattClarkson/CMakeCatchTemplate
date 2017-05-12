@@ -12,29 +12,28 @@
 
 =============================================================================*/
 
-#ifndef mpMainWindow_h
-#define mpMainWindow_h
+#ifndef mpCentralWidget_h
+#define mpCentralWidget_h
 
-#include "ui_mpMainWindow.h"
-#include <QMainWindow>
+#include "ui_mpCentralWidget.h"
+
+#include <QWidget>
 
 namespace mp
 {
 
 /**
-* \class MainWindow
-* \brief Demo widget provides main window!
+* \class CentralWidget
+* \brief Demo widget to group a VTKViewWidget with ControlPanelWidget.
 */
-class MainWindow : public QMainWindow, public Ui_MainWindow
+class CentralWidget : public QWidget, public Ui_CentralWidget
 {
   Q_OBJECT
 
 public:
 
-  MainWindow();
-  virtual ~MainWindow();
-
-private:
+  CentralWidget(QWidget* parent);
+  virtual ~CentralWidget();
 
 }; // end class
 
