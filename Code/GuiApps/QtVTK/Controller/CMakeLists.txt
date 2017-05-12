@@ -17,6 +17,7 @@
 #########################
 set(QTVTKCONTROLLER_UIS
   mpTwinSliderWidget.ui
+  mpControlPanelWidget.ui
 )
 
 
@@ -25,6 +26,7 @@ set(QTVTKCONTROLLER_UIS
 #########################
 set(QTVTKCONTROLLER_SRCS
   mpTwinSliderWidget.cpp
+  mpControlPanelWidget.cpp
 )
 
 
@@ -33,6 +35,7 @@ set(QTVTKCONTROLLER_SRCS
 ###################################
 SET(QTVTKCONTROLLER_MOC_HDRS
   mpTwinSliderWidget.h
+  mpControlPanelWidget.h
 )
 
 
@@ -61,6 +64,8 @@ qt5_add_resources(QT5_RES ${QTVTKCONTROLLER_RES})
 # Bundle it all together.
 ################################
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 add_library(qtvtkcontroller
   ${QTVTKCONTROLLER_SRCS}
   ${QTVTKCONTROLLER_HDRS}
