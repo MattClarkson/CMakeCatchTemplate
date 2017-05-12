@@ -16,6 +16,9 @@
 #define mpVTKViewWidget_h
 
 #include "mpQtVTKViewWin32ExportHeader.h"
+#include <vtkSmartPointer.h>
+#include <vtkRenderer.h>
+
 #include <QVTKWidget2.h>
 
 namespace mp
@@ -38,11 +41,7 @@ public:
   VTKViewWidget(QWidget* parent);
   virtual ~VTKViewWidget();
 
-signals:
-
-public slots:
-
-private slots:
+  void SetRenderer(vtkRenderer* r);
 
 }; // end class
 

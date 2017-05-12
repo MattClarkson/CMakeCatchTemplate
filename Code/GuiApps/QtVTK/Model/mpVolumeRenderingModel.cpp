@@ -21,12 +21,20 @@ namespace mp
 //-----------------------------------------------------------------------------
 VolumeRenderingModel::VolumeRenderingModel()
 {
+  m_Renderer = vtkSmartPointer<vtkRenderer>::New();
 }
 
 
 //-----------------------------------------------------------------------------
 VolumeRenderingModel::~VolumeRenderingModel()
 {
+}
+
+
+//-----------------------------------------------------------------------------
+vtkRenderer* VolumeRenderingModel::GetRenderer() const
+{
+  return m_Renderer.GetPointer();
 }
 
 

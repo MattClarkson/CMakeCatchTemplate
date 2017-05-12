@@ -13,11 +13,6 @@
 =============================================================================*/
 #include "mpCentralWidget.h"
 
-#include <vtkActor.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-#include <vtkGenericOpenGLRenderWindow.h>
-
 namespace mp
 {
 
@@ -39,13 +34,6 @@ CentralWidget::~CentralWidget()
 VTKViewWidget* CentralWidget::GetVTKViewWidget() const
 {
   return m_VTKView;
-}
-
-
-//-----------------------------------------------------------------------------
-void CentralWidget::AddActor(vtkActor* a)
-{
-  VTKViewWidget *viewer = this->GetVTKViewWidget();
 }
 
 } // end namespace

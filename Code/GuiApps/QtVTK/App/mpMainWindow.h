@@ -37,8 +37,7 @@ public:
 
   MainWindow(mp::VolumeRenderingModel* model);
   virtual ~MainWindow();
-
-public slots:
+  void ConnectRenderer();
 
 private slots:
 

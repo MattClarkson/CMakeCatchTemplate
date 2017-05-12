@@ -14,6 +14,10 @@
 #include "mpMainWindow.h"
 #include <mpExceptionMacro.h>
 
+#include <vtkRenderer.h>
+#include <vtkRenderWindow.h>
+#include <vtkGenericOpenGLRenderWindow.h>
+
 #include <QFileDialog>
 
 #include <cassert>
@@ -28,10 +32,11 @@ MainWindow::MainWindow(mp::VolumeRenderingModel* model)
   {
     mpExceptionThrow() << "Model is null.";
   }
-  m_Model = model;
 
   setupUi(this);
   setCentralWidget(m_CentralWidget);
+
+  m_Model = model;
 
   bool ok = false;
   ok = connect(actionOpen, SIGNAL(triggered()), this, SLOT(OnFileOpen()));
@@ -42,6 +47,14 @@ MainWindow::MainWindow(mp::VolumeRenderingModel* model)
 //-----------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
+}
+
+
+//-----------------------------------------------------------------------------
+void MainWindow::ConnectRenderer()
+{
+  m_Viewer = m_CentralWidget->GetVTKViewWidget();
+  m_Viewer->SetRenderer(m_Model->GetRenderer());
 }
 
 

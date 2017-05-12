@@ -402,9 +402,9 @@ if(BUILD_VTK)
   #       Its called 'config mode' when running find_package
   #       Its the preferred approach because VTK can then control what is exposed.
   find_package(VTK REQUIRED)
+  include(${VTK_USE_FILE})
   include_directories(${VTK_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${VTK_LIBRARIES})
-  #add_definitions(${VTK_DEFINITIONS})
   add_definitions(-DBUILD_VTK)
 endif()
 

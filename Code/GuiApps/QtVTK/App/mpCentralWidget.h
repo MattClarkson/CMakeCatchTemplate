@@ -19,8 +19,6 @@
 #include <mpVTKViewWidget.h>
 #include <QWidget>
 
-class vtkActor;
-
 namespace mp
 {
 
@@ -38,8 +36,6 @@ public:
   virtual ~CentralWidget();
 
   VTKViewWidget* GetVTKViewWidget() const;
-
-  void AddActor(vtkActor* a);
 
 }; // end class
 

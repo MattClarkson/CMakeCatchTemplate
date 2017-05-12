@@ -16,10 +16,9 @@
 #define mpVolumeRenderingModel_h
 
 #include "mpQtVTKModelWin32ExportHeader.h"
-
+#include <vtkSmartPointer.h>
+#include <vtkRenderer.h>
 #include <QObject>
-
-class vtkActor;
 
 namespace mp
 {
@@ -48,17 +47,19 @@ public:
   VolumeRenderingModel();
   virtual ~VolumeRenderingModel();
 
+  vtkRenderer* GetRenderer() const;
+
   void LoadFile(const QString& fileName);
 
 signals:
-
-  void NewActor(vtkActor*);
 
 public slots:
 
 private slots:
 
 private:
+
+  vtkSmartPointer<vtkRenderer> m_Renderer;
 
 }; // end class
 
