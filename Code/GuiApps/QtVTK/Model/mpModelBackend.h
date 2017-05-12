@@ -12,31 +12,34 @@
 
 =============================================================================*/
 
-#ifndef mpVTKViewWidget_h
-#define mpVTKViewWidget_h
+#ifndef mpModelBackend_h
+#define mpModelBackend_h
 
-#include "mpQtVTKViewWin32ExportHeader.h"
-#include <QVTKWidget2.h>
+#include "mpQtVTKModelWin32ExportHeader.h"
+
+#include <QObject>
 
 namespace mp
 {
 
 /**
-* \class VTKViewWidget
-* \brief Demo widget to provide a standard VTK window.
+* \class ModelBackend
+* \brief Demo backend, to contain VTK pipelines.
 *
-* You could just use QVTKWidget2 directly, as at the moment,
-* this is just a placeholder in case we want more logic.
+* Intended to demonstrate that this class knows nothing about the View,
+* and is controlled via Qt signals and slots.
+*
+* Also note that this class is not a QWidget, it derives from QObject.
 */
-MYPROJECT_QTVTKVIEWWINEXPORT
-class VTKViewWidget : public QVTKWidget2
+MYPROJECT_QTVTKMODELWINEXPORT
+class ModelBackend : public QObject
 {
   Q_OBJECT
 
 public:
 
-  VTKViewWidget(QWidget* parent);
-  virtual ~VTKViewWidget();
+  ModelBackend(QObject* parent);
+  virtual ~ModelBackend();
 
 signals:
 
