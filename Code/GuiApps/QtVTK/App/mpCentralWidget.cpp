@@ -29,4 +29,11 @@ CentralWidget::~CentralWidget()
 {
 }
 
+
+//-----------------------------------------------------------------------------
+VTKViewWidget* CentralWidget::GetVTKViewWidget() const
+{
+  return m_VTKView;
+}
+
 } // end namespace

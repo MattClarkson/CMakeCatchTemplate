@@ -12,15 +12,14 @@
 
 =============================================================================*/
 #include "mpModelBackend.h"
-
+#include <stdexcept>
 #include <cassert>
 
 namespace mp
 {
 
 //-----------------------------------------------------------------------------
-ModelBackend::ModelBackend(QObject* parent)
-: QObject(parent)
+ModelBackend::ModelBackend()
 {
 }
 

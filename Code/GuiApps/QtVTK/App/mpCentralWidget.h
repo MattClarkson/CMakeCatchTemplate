@@ -16,6 +16,7 @@
 #define mpCentralWidget_h
 
 #include "ui_mpCentralWidget.h"
+#include <mpVTKViewWidget.h>
 
 #include <QWidget>
 
@@ -34,6 +35,8 @@ public:
 
   CentralWidget(QWidget* parent);
   virtual ~CentralWidget();
+
+  VTKViewWidget* GetVTKViewWidget() const;
 
 }; // end class
 

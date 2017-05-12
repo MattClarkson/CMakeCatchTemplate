@@ -13,12 +13,20 @@
 =============================================================================*/
 #include "mpMainWindow.h"
 
+#include <stdexcept>
+
 namespace mp
 {
 
 //-----------------------------------------------------------------------------
-MainWindow::MainWindow()
+MainWindow::MainWindow(mp::ModelBackend* model)
 {
+  if (model == nullptr)
+  {
+    throw std::invalid_argument("Model is null.");
+  }
+  m_Model = model;
+
   setupUi(this);
   setCentralWidget(m_CentralWidget);
 }
