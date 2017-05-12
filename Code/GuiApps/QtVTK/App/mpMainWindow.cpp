@@ -12,8 +12,7 @@
 
 =============================================================================*/
 #include "mpMainWindow.h"
-
-#include <stdexcept>
+#include "mpExceptionMacro.h"
 
 namespace mp
 {
@@ -23,7 +22,7 @@ MainWindow::MainWindow(mp::ModelBackend* model)
 {
   if (model == nullptr)
   {
-    throw std::invalid_argument("Model is null.");
+    mpExceptionThrow() << "Model is null.";
   }
   m_Model = model;
 

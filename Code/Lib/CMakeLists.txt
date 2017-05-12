@@ -15,6 +15,11 @@
 set(MYPROJECT_SRCS
   mpBasicTypes.cpp
   mpMyFunctions.cpp
+  mpException.cpp
+)
+
+set(MYPROJECT_HDRS
+  mpExceptionMacro.h
 )
 
 add_library(myproject ${MYPROJECT_SRCS})

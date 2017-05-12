@@ -52,6 +52,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../Controller)
 add_executable(${APP_NAME} main.cpp ${APP_SRCS} ${APP_HDRS} ${QT5_UIS} ${QT5_MOCS} ${QT5_RES})
 
 set(APP_LIBS
+  myproject
   qtvtkmodel
   qtvtkview
   qtvtkcontroller
