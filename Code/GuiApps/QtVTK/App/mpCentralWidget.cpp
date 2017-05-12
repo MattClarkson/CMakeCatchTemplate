@@ -13,6 +13,8 @@
 =============================================================================*/
 #include "mpCentralWidget.h"
 
+#include <cassert>
+
 namespace mp
 {
 
@@ -21,6 +23,12 @@ CentralWidget::CentralWidget(QWidget *parent)
 : QWidget(parent)
 {
   setupUi(this);
+
+  bool ok = false;
+  ok = connect(m_RightHandControlPanel, SIGNAL(WindowValuesChanged(int,int)), this, SIGNAL(WindowValuesChanged(int,int)));
+  assert(ok);
+  ok = connect(m_RightHandControlPanel, SIGNAL(DoSomethingPressed()), this, SIGNAL(DoSomethingPressed()));
+  assert(ok);
 }
 
 

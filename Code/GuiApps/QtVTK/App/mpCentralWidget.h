@@ -37,6 +37,11 @@ public:
 
   VTKViewWidget* GetVTKViewWidget() const;
 
+signals:
+
+  void WindowValuesChanged(int low, int high);
+  void DoSomethingPressed();
+
 }; // end class
 
 } // end namespace

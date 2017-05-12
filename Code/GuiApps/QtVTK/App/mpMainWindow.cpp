@@ -41,6 +41,10 @@ MainWindow::MainWindow(mp::VolumeRenderingModel* model)
   bool ok = false;
   ok = connect(actionOpen, SIGNAL(triggered()), this, SLOT(OnFileOpen()));
   assert(ok);
+  ok = connect(m_CentralWidget, SIGNAL(WindowValuesChanged(int, int)), m_Model, SLOT(SetIntensityWindow(int, int)));
+  assert(ok);
+  ok = connect(m_CentralWidget, SIGNAL(DoSomethingPressed()), m_Model, SLOT(DoSomethingPressed()));
+  assert(ok);
 }
 
 

@@ -43,4 +43,18 @@ void VolumeRenderingModel::LoadFile(const QString& fileName)
 {
 }
 
+
+//-----------------------------------------------------------------------------
+void VolumeRenderingModel::SetIntensityWindow(int minValue, int maxValue)
+{
+  std::cout << "Window min=" << minValue << ", max=" << maxValue << std::endl;
+}
+
+
+//-----------------------------------------------------------------------------
+void VolumeRenderingModel::DoSomethingPressed()
+{
+  std::cout << "DoSomethingPressed()" << std::endl;
+}
+
 } // end namespace

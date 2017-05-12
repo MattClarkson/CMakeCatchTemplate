@@ -57,6 +57,11 @@ public:
    */
   vtkRenderer* GetRenderer() const;
 
+public slots:
+
+  void SetIntensityWindow(int minValue, int maxValue);
+  void DoSomethingPressed();
+
 private:
 
   vtkSmartPointer<vtkRenderer> m_Renderer;
