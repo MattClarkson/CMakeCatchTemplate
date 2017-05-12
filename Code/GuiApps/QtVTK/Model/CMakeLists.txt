@@ -16,7 +16,7 @@
 # Put .cpp files here.
 #########################
 set(QTVTKCONTROLLER_SRCS
-  mpModelBackend.cpp
+  mpVolumeRenderingModel.cpp
 )
 
 
@@ -24,7 +24,7 @@ set(QTVTKCONTROLLER_SRCS
 # Put .h files that need moc here.
 ###################################
 SET(QTVTKCONTROLLER_MOC_HDRS
-  mpModelBackend.h
+  mpVolumeRenderingModel.h
 )
 
 

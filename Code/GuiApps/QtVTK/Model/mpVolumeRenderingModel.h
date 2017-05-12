@@ -12,8 +12,8 @@
 
 =============================================================================*/
 
-#ifndef mpModelBackend_h
-#define mpModelBackend_h
+#ifndef mpVolumeRenderingModel_h
+#define mpVolumeRenderingModel_h
 
 #include "mpQtVTKModelWin32ExportHeader.h"
 
@@ -26,7 +26,7 @@ namespace mp
 {
 
 /**
-* \class ModelBackend
+* \class VolumeRenderingModel
 * \brief Demo backend, to contain VTK pipelines.
 *
 * Intended to demonstrate that this class knows nothing about the View.
@@ -40,14 +40,14 @@ namespace mp
 * the actors, so should remain quite thin.
 */
 MYPROJECT_QTVTKMODELWINEXPORT
-class ModelBackend : public QObject
+class VolumeRenderingModel : public QObject
 {
   Q_OBJECT
 
 public:
 
-  ModelBackend();
-  virtual ~ModelBackend();
+  VolumeRenderingModel();
+  virtual ~VolumeRenderingModel();
 
 signals:
 

@@ -14,7 +14,7 @@
 
 #include <QApplication>
 #include "mpMainWindow.h"
-#include <mpModelBackend.h>
+#include <mpVolumeRenderingModel.h>
 #include <QScopedPointer>
 
 int main(int argc, char** argv)
@@ -23,7 +23,7 @@ int main(int argc, char** argv)
   app.setOrganizationName("UCL");
   app.setApplicationName("Example QtVTK app.");
 
-  QScopedPointer<mp::ModelBackend> mb(new mp::ModelBackend());
+  QScopedPointer<mp::VolumeRenderingModel> mb(new mp::VolumeRenderingModel());
 
   mp::MainWindow mainWin(mb.data());
   mainWin.showMaximized();

@@ -16,7 +16,7 @@
 #define mpMainWindow_h
 
 #include "ui_mpMainWindow.h"
-#include <mpModelBackend.h>
+#include <mpVolumeRenderingModel.h>
 #include <QMainWindow>
 
 namespace mp
@@ -24,7 +24,7 @@ namespace mp
 
 /**
 * \class MainWindow
-* \brief Demo widget provides main window, and connects it to backend.
+* \brief Demo widget provides main window, and connects it to Model.
 */
 class MainWindow : public QMainWindow, public Ui_MainWindow
 {
@@ -32,12 +32,12 @@ class MainWindow : public QMainWindow, public Ui_MainWindow
 
 public:
 
-  MainWindow(mp::ModelBackend* model);
+  MainWindow(mp::VolumeRenderingModel* model);
   virtual ~MainWindow();
 
 private:
 
-  mp::ModelBackend* m_Model;
+  mp::VolumeRenderingModel* m_Model;
 
 }; // end class
 

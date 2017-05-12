@@ -11,7 +11,7 @@
   See LICENSE.txt in the top level directory for details.
 
 =============================================================================*/
-#include "mpModelBackend.h"
+#include "mpVolumeRenderingModel.h"
 #include <stdexcept>
 #include <cassert>
 
@@ -19,13 +19,13 @@ namespace mp
 {
 
 //-----------------------------------------------------------------------------
-ModelBackend::ModelBackend()
+VolumeRenderingModel::VolumeRenderingModel()
 {
 }
 
 
 //-----------------------------------------------------------------------------
-ModelBackend::~ModelBackend()
+VolumeRenderingModel::~VolumeRenderingModel()
 {
 }
 

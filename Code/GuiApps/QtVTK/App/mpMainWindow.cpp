@@ -18,7 +18,7 @@ namespace mp
 {
 
 //-----------------------------------------------------------------------------
-MainWindow::MainWindow(mp::ModelBackend* model)
+MainWindow::MainWindow(mp::VolumeRenderingModel* model)
 {
   if (model == nullptr)
   {
