@@ -13,10 +13,7 @@
 =============================================================================*/
 #include "mpCentralWidget.h"
 
-#include <vtkActor.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-#include <vtkGenericOpenGLRenderWindow.h>
+#include <cassert>
 
 namespace mp
 {
@@ -26,6 +23,12 @@ CentralWidget::CentralWidget(QWidget *parent)
 : QWidget(parent)
 {
   setupUi(this);
+
+  bool ok = false;
+  ok = connect(m_RightHandControlPanel, SIGNAL(WindowValuesChanged(int,int)), this, SIGNAL(WindowValuesChanged(int,int)));
+  assert(ok);
+  ok = connect(m_RightHandControlPanel, SIGNAL(DoSomethingPressed()), this, SIGNAL(DoSomethingPressed()));
+  assert(ok);
 }
 
 
@@ -43,9 +46,9 @@ VTKViewWidget* CentralWidget::GetVTKViewWidget() const
 
 
 //-----------------------------------------------------------------------------
-void CentralWidget::AddActor(vtkActor* a)
+void CentralWidget::SetIntensityRange(int low, int high)
 {
-  VTKViewWidget *viewer = this->GetVTKViewWidget();
+  m_RightHandControlPanel->SetIntensityRange(low, high);
 }
 
 } // end namespace

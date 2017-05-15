@@ -41,6 +41,8 @@ public:
   ControlPanelWidget(QWidget* parent);
   virtual ~ControlPanelWidget();
 
+  void SetIntensityRange(int low, int high);
+
 signals:
 
   void WindowValuesChanged(int low, int high);

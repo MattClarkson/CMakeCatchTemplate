@@ -26,8 +26,9 @@ int main(int argc, char** argv)
   QScopedPointer<mp::VolumeRenderingModel> mb(new mp::VolumeRenderingModel());
 
   mp::MainWindow mainWin(mb.data());
+  mainWin.show();
+  mainWin.ConnectRenderer();
   mainWin.showMaximized();
 
-  // Starts event loop.
   return app.exec();
 }

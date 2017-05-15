@@ -12,6 +12,10 @@
 
 =============================================================================*/
 #include "mpVTKViewWidget.h"
+#include <mpExceptionMacro.h>
+#include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
 
 #include <cassert>
 
@@ -28,6 +32,25 @@ VTKViewWidget::VTKViewWidget(QWidget* parent)
 //-----------------------------------------------------------------------------
 VTKViewWidget::~VTKViewWidget()
 {
+}
+
+
+//-----------------------------------------------------------------------------
+void VTKViewWidget::AddRenderer(vtkRenderer* r)
+{
+  if (r == nullptr)
+  {
+    mpExceptionThrow() << "Renderer is NULL";
+  }
+
+  this->GetRenderWindow()->AddRenderer(r);
+}
+
+
+//-----------------------------------------------------------------------------
+void VTKViewWidget::Render()
+{
+  this->GetRenderWindow()->Render();
 }
 
 } // end namespace

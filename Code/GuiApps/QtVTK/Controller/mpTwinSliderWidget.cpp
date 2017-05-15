@@ -137,6 +137,7 @@ void TwinSliderWidget::OnLowValueChanged(int low)
     m_MaxSpinBox->setValue(low+1);
     m_MaxScrollBar->setValue(low+1);
   }
+  emit ValuesChanged(m_MinSpinBox->value(), m_MaxSpinBox->value());
 }
 
 
@@ -148,6 +149,7 @@ void TwinSliderWidget::OnHighValueChanged(int high)
     m_MinSpinBox->setValue(high-1);
     m_MinScrollBar->setValue(high-1);
   }
+  emit ValuesChanged(m_MinSpinBox->value(), m_MaxSpinBox->value());
 }
 
 } // end namespace
