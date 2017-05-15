@@ -37,4 +37,12 @@ ControlPanelWidget::~ControlPanelWidget()
 {
 }
 
+
+//-----------------------------------------------------------------------------
+void ControlPanelWidget::SetIntensityRange(int low, int high)
+{
+  m_TwinSliderWidget->SetRange(low, high);
+  m_TwinSliderWidget->SetValues(low, high);
+}
+
 } // end namespace

@@ -46,4 +46,11 @@ void VTKViewWidget::AddRenderer(vtkRenderer* r)
   this->GetRenderWindow()->AddRenderer(r);
 }
 
+
+//-----------------------------------------------------------------------------
+void VTKViewWidget::Render()
+{
+  this->GetRenderWindow()->Render();
+}
+
 } // end namespace

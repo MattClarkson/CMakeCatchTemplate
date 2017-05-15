@@ -37,6 +37,10 @@ public:
 
   VTKViewWidget* GetVTKViewWidget() const;
 
+public slots:
+
+  void SetIntensityRange(int low, int high);
+
 signals:
 
   void WindowValuesChanged(int low, int high);

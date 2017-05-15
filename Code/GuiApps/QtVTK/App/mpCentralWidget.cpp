@@ -44,4 +44,11 @@ VTKViewWidget* CentralWidget::GetVTKViewWidget() const
   return m_VTKView;
 }
 
+
+//-----------------------------------------------------------------------------
+void CentralWidget::SetIntensityRange(int low, int high)
+{
+  m_RightHandControlPanel->SetIntensityRange(low, high);
+}
+
 } // end namespace

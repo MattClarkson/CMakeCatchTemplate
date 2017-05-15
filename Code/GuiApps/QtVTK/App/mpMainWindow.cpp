@@ -19,6 +19,7 @@
 #include <vtkGenericOpenGLRenderWindow.h>
 
 #include <QFileDialog>
+#include <QStandardPaths>
 
 #include <cassert>
 
@@ -39,11 +40,21 @@ MainWindow::MainWindow(mp::VolumeRenderingModel* model)
   m_Model = model;
 
   bool ok = false;
+
+  // Connect main window to model.
   ok = connect(actionOpen, SIGNAL(triggered()), this, SLOT(OnFileOpen()));
   assert(ok);
+
+  // Connect widgets to model
   ok = connect(m_CentralWidget, SIGNAL(WindowValuesChanged(int, int)), m_Model, SLOT(SetIntensityWindow(int, int)));
   assert(ok);
   ok = connect(m_CentralWidget, SIGNAL(DoSomethingPressed()), m_Model, SLOT(DoSomethingPressed()));
+  assert(ok);
+
+  // Connect model to widgets.
+  ok = connect(m_Model, SIGNAL(ImageLoaded(int, int)), m_CentralWidget, SLOT(SetIntensityRange(int, int)));
+  assert(ok);
+  ok = connect(m_Model, SIGNAL(Modified()), m_CentralWidget->GetVTKViewWidget(), SLOT(Render()));
   assert(ok);
 }
 
@@ -65,10 +76,19 @@ void MainWindow::ConnectRenderer()
 //-----------------------------------------------------------------------------
 void MainWindow::OnFileOpen()
 {
-  QString fileName = QFileDialog::getOpenFileName(this);
-  if (!fileName.isEmpty())
+
+  QStringList paths;
+  paths = QStandardPaths::standardLocations(QStandardPaths::HomeLocation);
+  assert(paths.size() == 1);
+  QString path = paths[0];
+
+  QString dirName = QFileDialog::getExistingDirectory(
+        this, "Choose a directory", path,
+        QFileDialog::ShowDirsOnly);
+
+  if (!dirName.isEmpty())
   {
-    m_Model->LoadFile(fileName);
+    m_Model->LoadDirectory(dirName);
   }
 }
 

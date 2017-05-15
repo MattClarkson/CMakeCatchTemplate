@@ -16,8 +16,15 @@
 #define mpVolumeRenderingModel_h
 
 #include "mpQtVTKModelWin32ExportHeader.h"
+
 #include <vtkSmartPointer.h>
 #include <vtkRenderer.h>
+#include <vtkDICOMImageReader.h>
+#include <vtkSmartVolumeMapper.h>
+#include <vtkColorTransferFunction.h>
+#include <vtkPiecewiseFunction.h>
+#include <vtkVolumeProperty.h>
+#include <vtkVolume.h>
 #include <QObject>
 
 namespace mp
@@ -48,14 +55,19 @@ public:
   virtual ~VolumeRenderingModel();
 
   /**
-   * \brief Load file into the pipeline.
+   * \brief Load DICOM directory into the pipeline.
    */
-  void LoadFile(const QString& fileName);
+  void LoadDirectory(const QString& dirName);
 
   /**
    * \brief Get hold of the renderer.
    */
   vtkRenderer* GetRenderer() const;
+
+signals:
+
+  void ImageLoaded(int minValue, int maxValue);
+  void Modified();
 
 public slots:
 
@@ -64,7 +76,13 @@ public slots:
 
 private:
 
-  vtkSmartPointer<vtkRenderer> m_Renderer;
+  vtkSmartPointer<vtkDICOMImageReader>      m_ImageReader;
+  vtkSmartPointer<vtkSmartVolumeMapper>     m_VolumeMapper;
+  vtkSmartPointer<vtkColorTransferFunction> m_ColorTransferFunction;
+  vtkSmartPointer<vtkPiecewiseFunction>     m_OpacityTransferFunction;
+  vtkSmartPointer<vtkVolumeProperty>        m_VolumeProperty;
+  vtkSmartPointer<vtkVolume>                m_Volume;
+  vtkSmartPointer<vtkRenderer>              m_Renderer;
 
 }; // end class
 

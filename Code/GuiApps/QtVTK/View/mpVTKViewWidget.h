@@ -43,6 +43,10 @@ public:
 
   void AddRenderer(vtkRenderer* r);
 
+public slots:
+
+  void Render();
+
 }; // end class
 
 } // end namespace
