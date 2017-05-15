@@ -23,14 +23,14 @@ Overview
 --------
 
 The features provided are:
- 1. Meta-Build, a.k.a. SuperBuild to download and build Boost, Eigen and OpenCV.
+ 1. Meta-Build, a.k.a. SuperBuild to download and build Boost, Eigen, OpenCV, glog, gflags and VTK.
  2. A single library for the main functionality - called myproject, so you should rename it.
  3. Unit tests, using Catch, and run with CTest - to demonstrate correctness and regression.
  4. A single command line application - to give the end user a functioning program.
  5. KWStyle to check some basic code style - for consistency
  6. CppCheck to check some code features - for performance, style and correctness
  7. Doxygen config - for documentation
- 8. CI build with Travis
+ 8. CI build with Travis and appveyor (if project is open-source).
 
 
 Tested On
@@ -48,7 +48,7 @@ Note: Installation and Packaging are not ready yet.
 Build Instructions
 -----------------------------
 
-This project can be configured to build against Eigen, Boost and OpenCV.
+This project can be configured to build against Eigen, Boost, OpenCV, glog, gflags and VTK.
 These were chosen as an example of how to use CMake, and some common
 C++ projects. These dependencies are optional, and this project
 will compile without them.
@@ -67,7 +67,7 @@ Then to select any of Eigen, Boost or OpenCV, use CMake to set:
   * BUILD_Boost:BOOL=ON|OFF
   * BUILD_OpenCV:BOOL=ON|OFF
 
-So, if BUILD_SUPERBUILD=OFF, then CMake will just try finding
+and so on. If BUILD_SUPERBUILD=OFF, and these variables are on, then CMake will just try finding
 locally installed versions rather then downloading them.
 
 To switch between static/dynamic linking, use CMake to set:
