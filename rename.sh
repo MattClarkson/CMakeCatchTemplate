@@ -2,7 +2,7 @@
 
 #/*============================================================================
 #
-#  MYPROJECT: A software package for whatever.
+#  NEWPROJECT: Project for visualisation of DBT.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #
@@ -14,30 +14,29 @@
 #
 #============================================================================*/
 
-# Script which changes generic name MyProject, namespace mp etc to a project name of your choice.
+# Script which changes generic name NewProject, namespace newproj etc to a project name of your choice.
 # USAGE: Just change the variables prefixed by NEW below to an appropriate name then run the script.
 
 ######################################################
 ##                 EDIT THIS PART                   ##
 ######################################################
 
-NEW_PROJECT_NAME_CAMEL_CASE='NewProject';
-NEW_PROJECT_NAME_LOWER_CASE='newproject';
-NEW_PROJECT_NAME_CAPS='NEWPROJECT';
-NEW_SHORT_DESCRIPTION='A project for doing stuff.';
-NEW_NAMESPACE='newproj';
+NEW_PROJECT_NAME_CAMEL_CASE='PhDProject';
+NEW_PROJECT_NAME_LOWER_CASE='phdproject';
+NEW_PROJECT_NAME_CAPS='PHDPROJECT';
+NEW_SHORT_DESCRIPTION='Project for visualisation of DBT.';
+NEW_NAMESPACE='vdbt';
 
 
 ######################################################
 
 # Strings to replace
-
 OLD_DIR_NAME='CMakeCatchTemplate';
-OLD_PROJECT_NAME_CAMEL_CASE='MyProject';
-OLD_PROJECT_NAME_LOWER_CASE='myproject';
-OLD_PROJECT_NAME_CAPS='MYPROJECT';
-OLD_DOXYGEN_INTRO='MyProject is a software library to perform whatever.'
-OLD_SHORT_DESCRIPTION='MyProject: A software package for whatever.';
+OLD_PROJECT_NAME_CAMEL_CASE='PhDProject';
+OLD_PROJECT_NAME_LOWER_CASE='phdproject';
+OLD_PROJECT_NAME_CAPS='PHDPROJECT';
+OLD_DOXYGEN_INTRO='Project for visualisation of DBT.'
+OLD_SHORT_DESCRIPTION='Project for visualisation of DBT.';
 OLD_NAMESPACE='mp';
 
 #### Replacements ###
@@ -62,12 +61,12 @@ find_and_replace_filename_and_string(){
 }
 
 # Change comment at top of each file describing project
-find_and_replace_string "${OLD_SHORT_DESCRIPTION}" "${NEW_PROJECT_NAME_CAMEL_CASE}"": ""${NEW_SHORT_DESCRIPTION}" ;
+find_and_replace_string "${OLD_SHORT_DESCRIPTION}" "${NEW_SHORT_DESCRIPTION}" ;
 
 # Change Doxygen intro
-find_and_replace_string "${OLD_DOXYGEN_INTRO}" "${NEW_PROJECT_NAME_CAMEL_CASE}"": ""${NEW_SHORT_DESCRIPTION}";
+find_and_replace_string "${OLD_DOXYGEN_INTRO}" "${NEW_SHORT_DESCRIPTION}";
 
-# Replace name MyProject, myproject, MYPROJECT
+# Replace name NewProject, newproject, NEWPROJECT
 find_and_replace_string "$OLD_PROJECT_NAME_CAMEL_CASE" "$NEW_PROJECT_NAME_CAMEL_CASE"
 find_and_replace_string "$OLD_PROJECT_NAME_LOWER_CASE" "$NEW_PROJECT_NAME_LOWER_CASE"
 find_and_replace_string "$OLD_PROJECT_NAME_CAPS" "$NEW_PROJECT_NAME_CAPS"
@@ -82,19 +81,32 @@ find_and_replace_filename "$OLD_PROJECT_NAME_LOWER_CASE" "$NEW_PROJECT_NAME_LOWE
 find_and_replace_filename "$OLD_PROJECT_NAME_CAPS" "$NEW_PROJECT_NAME_CAPS"
 
 # mp prefixes
-declare -a file_names=("BasicTypes.cpp" "BasicTypes_h" "BasicTypes.h"
-                "MyFunctions_h" "CatchMain_h"
-                "MyFunctions.cpp" "MyFunctions.h"
-                "Win32ExportHeader_h" "Win32ExportHeader.h"
-                "BasicTest.cpp"
-                "CatchMain.cpp" "CatchMain.h"
-                "CommandLineArgsTest.cpp"
-                "BasicTest" "CommandLineArgsTest"
-                "MyFirstApp"
-                )
+for g in .h .cpp .ui
+do
+  find . -name "${OLD_NAMESPACE}*${g}" > $HOME/tmp.$$.${OLD_NAMESPACE}.${g}.txt
+  for f in `cat $HOME/tmp.$$.${OLD_NAMESPACE}.${g}.txt`
+  do
+    basename $f $g | cut -c 3-10000 >> $HOME/tmp.$$.prefixes.txt
+  done
+  rm $HOME/tmp.$$.${OLD_NAMESPACE}.${g}.txt
+done
+cat $HOME/tmp.$$.prefixes.txt | sort -u > $HOME/tmp.$$.prefixes.sorted.txt
+for f in `cat $HOME/tmp.$$.prefixes.sorted.txt`
+do
+  echo "${f}\.cpp" >> $HOME/tmp.$$.prefixes.all.txt
+  echo "${f}_h" >> $HOME/tmp.$$.prefixes.all.txt
+  echo "${f}\.h" >> $HOME/tmp.$$.prefixes.all.txt
+  echo "${f}\.ui" >> $HOME/tmp.$$.prefixes.all.txt
+  echo "${f}" >> $HOME/tmp.$$.prefixes.all.txt
+done
 
+declare -a file_names=(`cat $HOME/tmp.$$.prefixes.all.txt`)
 for i in "${file_names[@]}"
 do
     find_and_replace_filename_and_string "${OLD_NAMESPACE}${i}" "${NEW_NAMESPACE}${i}"
 done
+rm $HOME/tmp.$$.prefixes.txt
+rm $HOME/tmp.$$.prefixes.sorted.txt
+rm $HOME/tmp.$$.prefixes.all.txt
+
 
