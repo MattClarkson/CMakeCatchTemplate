@@ -138,6 +138,8 @@ if(Qt5_DIR)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5${_component}_EXECUTABLE_COMPILE_FLAGS}")
     list(APPEND QT5_LINK_LIBRARIES Qt5::${_component})
   endforeach()
+else()
+  message(WARN "Didn't find Qt.")
 endif()
 
 
