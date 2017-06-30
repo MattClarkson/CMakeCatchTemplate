@@ -120,26 +120,59 @@ endif()
 ######################################################################
 # Check for Qt up-front, as VTK may need it in SuperBuild.
 ######################################################################
-set(_qt_components Concurrent OpenGL PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
-set(QT5_LINK_LIBRARIES)
-find_package(Qt5 5.4.2 QUIET COMPONENTS ${_qt_components})
-if(Qt5_DIR)
-  message(STATUS "Found Qt5: ${Qt5_DIR}")
-  get_filename_component(_Qt5_DIR "${Qt5_DIR}/../../../" ABSOLUTE)
-  list(FIND CMAKE_PREFIX_PATH "${_Qt5_DIR}" _result)
-  if(_result LESS 0)
-    set(CMAKE_PREFIX_PATH "${_Qt5_DIR};${CMAKE_PREFIX_PATH}" CACHE PATH "" FORCE)
+if(MYPROJECT_USE_QT)
+  set(ADDITIONAL_SEARCH_PATHS)
+  set(_qt_components Concurrent OpenGL PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
+  if(UNIX AND NOT APPLE)
+    list(APPEND _qt_components X11Extras)
   endif()
-  set(MYPROJECT_PREFIX_PATH ${_Qt5_DIR})
-  foreach(_component ${_qt_components})
-    find_package(Qt5${_component} REQUIRED QUIET)
-    include_directories(${Qt5${_component}_INCLUDE_DIRS})
-    add_definitions(${Qt5${_component}_DEFINITIONS})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5${_component}_EXECUTABLE_COMPILE_FLAGS}")
-    list(APPEND QT5_LINK_LIBRARIES Qt5::${_component})
-  endforeach()
-else()
-  message(WARN "Didn't find Qt.")
+  set(QT5_LINK_LIBRARIES)
+  find_package(Qt5 5.4.2 QUIET COMPONENTS ${_qt_components})
+  if(Qt5_DIR)
+    message(STATUS "Found Qt5: ${Qt5_DIR}")
+    get_filename_component(_Qt5_DIR "${Qt5_DIR}/../../../" ABSOLUTE)
+    list(FIND CMAKE_PREFIX_PATH "${_Qt5_DIR}" _result)
+    if(_result LESS 0)
+      set(CMAKE_PREFIX_PATH "${_Qt5_DIR};${CMAKE_PREFIX_PATH}" CACHE PATH "" FORCE)
+    endif()
+    set(MYPROJECT_PREFIX_PATH ${_Qt5_DIR})
+    foreach(_component ${_qt_components})
+      find_package(Qt5${_component} REQUIRED QUIET)
+      include_directories(${Qt5${_component}_INCLUDE_DIRS})
+      add_definitions(${Qt5${_component}_DEFINITIONS})
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5${_component}_EXECUTABLE_COMPILE_FLAGS}")
+      list(APPEND QT5_LINK_LIBRARIES Qt5::${_component})
+    endforeach()
+    set(_qmake_location )
+    if(TARGET ${Qt5Core_QMAKE_EXECUTABLE})
+      get_property(_qmake_location TARGET ${Qt5Core_QMAKE_EXECUTABLE}
+                   PROPERTY IMPORT_LOCATION)
+    endif()
+    if(_qmake_location)
+      if(NOT _qt_install_libs)
+        if(WIN32)
+          execute_process(COMMAND ${_qmake_location} -query QT_INSTALL_BINS
+                          OUTPUT_VARIABLE _qt_install_libs
+                          OUTPUT_STRIP_TRAILING_WHITESPACE)
+        else()
+          execute_process(COMMAND ${_qmake_location} -query QT_INSTALL_LIBS
+                          OUTPUT_VARIABLE _qt_install_libs
+                          OUTPUT_STRIP_TRAILING_WHITESPACE)
+        endif()
+        file(TO_CMAKE_PATH "${_qt_install_libs}" _qt_install_libs)
+        set(_qt_install_libs ${_qt_install_libs} CACHE INTERNAL "Qt library installation prefix" FORCE)
+      endif()
+      if(_qt_install_libs)
+        list(APPEND ADDITIONAL_SEARCH_PATHS ${_qt_install_libs})
+      endif()
+    else()
+      message(WARNING "The qmake executable could not be found.")
+    endif()
+  endif()
+endif(MYPROJECT_USE_QT)
+
+if(MYPROJECT_USE_QT AND NOT Qt5_DIR)
+  message(FATAL " Qt was required but not found")
 endif()
 
 
@@ -153,7 +186,7 @@ set(CMAKE_MODULE_PATH
    )
 include(mitkMacroEmptyExternalProject)
 include(mitkFunctionCheckCompilerFlags)
-
+include(mpMacroInstall)
 
 
 ######################################################################
@@ -278,6 +311,8 @@ message("CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/License.dox ${CMAKE_BINARY_DIR}/Doxygen/License.dox)
 configure_file(${CMAKE_SOURCE_DIR}/LICENSE.txt ${CMAKE_BINARY_DIR}/LICENSE.txt @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/README.txt ${CMAKE_BINARY_DIR}/README.txt @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/INSTALLATION.txt ${CMAKE_BINARY_DIR}/INSTALLATION.txt @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/CMake/Findglog.cmake.in ${CMAKE_BINARY_DIR}/Findglog.cmake @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/CMake/Findgflags.cmake.in ${CMAKE_BINARY_DIR}/Findgflags.cmake @ONLY)
 
@@ -299,7 +334,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Add Mandatory Requirements
 ######################################################################
 set(ALL_THIRD_PARTY_LIBRARIES)
-set(ADDITIONAL_SEARCH_PATHS ${CMAKE_BINARY_DIR}/bin/${VS_BUILD_TYPE})
+list(APPEND ADDITIONAL_SEARCH_PATHS ${CMAKE_BINARY_DIR}/bin/${VS_BUILD_TYPE})
 
 
 ######################################################################
@@ -426,23 +461,98 @@ endif(WIN32)
 
 
 ######################################################################
+# This is a list of all known GUI apps. Used for things like
+# creating Mac OSX bundles, and each command line app gets copied
+# into each OSX bundle.
+######################################################################
+set(_known_apps "")
+if (BUILD_QTVTKGUI)
+  list(APPEND _known_apps QtVTKApp)
+endif()
+set_property(GLOBAL PROPERTY MYPROJECT_APPS ${_known_apps})
+
+
+######################################################################
 # Add code folders.
 ######################################################################
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+
 foreach(type LIBRARY RUNTIME ARCHIVE)
   set(output_dir ${CMAKE_BINARY_DIR}/bin)
   set(CMAKE_${type}_OUTPUT_DIRECTORY ${output_dir} CACHE INTERNAL "Single output directory for building all libraries.")
   mark_as_advanced(CMAKE_${type}_OUTPUT_DIRECTORY)
 endforeach()
+
 include_directories(${CMAKE_SOURCE_DIR}/Code/Lib)
+
 add_subdirectory(Code)
+
 add_subdirectory(Documentation)
+
 if(BUILD_TESTING)
   set(TEMP_DIR ${CMAKE_BINARY_DIR}/Testing/Temporary)
   include_directories(${CMAKE_SOURCE_DIR}/Testing/)
   add_subdirectory(Testing)
 endif()
 
+
+######################################################################
+# Packaging code.
+######################################################################
+set(MYPROJECT_PACKAGE_NAME "MyProject" CACHE STRING "")
+if(WIN32)
+  set(MYPROJECT_BASE_NAME "MyProject" CACHE STRING "")
+else()
+  set(MYPROJECT_BASE_NAME "myproject" CACHE STRING "")
+endif()
+set(MYPROJECT_VERSION_STRING "${MYPROJECT_VERSION_MAJOR}.${MYPROJECT_VERSION_MINOR}.${MYPROJECT_VERSION_PATCH}" CACHE STRING "String to describe fully named version" FORCE)
+set(MYPROJECT_DEPLOY_NAME "${MYPROJECT_BASE_NAME}-${MYPROJECT_VERSION_STRING}" CACHE STRING "")
+set(MYPROJECT_CONTACT "Your Name Here <your@email.com>" CACHE STRING "")
+
+# 1. Setup defaults, common for all generators.
+include(CPackSetup)
+
+# 2. Configuring the Start Menu and Desktop icon strings for NSIS
+if (WIN32)
+  set(ICONS_SETUP_STRING "")
+  set(ICONS_REMOVE_STRING "")
+  set(DESKTOP_ICONS_SETUP_STRING "")
+  set(DESKTOP_ICONS_REMOVE_STRING "")
+  set(DESKTOP_ICONS_REMOVE_STRING "")
+
+  get_property(_apps GLOBAL PROPERTY MYPROJECT_APPS)
+
+  foreach(app_name ${_apps})
+
+    message("Current App Name: ${app_name}")
+
+    set(ICONS_SETUP_STRING "${ICONS_SETUP_STRING}CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\${app_name}.lnk' '$INSTDIR\\\\bin\\\\${app_name}.exe'\n")
+    set(ICONS_REMOVE_STRING "${ICONS_REMOVE_STRING}Delete '$SMPROGRAMS\\\\$MUI_TEMP\\\\${app_name}.lnk'\n")
+
+    set(DESKTOP_ICONS_SETUP_STRING "${DESKTOP_ICONS_SETUP_STRING}CreateShortCut '$DESKTOP\\\\${app_name}.lnk' '$INSTDIR\\\\bin\\\\${app_name}.exe'\n")
+    set(DESKTOP_ICONS_REMOVE_STRING "${DESKTOP_ICONS_REMOVE_STRING}Delete '$DESKTOP\\\\${app_name}.lnk'\n")
+  endforeach()
+endif()
+
+# 3. Set variables that may be platform (Windows/Linux/Mac) or Generator (TGZ,DEB,NSIS) specific.
+#    When CPack runs, it just uses all the information in the generated files cmake_install.cmake.
+#    So, CPack does not read all your configuration information in CMakeLists.txt, and CPack
+#    does not re-run any cmake process.  So, it is cmake that reads all the CMakeLists.txt files
+#    and generates all the cmake_install.cmake.  So this command will use cmake to generate
+#    and additional file, that we can politely ask cpack to include, in addition to all the
+#    cmake_install.cmake files.
+
+configure_file(${CMAKE_SOURCE_DIR}/CMake/CPackOptions.cmake.in
+               ${CMAKE_BINARY_DIR}/MYPROJECTCPackOptions.cmake)
+
+# 4. Set a variable with the name of this file.
+set(CPACK_PROJECT_CONFIG_FILE "${CMAKE_BINARY_DIR}/MYPROJECTCPackOptions.cmake")
+
+# 5. Include this optional file.
+include(MYPROJECTCPackOptions)
+
+# 6. Include CPack module once all variables are set.
+include(CPack)
 
 ######################################################################
 # If we are under Windows, create batch files which correctly

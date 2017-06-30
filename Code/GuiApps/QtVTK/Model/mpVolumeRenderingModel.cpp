@@ -61,9 +61,9 @@ vtkRenderer* VolumeRenderingModel::GetRenderer() const
 
 
 //-----------------------------------------------------------------------------
-void VolumeRenderingModel::LoadDirectory(const QString& dirName)
+void VolumeRenderingModel::LoadDirectory(const std::string& dirName)
 {
-  m_ImageReader->SetDirectoryName(dirName.toStdString().c_str());
+  m_ImageReader->SetDirectoryName(dirName.c_str());
   m_ImageReader->Update();
 
   vtkImageData *input = m_ImageReader->GetOutput();
@@ -79,7 +79,7 @@ void VolumeRenderingModel::LoadDirectory(const QString& dirName)
     double min = ihs->GetMinimum();
     double max = ihs->GetMaximum();
 
-    std::cout << "Loaded image:" << dirName.toStdString() << ", size="
+    std::cout << "Loaded image:" << dirName << ", size="
               << dims[0] << ", "
               << dims[1] << ", "
               << dims[2] << ", "

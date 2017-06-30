@@ -88,7 +88,7 @@ void MainWindow::OnFileOpen()
 
   if (!dirName.isEmpty())
   {
-    m_Model->LoadDirectory(dirName);
+    m_Model->LoadDirectory(dirName.toStdString());
   }
 }
 
