@@ -2,7 +2,7 @@
 
 #/*============================================================================
 #
-#  NEWPROJECT: Project for visualisation of DBT.
+#  NEWPROJECT: A software package for whatever.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #
@@ -14,29 +14,29 @@
 #
 #============================================================================*/
 
-# Script which changes generic name NewProject, namespace newproj etc to a project name of your choice.
+# Script which changes generic name MyProject, namespace mp etc to a project name of your choice.
 # USAGE: Just change the variables prefixed by NEW below to an appropriate name then run the script.
 
 ######################################################
 ##                 EDIT THIS PART                   ##
 ######################################################
 
-NEW_PROJECT_NAME_CAMEL_CASE='PhDProject';
-NEW_PROJECT_NAME_LOWER_CASE='phdproject';
-NEW_PROJECT_NAME_CAPS='PHDPROJECT';
-NEW_SHORT_DESCRIPTION='Project for visualisation of DBT.';
-NEW_NAMESPACE='vdbt';
+NEW_PROJECT_NAME_CAMEL_CASE='MyProject';
+NEW_PROJECT_NAME_LOWER_CASE='myproject';
+NEW_PROJECT_NAME_CAPS='MYPROJECT';
+NEW_SHORT_DESCRIPTION='A software package for whatever.';
+NEW_NAMESPACE='mp';
 
 
 ######################################################
 
 # Strings to replace
 OLD_DIR_NAME='CMakeCatchTemplate';
-OLD_PROJECT_NAME_CAMEL_CASE='PhDProject';
-OLD_PROJECT_NAME_LOWER_CASE='phdproject';
-OLD_PROJECT_NAME_CAPS='PHDPROJECT';
-OLD_DOXYGEN_INTRO='Project for visualisation of DBT.'
-OLD_SHORT_DESCRIPTION='Project for visualisation of DBT.';
+OLD_PROJECT_NAME_CAMEL_CASE='MyProject';
+OLD_PROJECT_NAME_LOWER_CASE='myproject';
+OLD_PROJECT_NAME_CAPS='MYPROJECT';
+OLD_DOXYGEN_INTRO='A software package for whatever.'
+OLD_SHORT_DESCRIPTION='A software package for whatever.';
 OLD_NAMESPACE='mp';
 
 #### Replacements ###
@@ -86,7 +86,7 @@ do
   find . -name "${OLD_NAMESPACE}*${g}" > $HOME/tmp.$$.${OLD_NAMESPACE}.${g}.txt
   for f in `cat $HOME/tmp.$$.${OLD_NAMESPACE}.${g}.txt`
   do
-    basename $f $g | cut -c 3-10000 >> $HOME/tmp.$$.prefixes.txt
+    basename $f $g | cut -c 5-10000 >> $HOME/tmp.$$.prefixes.txt
   done
   rm $HOME/tmp.$$.${OLD_NAMESPACE}.${g}.txt
 done

@@ -28,6 +28,7 @@ if(BUILD_SHARED_LIBS)
   if(WIN32)
     add_definitions(-DMYPROJECT_WINDOWS_EXPORT)
   endif(WIN32)
+  MYPROJECT_INSTALL(TARGETS myproject)
 endif(BUILD_SHARED_LIBS)
 
 target_link_libraries(myproject PRIVATE ${ALL_THIRD_PARTY_LIBRARIES})

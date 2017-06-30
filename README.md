@@ -31,7 +31,7 @@ The features provided are:
  6. CppCheck to check some code features - for performance, style and correctness
  7. Doxygen config - for documentation
  8. CI build with Travis and appveyor (if project is open-source).
-
+ 9. CPack setup for the first GUI called QtVTKApp, and command line apps.
 
 Tested On
 -----------------------------
@@ -41,8 +41,6 @@ Tested On
  * Mac - OSX 10.10.5, clang 6.0, CMake 3.6.3
 
 With all other versions - good luck.
-
-Note: Installation and Packaging are not ready yet.
 
 
 Build Instructions

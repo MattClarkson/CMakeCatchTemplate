@@ -18,4 +18,5 @@ set(MYPROJECT_APPS
 foreach(app ${MYPROJECT_APPS})
   add_executable(${app} ${app}.cpp)
   target_link_libraries(${app} myproject ${ALL_THIRD_PARTY_LIBRARIES})
+  MYPROJECT_INSTALL(TARGETS ${app})
 endforeach()

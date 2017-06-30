@@ -57,7 +57,7 @@ public:
   /**
    * \brief Load DICOM directory into the pipeline.
    */
-  void LoadDirectory(const QString& dirName);
+  void LoadDirectory(const std::string& dirName);
 
   /**
    * \brief Get hold of the renderer.
