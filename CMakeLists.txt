@@ -48,7 +48,9 @@ option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_Eigen "Build Eigen." OFF)
 option(BUILD_Boost "Build Boost." OFF)
 option(BUILD_VTK "Build VTK." OFF)
-option(BUILD_QTVTKGUI "Build QtVTK." OFF)
+option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
+option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
+
 option(MYPROJECT_USE_QT "Use Qt, normally for GUI development, but can be for anything." OFF)
 
 if(BUILD_glog AND NOT BUILD_gflags)
@@ -58,6 +60,11 @@ endif()
 
 if(BUILD_QTVTKGUI AND NOT MYPROJECT_USE_QT)
   message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QTVTKGUI being ON.")
+  set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt, normally for GUI development, but can be for anything." FORCE)
+endif()
+
+if(BUILD_QMLDEMO AND NOT MYPROJECT_USE_QT)
+  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QMLDEMO being ON.")
   set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt, normally for GUI development, but can be for anything." FORCE)
 endif()
 
@@ -123,6 +130,9 @@ endif()
 if(MYPROJECT_USE_QT)
   set(ADDITIONAL_SEARCH_PATHS)
   set(_qt_components Concurrent OpenGL PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
+  if(BUILD_QMLDEMO)
+    list(APPEND _qt_components Quick Qml Gui)
+  endif()
   if(UNIX AND NOT APPLE)
     list(APPEND _qt_components X11Extras)
   endif()
@@ -187,6 +197,7 @@ set(CMAKE_MODULE_PATH
 include(mitkMacroEmptyExternalProject)
 include(mitkFunctionCheckCompilerFlags)
 include(mpMacroInstall)
+include(mpCreateGuiApplication)
 
 
 ######################################################################
