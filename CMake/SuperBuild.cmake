@@ -242,6 +242,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DBUILD_SUPERBUILD:BOOL=OFF           # Must force this to be off, or else you will loop forever.
       -DWITHIN_SUPERBUILD:BOOL=ON
       -DBUILD_QTVTKGUI:BOOL=${BUILD_QTVTKGUI}
+      -DBUILD_QML:BOOL=${BUILD_QML}
       -DBUILD_gflags:BOOL=${BUILD_gflags}
       -DBUILD_glog:BOOL=${BUILD_glog}
       -DBUILD_Eigen:BOOL=${BUILD_Eigen}
