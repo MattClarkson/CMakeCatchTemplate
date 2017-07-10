@@ -31,7 +31,7 @@ The features provided are:
  6. CppCheck to check some code features - for performance, style and correctness
  7. Doxygen config - for documentation
  8. CI build with Travis and appveyor (if project is open-source).
- 9. CPack setup for the first GUI called QtVTKApp, and command line apps.
+ 9. CPack setup for GUI apps QtVTKApp and QMLDemo along with command line apps.
 
 Tested On
 -----------------------------
