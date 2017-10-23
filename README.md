@@ -23,7 +23,7 @@ Overview
 --------
 
 The features provided are:
- 1. Meta-Build, a.k.a. SuperBuild to download and build Boost, Eigen, OpenCV, glog, gflags and VTK.
+ 1. Meta-Build, a.k.a. SuperBuild to download and build Boost, Eigen, OpenCV, glog, gflags, VTK and PCL.
  2. A single library for the main functionality - called myproject, so you should rename it.
  3. Unit tests, using Catch, and run with CTest - to demonstrate correctness and regression.
  4. A single command line application - to give the end user a functioning program.
@@ -36,17 +36,17 @@ The features provided are:
 Tested On
 -----------------------------
 
- * Windows - Windows 8, VS2012, CMake 3.3.1
+ * Windows - Windows 8, VS2013, CMake 3.6.3
  * Linux - Centos 7, g++ 4.8.5, CMake 3.5.1
- * Mac - OSX 10.10.5, clang 6.0, CMake 3.6.3
+ * Mac - OSX 10.10.5, clang 6.0, CMake 3.9.4
 
-With all other versions - good luck.
+Minimum CMake is 3.5. With all other versions - good luck.
 
 
 Build Instructions
 -----------------------------
 
-This project can be configured to build against Eigen, Boost, OpenCV, glog, gflags and VTK.
+This project can be configured to build against Eigen, Boost, OpenCV, glog, gflags, VTK and PCL.
 These were chosen as an example of how to use CMake, and some common
 C++ projects. These dependencies are optional, and this project
 will compile without them.
@@ -59,7 +59,7 @@ To download and build dependencies, use CMake to configure:
 
   * BUILD_SUPERBUILD:BOOL=ON
 
-Then to select any of Eigen, Boost or OpenCV, use CMake to set:
+Then to select any of Eigen, Boost or OpenCV etc., use CMake to set:
 
   * BUILD_Eigen:BOOL=ON|OFF
   * BUILD_Boost:BOOL=ON|OFF

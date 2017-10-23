@@ -28,7 +28,7 @@ if(DEFINED BOOST_ROOT AND NOT EXISTS ${BOOST_ROOT})
 endif()
 
 set(version "1_64_0")
-set(location "${NIFTK_EP_TARBALL_LOCATION}/boost_${version}.tar.bz2")
+set(location "${NIFTK_EP_TARBALL_LOCATION}/boost_${version}.tar.gz")
 mpMacroDefineExternalProjectVariables(Boost ${version} ${location})
 set(proj_DEPENDENCIES )
 

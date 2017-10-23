@@ -12,6 +12,7 @@ addons:
           - gcc-5
           - g++-5
           - clang-3.6
+
 matrix:
   include:
     - compiler: gcc
@@ -48,10 +49,29 @@ matrix:
           packages:
             - clang-3.7
       env: COMPILER=clang++-3.7
+
+before_install:
+  - |
+    sudo apt-get update
+    sudo apt-get -yqq install freeglut3
+    sudo apt-get -yqq install freeglut3-dev 
+    sudo apt-get -yqq install binutils-gold 
+    sudo apt-get -yqq install libglew-dev 
+    sudo apt-get -yqq install mesa-common-dev  
+    sudo apt-get -yqq install build-essential 
+    sudo apt-get -yqq install libglew1.5-dev 
+    sudo apt-get -yqq install libglm-dev 
+    sudo apt-get -yqq install mesa-utils-extra 
+    sudo apt-get -yqq install libgl1-mesa-dev 
+    sudo apt-get -yqq install libglapi-mesa 
+    wget -q https://cmake.org/files/v3.6/cmake-3.6.3-Linux-x86_64.sh
+    sh cmake-3.6.3-Linux-x86_64.sh --skip-license
+    ls -lrt /usr/lib/x86_64-linux-gnu
+
 script:
   - mkdir build
   - cd build
-  - CXX="g++-4.8" CC="gcc-4.8" cmake -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
+  - CXX="g++-4.8" CC="gcc-4.8" ../bin/cmake -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=ON -DBUILD_OpenCV:BOOL=ON ..
   - make
   - cd MYPROJECT-build
   - ctest .

@@ -15,7 +15,7 @@
 ######################################################################
 # Set the minimum CMake version.
 ######################################################################
-set(MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION 3.9)
+set(MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION 3.5)
 cmake_minimum_required(VERSION ${MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION})
 
 
@@ -138,6 +138,14 @@ endif()
 find_package(Git REQUIRED)
 if (WIN32)
   set(GITCOMMAND ${GIT_EXECUTABLE})
+endif()
+
+
+######################################################################
+# PCL requires OpenGL.
+######################################################################
+if(BUILD_PCL)
+  find_package(OpenGL REQUIRED)
 endif()
 
 
