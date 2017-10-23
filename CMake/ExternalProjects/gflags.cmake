@@ -26,8 +26,8 @@ endif()
 
 set(gflags_VERSION "3476433")
 set(location "${NIFTK_EP_TARBALL_LOCATION}/gflags-${gflags_VERSION}.tar.gz")
-
 mpMacroDefineExternalProjectVariables(gflags ${gflags_VERSION} ${location})
+set(proj_DEPENDENCIES )
 
 if(NOT DEFINED gflags_DIR)
 

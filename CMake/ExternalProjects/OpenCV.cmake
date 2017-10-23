@@ -26,8 +26,8 @@ endif()
 
 set(version "2.4.11")
 set(location "${NIFTK_EP_TARBALL_LOCATION}/OpenCV-${version}.tar.gz")
-
 mpMacroDefineExternalProjectVariables(OpenCV ${version} ${location})
+set(proj_DEPENDENCIES )
 
 if(NOT DEFINED OpenCV_DIR)
 

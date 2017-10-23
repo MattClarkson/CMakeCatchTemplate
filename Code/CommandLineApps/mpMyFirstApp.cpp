@@ -37,6 +37,11 @@
 #include <cv.h>
 #endif
 
+#ifdef BUILD_PCL
+#include <pcl/point_types.h>
+#include <pcl/common/projection_matrix.h>
+#endif
+
 /**
  * \brief Demo file to check that #includes and library linkage is correct.
  */
@@ -65,6 +70,10 @@ int main(int argc, char** argv)
 #ifdef BUILD_OpenCV
   cv::Matx44d matrix = cv::Matx44d::eye();
   std::cout << "Printing 4x4 matrix ..." << matrix << std::endl;
+#endif
+
+#ifdef BUILD_PCL
+  pcl::PointCloud<pcl::PointXYZ> cloud;
 #endif
 
   std::cout << "Calculating ... " << mp::MyFirstFunction(1) << std::endl;

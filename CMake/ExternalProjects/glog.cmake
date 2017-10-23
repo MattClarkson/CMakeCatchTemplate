@@ -26,9 +26,7 @@ endif()
 
 set(glog_VERSION "e8ddd96")
 set(location "${NIFTK_EP_TARBALL_LOCATION}/glog-${glog_VERSION}.tar.gz")
-
 mpMacroDefineExternalProjectVariables(glog ${glog_VERSION} ${location})
-
 set(proj_DEPENDENCIES gflags)
 
 if(NOT DEFINED glog_DIR)

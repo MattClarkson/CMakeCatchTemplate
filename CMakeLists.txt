@@ -15,7 +15,7 @@
 ######################################################################
 # Set the minimum CMake version.
 ######################################################################
-set(MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION 3.2)
+set(MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION 3.9)
 cmake_minimum_required(VERSION ${MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION})
 
 
@@ -44,10 +44,12 @@ set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
 option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via SuperBuild.cmake." ON)
 option(BUILD_gflags "Build gflags." OFF)
 option(BUILD_glog "Build glog." OFF)
-option(BUILD_OpenCV "Build OpenCV." OFF)
-option(BUILD_Eigen "Build Eigen." OFF)
 option(BUILD_Boost "Build Boost." OFF)
+option(BUILD_Eigen "Build Eigen." OFF)
+option(BUILD_FLANN "Build FLANN." OFF)
+option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_VTK "Build VTK." OFF)
+option(BUILD_PCL "Build PCL." OFF)
 option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
 
@@ -56,6 +58,21 @@ option(MYPROJECT_USE_QT "Use Qt, normally for GUI development, but can be for an
 if(BUILD_glog AND NOT BUILD_gflags)
   message("Forcing BUILD_gflags to ON due to BUILD_glog being ON.")
   set(BUILD_gflags ON CACHE BOOL "Build gflags." FORCE)
+endif()
+
+if(BUILD_PCL AND NOT BUILD_Boost)
+  message("Forcing BUILD_Boost to ON due to BUILD_PCL being ON.")
+  set(BUILD_Boost ON CACHE BOOL "Build Boost." FORCE)
+endif()
+
+if(BUILD_PCL AND NOT BUILD_Eigen)
+  message("Forcing BUILD_Eigen to ON due to BUILD_PCL being ON.")
+  set(BUILD_Eigen ON CACHE BOOL "Build Eigen." FORCE)
+endif()
+
+if(BUILD_PCL AND NOT BUILD_FLANN)
+  message("Forcing BUILD_FLANN to ON due to BUILD_PCL being ON.")
+  set(BUILD_FLANN ON CACHE BOOL "Build FLANN." FORCE)
 endif()
 
 if(BUILD_QTVTKGUI AND NOT MYPROJECT_USE_QT)
@@ -130,6 +147,9 @@ endif()
 if(MYPROJECT_USE_QT)
   set(ADDITIONAL_SEARCH_PATHS)
   set(_qt_components Concurrent OpenGL PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
+  if(BUILD_VTK)
+    list(APPEND _qt_components WebKitWidgets)
+  endif()
   if(BUILD_QMLDEMO)
     list(APPEND _qt_components Quick Qml Gui)
   endif()
@@ -370,6 +390,7 @@ if(BUILD_gflags)
     list(APPEND ALL_THIRD_PARTY_LIBRARIES Shlwapi)
   endif()
   set(ADDITIONAL_SEARCH_PATHS "${gflags_DIR}${_library_sub_dir};${ADDITIONAL_SEARCH_PATHS}")
+  configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/gflags.txt ${CMAKE_BINARY_DIR}/LICENSE_gflags.txt)
 endif()
 
 if(BUILD_glog)
@@ -380,6 +401,7 @@ if(BUILD_glog)
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${glog_LIBRARY})
   add_definitions(-DBUILD_glog)
   set(ADDITIONAL_SEARCH_PATHS "${glog_DIR}${_library_sub_dir};${ADDITIONAL_SEARCH_PATHS}")
+  configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/glog.txt ${CMAKE_BINARY_DIR}/LICENSE_glog.txt)
 endif()
 
 if(BUILD_Eigen)
@@ -410,7 +432,7 @@ if(BUILD_Boost)
     set(Boost_USE_STATIC_LIBS ON)
     set(Boost_USE_STATIC_RUNTIME ON) 
   endif()
-  find_package(Boost 1.56 EXACT COMPONENTS filesystem system date_time regex REQUIRED)
+  find_package(Boost 1.64 EXACT COMPONENTS filesystem system date_time regex REQUIRED)
   include_directories(${Boost_INCLUDE_DIRS})
   link_directories(${Boost_LIBRARY_DIRS})
   if(WIN32)
@@ -454,6 +476,24 @@ if(BUILD_VTK)
   include_directories(${VTK_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${VTK_LIBRARIES})
   add_definitions(-DBUILD_VTK)
+  configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/VTK.txt ${CMAKE_BINARY_DIR}/LICENSE_VTK.txt)
+endif()
+
+if(BUILD_PCL)
+  # Example of:
+  #   (1) When SuperBuild builds PCL it adds PCL_DIR to CMAKE_PREFIX_PATH
+  #       So, PCL is found using PCL's provided PCLConfig.cmake.
+  #       Its called 'config mode' when running find_package
+  #       Its the preferred approach because PCL can then control what is exposed.
+  set(PCL_FIND_QUIETLY ON)
+  find_package(PCL REQUIRED)
+  include_directories(${PCL_INCLUDE_DIRS})
+  link_directories(${PCL_LIBRARY_DIRS})
+  add_definitions(${PCL_DEFINITIONS})
+  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${PCL_LIBRARIES})
+  add_definitions(-DBUILD_PCL)
+  set(ADDITIONAL_SEARCH_PATHS "${PCL_LIBRARY_DIRS};${ADDITIONAL_SEARCH_PATHS}")
+  configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/PCL.txt ${CMAKE_BINARY_DIR}/LICENSE_PCL.txt)
 endif()
 
 set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})
