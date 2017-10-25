@@ -24,10 +24,15 @@ if(DEFINED VTK_DIR AND NOT EXISTS ${VTK_DIR})
   message(FATAL_ERROR "VTK_DIR variable is defined but corresponds to non-existing directory")
 endif()
 
-set(version "7.1.0")
-set(location "${NIFTK_EP_TARBALL_LOCATION}/VTK-${version}.tar.gz")
+if(APPLE AND BUILD_PCL)
+  set(version "6.1.0")
+else()
+  set(version "7.1.0")
+endif()
 
+set(location "${NIFTK_EP_TARBALL_LOCATION}/VTK-${version}.tar.gz")
 mpMacroDefineExternalProjectVariables(VTK ${version} ${location})
+set(proj_DEPENDENCIES )
 
 if(WIN32)
   option(VTK_USE_SYSTEM_FREETYPE OFF)
@@ -73,6 +78,12 @@ if(NOT DEFINED VTK_DIR)
       "-DCMAKE_PROJECT_${proj}_INCLUDE:FILEPATH=${CMAKE_ROOT}/Modules/CTestUseLaunchers.cmake"
     )
   endif()
+
+  if(APPLE)
+    list(APPEND additional_cmake_args
+        -DVTK_REQUIRED_OBJCXX_FLAGS:STRING=""
+        )
+  endif(APPLE)
 
   ExternalProject_Add(${proj}
     LIST_SEPARATOR ^^

@@ -13,23 +13,23 @@
 #============================================================================*/
 
 #-----------------------------------------------------------------------------
-# Eigen
+# FLANN - external project needed by PCL.
 #-----------------------------------------------------------------------------
-if(NOT BUILD_Eigen)
+if(NOT BUILD_FLANN)
   return()
 endif()
 
 # Sanity checks
-if(DEFINED Eigen_DIR AND NOT EXISTS ${Eigen_DIR})
-  message(FATAL_ERROR "Eigen_DIR variable is defined but corresponds to non-existing directory \"${Eigen_ROOT}\".")
+if(DEFINED FLANN_DIR AND NOT EXISTS ${FLANN_DIR})
+  message(FATAL_ERROR "FLANN_DIR variable is defined but corresponds to non-existing directory \"${FLANN_DIR}\".")
 endif()
 
-set(version "3.2.2.1")
-set(location "${NIFTK_EP_TARBALL_LOCATION}/eigen-eigen-${version}.tar.bz2")
-mpMacroDefineExternalProjectVariables(Eigen ${version} ${location})
+set(version "1.9.1")
+set(location "${NIFTK_EP_TARBALL_LOCATION}/flann-${version}.tar.gz")
+mpMacroDefineExternalProjectVariables(FLANN ${version} ${location})
 set(proj_DEPENDENCIES )
 
-if(NOT DEFINED Eigen_DIR)
+if(NOT DEFINED FLANN_DIR)
 
   ExternalProject_Add(${proj}
     LIST_SEPARATOR ^^
@@ -39,14 +39,14 @@ if(NOT DEFINED Eigen_DIR)
     INSTALL_DIR ${proj_INSTALL}
     URL ${proj_LOCATION}
     URL_MD5 ${proj_CHECKSUM}
-    #CONFIGURE_COMMAND ""
-    UPDATE_COMMAND ""
-    BUILD_COMMAND ""
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
       ${EP_COMMON_ARGS}
       -DCMAKE_PREFIX_PATH:PATH=${MYPROJECT_PREFIX_PATH}
-      -DEIGEN_LEAVE_TEST_IN_ALL_TARGET=ON
+      -DBUILD_MATLAB_BINDINGS:BOOL=OFF
+      -DBUILD_PYTHON_BINDINGS:BOOL=OFF
+      -DBUILD_TESTS:BOOL=OFF
+      -DCMAKE_DEBUG_POSTFIX:STRING=
     CMAKE_CACHE_ARGS
       ${EP_COMMON_CACHE_ARGS}
     CMAKE_CACHE_DEFAULT_ARGS
@@ -54,17 +54,16 @@ if(NOT DEFINED Eigen_DIR)
     DEPENDS ${proj_DEPENDENCIES}
   )
 
-  set(Eigen_SOURCE_DIR ${proj_SOURCE})
-  set(Eigen_DIR ${proj_INSTALL})
-  set(Eigen_INCLUDE_DIR ${Eigen_DIR}/include/eigen3)
+  set(FLANN_DIR ${proj_INSTALL})
+  set(FLANN_ROOT ${FLANN_DIR})
 
   set(MYPROJECT_PREFIX_PATH ${proj_INSTALL}^^${MYPROJECT_PREFIX_PATH})
   mitkFunctionInstallExternalCMakeProject(${proj})
 
-  message("SuperBuild loading Eigen from ${Eigen_SOURCE_DIR} (PCL) or ${Eigen_DIR} (anything else).")
+  message("SuperBuild loading FLANN from ${FLANN_DIR}")
 
-else(NOT DEFINED Eigen_DIR)
+else()
 
   mitkMacroEmptyExternalProject(${proj} "${proj_DEPENDENCIES}")
 
-endif(NOT DEFINED Eigen_DIR)
+endif()
