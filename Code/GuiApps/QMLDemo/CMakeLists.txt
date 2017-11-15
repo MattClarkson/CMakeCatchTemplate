@@ -13,9 +13,6 @@
 #============================================================================*/
 
 set(APP_NAME QMLDemo)
-get_property(_apps GLOBAL PROPERTY MYPROJECT_APPS)
-list(APPEND _apps ${APP_NAME})
-set_property(GLOBAL PROPERTY MYPROJECT_APPS ${_apps})
 
 # Install all Qt qml infrastructure.
 set(_qml_dest_dir bin)

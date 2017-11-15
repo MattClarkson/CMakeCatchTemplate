@@ -12,24 +12,25 @@
 #
 #============================================================================*/
 
-macro(MYPROJECT_INSTALL)
+macro(MYPROJECT_INSTALL_CL)
 
   set(ARGS ${ARGN})
-
-  set(install_directories "")
   list(FIND ARGS DESTINATION _destination_index)
-
   if(_destination_index GREATER -1)
-    message(SEND_ERROR "MITK_INSTALL macro must not be called with a DESTINATION parameter.")
+    message(SEND_ERROR "MYPROJECT_INSTALL_CL macro must not be called with a DESTINATION parameter.")
   else()
-    get_property(_apps GLOBAL PROPERTY MYPROJECT_APPS)
-    if(NOT APPLE)
-      install(${ARGS} DESTINATION bin)
-    else()
+
+    set(_app_installed FALSE)
+    get_property(_apps GLOBAL PROPERTY MYPROJECT_GUI_APPS)
+    if(APPLE)
       foreach(app ${_apps})
         install(${ARGS} DESTINATION ${app}.app/Contents/MacOS/)
+        set(_app_installed TRUE)
       endforeach()
     endif()
-  endif()
+    if(NOT _app_installed OR BUILD_SHARED_LIBS)
+      install(${ARGS} DESTINATION ${MYPROJECT_INSTALL_BIN_DIR})
+    endif()
 
+  endif()
 endmacro()

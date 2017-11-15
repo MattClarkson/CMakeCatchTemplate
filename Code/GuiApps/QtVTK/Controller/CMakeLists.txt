@@ -82,12 +82,12 @@ if(BUILD_SHARED_LIBS)
   if(WIN32)
     add_definitions(-DMYPROJECT_QTVTKCONTROLLER_WINDOWS_EXPORT)
   endif(WIN32)
-  MYPROJECT_INSTALL(TARGETS qtvtkcontroller)
+  MYPROJECT_INSTALL_LIBRARY(qtvtkcontroller)
 endif(BUILD_SHARED_LIBS)
 
 
 #################################
 # Link the library.
 #################################
-target_link_libraries(qtvtkcontroller PRIVATE ${QT5_LINK_LIBRARIES})
+target_link_libraries(qtvtkcontroller PRIVATE ${QT5_LINK_LIBRARIES} ${ALL_THIRD_PARTY_LIBRARIES})
 

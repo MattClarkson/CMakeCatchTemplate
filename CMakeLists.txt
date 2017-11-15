@@ -54,6 +54,7 @@ option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
 
 option(MYPROJECT_USE_QT "Use Qt, normally for GUI development, but can be for anything." OFF)
+mark_as_advanced(MYPROJECT_USE_QT) # Qt gets backed into VTK, so really developers should not fiddle with this.
 
 if(BUILD_glog AND NOT BUILD_gflags)
   message("Forcing BUILD_gflags to ON due to BUILD_glog being ON.")
@@ -152,14 +153,12 @@ endif()
 ######################################################################
 # Check for Qt up-front, as VTK may need it in SuperBuild.
 ######################################################################
+set(ADDITIONAL_SEARCH_PATHS)
+set(QT5_LINK_LIBRARIES)
 if(MYPROJECT_USE_QT)
-  set(ADDITIONAL_SEARCH_PATHS)
-  set(_qt_components Concurrent OpenGL PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
-  if(BUILD_VTK)
-    list(APPEND _qt_components WebKitWidgets)
-  endif()
+  set(_qt_components Concurrent OpenGL Gui PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
   if(BUILD_QMLDEMO)
-    list(APPEND _qt_components Quick Qml Gui)
+    list(APPEND _qt_components Quick Qml)
   endif()
   if(UNIX AND NOT APPLE)
     list(APPEND _qt_components X11Extras)
@@ -207,7 +206,7 @@ if(MYPROJECT_USE_QT)
       message(WARNING "The qmake executable could not be found.")
     endif()
   endif()
-endif(MYPROJECT_USE_QT)
+endif()
 
 if(MYPROJECT_USE_QT AND NOT Qt5_DIR)
   message(FATAL " Qt was required but not found")
@@ -224,7 +223,9 @@ set(CMAKE_MODULE_PATH
    )
 include(mitkMacroEmptyExternalProject)
 include(mitkFunctionCheckCompilerFlags)
-include(mpMacroInstall)
+include(mpMacroInstallCommandLineApp)
+include(mpMacroInstallHeaders)
+include(mpMacroInstallLibrary)
 include(mpCreateGuiApplication)
 
 
@@ -481,9 +482,9 @@ if(BUILD_VTK)
   #       Its the preferred approach because VTK can then control what is exposed.
   find_package(VTK REQUIRED)
   include(${VTK_USE_FILE})
-  include_directories(${VTK_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${VTK_LIBRARIES})
   add_definitions(-DBUILD_VTK)
+  set(ADDITIONAL_SEARCH_PATHS "${VTK_INCLUDE_DIRS}/../../lib;${ADDITIONAL_SEARCH_PATHS}")
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/VTK.txt ${CMAKE_BINARY_DIR}/LICENSE_VTK.txt)
 endif()
 
@@ -504,8 +505,7 @@ if(BUILD_PCL)
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/PCL.txt ${CMAKE_BINARY_DIR}/LICENSE_PCL.txt)
 endif()
 
-set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})
-
+set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES} ${QT5_LINK_LIBRARIES})
 
 ######################################################################
 # Compilation specific stuff, like flags etc.
@@ -525,16 +525,25 @@ endif(WIN32)
 # into each OSX bundle.
 ######################################################################
 set(_known_apps "")
+set(BUILDING_GUIS OFF)
 if (BUILD_QTVTKGUI)
   list(APPEND _known_apps QtVTKApp)
+  set(BUILDING_GUIS ON)
 endif()
-set_property(GLOBAL PROPERTY MYPROJECT_APPS ${_known_apps})
+if (BUILD_QMLDEMO)
+  list(APPEND _known_apps QMLDemo)
+  set(BUILDING_GUIS ON)
+endif()
+set_property(GLOBAL PROPERTY MYPROJECT_GUI_APPS ${_known_apps})
 
 
 ######################################################################
 # Add code folders.
 ######################################################################
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+set(MYPROJECT_INSTALL_LIB_DIR lib)
+set(MYPROJECT_INSTALL_INC_DIR include)
+set(MYPROJECT_INSTALL_BIN_DIR bin)
 
 foreach(type LIBRARY RUNTIME ARCHIVE)
   set(output_dir ${CMAKE_BINARY_DIR}/bin)
@@ -579,7 +588,7 @@ if (WIN32)
   set(DESKTOP_ICONS_REMOVE_STRING "")
   set(DESKTOP_ICONS_REMOVE_STRING "")
 
-  get_property(_apps GLOBAL PROPERTY MYPROJECT_APPS)
+  get_property(_apps GLOBAL PROPERTY MYPROJECT_GUI_APPS)
 
   foreach(app_name ${_apps})
 
