@@ -32,10 +32,15 @@ endforeach()
 
 
 ##############################################################################
-# Further variables for the external project names and locations are defined
-# in the external project CMake files under CMake/ExternalProjects.
+# Setup project name, and version.
 ##############################################################################
-set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
+if (BUILD_SUPERBUILD)
+  project(MYPROJECT-superbuild)
+  set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
+  set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
+else()
+  project(MYPROJECT VERSION 00.00.1)
+endif()
 
 
 ##############################################################################
@@ -91,13 +96,30 @@ if(BUILD_QTVTKGUI AND NOT BUILD_VTK)
   set(BUILD_VTK ON CACHE BOOL "Build VTK." FORCE)
 endif()
 
-if (BUILD_SUPERBUILD)
-  project(MYPROJECT-superbuild)
-  set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
-  set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
-else()
-  project(MYPROJECT VERSION 00.00.1)
+
+######################################################################
+# This is a list of all known GUI apps. Used for things like
+# creating Mac OSX bundles, and each command line app gets copied
+# into each OSX bundle.
+######################################################################
+set(_known_apps "")
+set(BUILDING_GUIS OFF)
+if (BUILD_QTVTKGUI)
+  list(APPEND _known_apps QtVTKApp)
+  set(BUILDING_GUIS ON)
 endif()
+if (BUILD_QMLDEMO)
+  list(APPEND _known_apps QMLDemo)
+  set(BUILDING_GUIS ON)
+endif()
+set_property(GLOBAL PROPERTY MYPROJECT_GUI_APPS ${_known_apps})
+
+
+##############################################################################
+# Further variables for the external project names and locations are defined
+# in the external project CMake files under CMake/ExternalProjects.
+##############################################################################
+set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
 
 
 ######################################################################
@@ -517,24 +539,6 @@ if(WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_LIB_PREFIX=\"\"")
   endif()
 endif(WIN32)
-
-
-######################################################################
-# This is a list of all known GUI apps. Used for things like
-# creating Mac OSX bundles, and each command line app gets copied
-# into each OSX bundle.
-######################################################################
-set(_known_apps "")
-set(BUILDING_GUIS OFF)
-if (BUILD_QTVTKGUI)
-  list(APPEND _known_apps QtVTKApp)
-  set(BUILDING_GUIS ON)
-endif()
-if (BUILD_QMLDEMO)
-  list(APPEND _known_apps QMLDemo)
-  set(BUILDING_GUIS ON)
-endif()
-set_property(GLOBAL PROPERTY MYPROJECT_GUI_APPS ${_known_apps})
 
 
 ######################################################################
