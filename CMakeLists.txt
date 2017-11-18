@@ -54,7 +54,7 @@ option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
 
 option(MYPROJECT_USE_QT "Use Qt, normally for GUI development, but can be for anything." OFF)
-mark_as_advanced(MYPROJECT_USE_QT) # Qt gets backed into VTK, so really developers should not fiddle with this.
+mark_as_advanced(MYPROJECT_USE_QT) # Qt gets baked into VTK, so really developers should not fiddle with this.
 
 if(BUILD_glog AND NOT BUILD_gflags)
   message("Forcing BUILD_gflags to ON due to BUILD_glog being ON.")
