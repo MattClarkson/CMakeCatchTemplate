@@ -116,14 +116,14 @@ some simple starting points, and recommendations.
 
 Lets start with some assumptions:
 
- 1. This example is only suitable for small research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then each project like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) have much larger examples, but each one is written by an excellent software engineer, and is way beyond the scope of this small example.
+ 1. This example is only suitable for small research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then example projects like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) have much larger examples, but each one is written by an excellent software engineer, each project has their own nuances so its difficult to define a standard, and each is way beyond the scope of this small example.
  2. This project does not support dynamically loaded plugins. This would require much more CMake coding.
  3. You have built your own Qt. Lots of people would like to take a shortcut and use Qt that comes with a package manager on Linux, or with Homebrew or Macports on MacOSX, or pre-compiled on Windows. I believe its quicker to learn how to build it, than it is to cope with the wrong version, or a version that you did not compile. It really doesn't take long to learn, and is quicker than debugging all the numerous problems.
 
 So, to simplify matters, lets consider the following Use-Cases.
 
- 1. You are developing a small library or command line app, and NOT a GUI. Your focus is the core algorithm. In that case, build everything statically. The packaging code will produce an SDK to link against, so other people can be responsible for integrating your new algorithm into their app.
- 2. You are developing a GUI, or you are an application developer, or integration developer. In that case, you can use static or shared, you get a GUI, but no SDK.
+ 1. You are developing a small library or command line app, and NOT a GUI. Your focus is the core algorithm. In that case, build everything statically. The packaging code will produce an SDK to link against, so other people can be responsible for integrating your new algorithm into their app. You can use non-GUI Qt, by turning on the flag MYPROJECT_USE_QT, but you should still compile Qt statically. Static linking makes ```make install``` and ```make package``` for command line apps and libraries so much easier.
+ 2. You are developing a GUI, or you are an application developer, or integration developer. In that case, you can use static or shared linking, you get a GUI, but no SDK.
 
 
 Preferred Branching Workflow
