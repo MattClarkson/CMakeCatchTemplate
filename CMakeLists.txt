@@ -372,8 +372,10 @@ message("CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 ######################################################################
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/License.dox ${CMAKE_BINARY_DIR}/Doxygen/License.dox)
 configure_file(${CMAKE_SOURCE_DIR}/LICENSE.txt ${CMAKE_BINARY_DIR}/LICENSE.txt @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/LICENSE.txt DESTINATION . COMPONENT CONFIG)
 configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/README.txt ${CMAKE_BINARY_DIR}/README.txt @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/README.txt DESTINATION . COMPONENT CONFIG)
 configure_file(${CMAKE_SOURCE_DIR}/INSTALLATION.txt ${CMAKE_BINARY_DIR}/INSTALLATION.txt @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/CMake/Findglog.cmake.in ${CMAKE_BINARY_DIR}/Findglog.cmake @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/CMake/Findgflags.cmake.in ${CMAKE_BINARY_DIR}/Findgflags.cmake @ONLY)
@@ -422,6 +424,7 @@ if(BUILD_gflags)
   endif()
   set(ADDITIONAL_SEARCH_PATHS "${gflags_DIR}${_library_sub_dir};${ADDITIONAL_SEARCH_PATHS}")
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/gflags.txt ${CMAKE_BINARY_DIR}/LICENSE_gflags.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_gflags.txt DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT CONFIG)
 endif()
 
 if(BUILD_glog)
@@ -433,6 +436,7 @@ if(BUILD_glog)
   add_definitions(-DBUILD_glog)
   set(ADDITIONAL_SEARCH_PATHS "${glog_DIR}${_library_sub_dir};${ADDITIONAL_SEARCH_PATHS}")
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/glog.txt ${CMAKE_BINARY_DIR}/LICENSE_glog.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_glog.txt DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT CONFIG)
 endif()
 
 if(BUILD_Eigen)
@@ -441,6 +445,7 @@ if(BUILD_Eigen)
   include_directories(${Eigen_INCLUDE_DIR})
   add_definitions(-DBUILD_Eigen)
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT CONFIG)
 endif()
 
 if(BUILD_Boost)
@@ -479,6 +484,7 @@ if(BUILD_Boost)
   add_definitions(-DBUILD_Boost)
   set(ADDITIONAL_SEARCH_PATHS "${BOOST_ROOT}/bin;${ADDITIONAL_SEARCH_PATHS}")
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Boost.txt ${CMAKE_BINARY_DIR}/LICENSE_Boost.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_Boost.txt DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT CONFIG)
 endif()
 
 if(BUILD_OpenCV)
@@ -493,6 +499,7 @@ if(BUILD_OpenCV)
   add_definitions(-DBUILD_OpenCV)
   set(ADDITIONAL_SEARCH_PATHS "${OpenCV_LIB_DIR}/../bin;${ADDITIONAL_SEARCH_PATHS}")
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/OpenCV.txt ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT CONFIG)
 endif()
 
 if(BUILD_VTK)
@@ -508,6 +515,7 @@ if(BUILD_VTK)
   add_definitions(-DBUILD_VTK)
   set(ADDITIONAL_SEARCH_PATHS "${VTK_INCLUDE_DIRS}/../../lib;${ADDITIONAL_SEARCH_PATHS}")
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/VTK.txt ${CMAKE_BINARY_DIR}/LICENSE_VTK.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_VTK.txt DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT CONFIG)
 endif()
 
 if(BUILD_PCL)
@@ -525,9 +533,9 @@ if(BUILD_PCL)
   add_definitions(-DBUILD_PCL)
   set(ADDITIONAL_SEARCH_PATHS "${PCL_LIBRARY_DIRS};${ADDITIONAL_SEARCH_PATHS}")
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/PCL.txt ${CMAKE_BINARY_DIR}/LICENSE_PCL.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_PCL.txt DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT CONFIG)
 endif()
 
-set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES} ${QT5_LINK_LIBRARIES})
 
 ######################################################################
 # Compilation specific stuff, like flags etc.
@@ -542,7 +550,14 @@ endif(WIN32)
 
 
 ######################################################################
-# Add code folders.
+# A few shortcuts for lists of libraries.
+######################################################################
+set(MYPROJECT_LIBRARIES myproject)
+set(ALL_LIBRARIES ${MYPROJECT_LIBRARIES} ${ALL_THIRD_PARTY_LIBRARIES} ${QT5_LINK_LIBRARIES})
+
+
+######################################################################
+# Set up a few paths.
 ######################################################################
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(MYPROJECT_INSTALL_LIB_DIR lib)
@@ -557,10 +572,23 @@ endforeach()
 
 include_directories(${CMAKE_SOURCE_DIR}/Code/Lib)
 
+
+##########################################################################################
+# The next two generate CMake code to enable external projects to correctly use MYPROJECT.
+##########################################################################################
+configure_file(${CMAKE_SOURCE_DIR}/UseMYPROJECT.cmake.in ${CMAKE_BINARY_DIR}/UseMYPROJECT.cmake @ONLY IMMEDIATE)
+configure_file(${CMAKE_SOURCE_DIR}/MYPROJECTConfig.cmake.in ${CMAKE_BINARY_DIR}/MYPROJECTConfig.cmake @ONLY IMMEDIATE)
+if(NOT BUILDING_GUIS)
+  install(FILES ${CMAKE_BINARY_DIR}/UseMYPROJECT.cmake DESTINATION . COMPONENT CONFIG)
+  install(FILES ${CMAKE_BINARY_DIR}/MYPROJECTConfig.cmake DESTINATION . COMPONENT CONFIG)
+endif()
+
+
+######################################################################
+# Add code folders.
+######################################################################
 add_subdirectory(Code)
-
 add_subdirectory(Documentation)
-
 if(BUILD_TESTING)
   set(TEMP_DIR ${CMAKE_BINARY_DIR}/Testing/Temporary)
   include_directories(${CMAKE_SOURCE_DIR}/Testing/)

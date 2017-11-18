@@ -1,0 +1,33 @@
+#/*============================================================================
+#
+#  MYPROJECT: A software package for whatever.
+#
+#  Copyright (c) University College London (UCL). All rights reserved.
+#
+#  This software is distributed WITHOUT ANY WARRANTY; without even
+#  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+#  PURPOSE.
+#
+#  See LICENSE.txt in the top level directory for details.
+#
+#============================================================================*/
+
+# This file sets up include directories, link directories, and
+# compiler settings for a project to compile against MYPROJECT.
+# It should not be included directly, but rather through the 
+# MYPROJECT_USE_FILE setting obtained from MYPROJECTConfig.cmake.
+
+if(MYPROJECT_BUILD_SETTINGS_FILE AND NOT SKIP_MYPROJECT_BUILD_SETTINGS_FILE)
+  include(${CMAKE_ROOT}/Modules/CMakeImportBuildSettings.cmake)
+  CMAKE_IMPORT_BUILD_SETTINGS(${MYPROJECT_BUILD_SETTINGS_FILE})
+endif()
+
+# Add compiler flags needed to use MYPROJECT.
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${MYPROJECT_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MYPROJECT_CXX_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${MYPROJECT_EXE_LINKER_FLAGS}")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${MYPROJECT_SHARED_LINKER_FLAGS}")
+set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${MYPROJECT_MODULE_LINKER_FLAGS}")
+
+include_directories(BEFORE ${MYPROJECT_INCLUDE_DIRS})
+link_directories(${MYPROJECT_LIBRARY_DIRS})
