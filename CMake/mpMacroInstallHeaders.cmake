@@ -20,8 +20,10 @@ macro(MYPROJECT_INSTALL_HEADERS)
     message(SEND_ERROR "MYPROJECT_INSTALL_HEADERS macro must not be called with a DESTINATION parameter.")
   else()
 
-    file(GLOB_RECURSE HEADERS *.h)
-    install(FILES ${HEADERS} DESTINATION ${MYPROJECT_INSTALL_INC_DIR} COMPONENT HEADERS)
+    if(NOT BUILDING_GUIS)
+      file(GLOB_RECURSE HEADERS *.h)
+      install(FILES ${HEADERS} DESTINATION ${MYPROJECT_INSTALL_INC_DIR} COMPONENT HEADERS)
+    endif()
 
   endif()
 endmacro()

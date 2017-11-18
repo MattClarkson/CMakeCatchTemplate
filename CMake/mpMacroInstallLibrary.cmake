@@ -21,11 +21,13 @@ macro(MYPROJECT_INSTALL_LIBRARY)
     message(SEND_ERROR "MYPROJECT_INSTALL_LIBRARAY macro must not be called with a DESTINATION parameter.")
   else()
 
-    install(TARGETS ${ARGS}
-            ARCHIVE DESTINATION ${MYPROJECT_INSTALL_LIB_DIR}
-            LIBRARY DESTINATION ${MYPROJECT_INSTALL_LIB_DIR}
-            RUNTIME DESTINATION ${MYPROJECT_INSTALL_BIN_DIR}
-           )
+    if(NOT BUILDING_GUIS)
+        install(TARGETS ${ARGS}
+                ARCHIVE DESTINATION ${MYPROJECT_INSTALL_LIB_DIR}
+                LIBRARY DESTINATION ${MYPROJECT_INSTALL_LIB_DIR}
+                RUNTIME DESTINATION ${MYPROJECT_INSTALL_BIN_DIR}
+               )
+     endif()
 
   endif()
 endmacro()
