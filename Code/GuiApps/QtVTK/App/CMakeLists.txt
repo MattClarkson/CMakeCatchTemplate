@@ -58,6 +58,5 @@ set(APP_LIBS
   qtvtkcontroller
 )
 
-message("Matt, QT5_LINK_LIBRARIES=${QT5_LINK_LIBRARIES}")
 target_link_libraries(${APP_NAME} ${APP_LIBS} ${ALL_THIRD_PARTY_LIBRARIES} ${QT5_LINK_LIBRARIES})
-mpCreateGuiApplication(${APP_NAME} ${ADDITIONAL_SEARCH_PATHS})
+mpCreateGuiApplication(${APP_NAME} "${ADDITIONAL_SEARCH_PATHS}")
