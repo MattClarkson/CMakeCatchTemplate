@@ -64,14 +64,14 @@ macro(mpCreateGuiApplication APP_NAME ADDITIONAL_SEARCH_PATHS)
     endif()
   endif()
 
-#  install(CODE "
-#          file(GLOB_RECURSE QTPLUGINS
-#          \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/platforms/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
-#          file(GLOB_RECURSE QMLPLUGINS
-#          \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/qml/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
-#          list(APPEND QTPLUGINS \"\${QMLPLUGINS}\")
-#          include(BundleUtilities)
-#          fixup_bundle(\"${APPS}\" \"\${QTPLUGINS}\" \"${ADDITIONAL_SEARCH_PATHS}\")
-#          " COMPONENT Runtime)
+  install(CODE "
+          file(GLOB_RECURSE QTPLUGINS
+          \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/platforms/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
+          file(GLOB_RECURSE QMLPLUGINS
+          \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/qml/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
+          list(APPEND QTPLUGINS \"\${QMLPLUGINS}\")
+          include(BundleUtilities)
+          fixup_bundle(\"${APPS}\" \"\${QTPLUGINS}\" \"${ADDITIONAL_SEARCH_PATHS}\")
+          " COMPONENT Runtime)
 
 endmacro()
