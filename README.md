@@ -125,6 +125,13 @@ So, to simplify matters, lets consider the following Use-Cases.
  1. You are developing a small library or command line app, and NOT a GUI. Your focus is the core algorithm. In that case, build everything statically. The packaging code will produce an SDK to link against, so other people can be responsible for integrating your new algorithm into their app. You can use non-GUI Qt, by turning on the flag MYPROJECT_USE_QT, but you should still compile Qt statically. Static linking makes ```make install``` and ```make package``` for command line apps and libraries so much easier.
  2. You are developing a GUI, or you are an application developer, or integration developer. In that case, you can use static or shared linking, you get a GUI, but no SDK.
 
+and then, if you switch between 1 and 2, you will probably need a complete rebuild at the SuperBuild level.
+For example, if you start with a command line app, and build without Qt, but you are using VTK filters.
+Then at some point you decide you want to add a Qt GUI, then you will also need to rebuild VTK to pick up the
+Qt support classes like QVTKWidget.
+
+So, basically, pick your main options, up front, for the SuperBuild, and then don't change them or be prepared for a full clean build.
+
 
 Preferred Branching Workflow
 ----------------------------
