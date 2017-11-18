@@ -24,10 +24,10 @@ Overview
 
 The features provided are:
  1. Meta-Build, a.k.a. SuperBuild to download and build Boost, Eigen, OpenCV, glog, gflags, VTK and PCL.
- 2. A single library for the main functionality - called myproject, so you should rename it.
- 3. Unit tests, using Catch, and run with CTest - to demonstrate correctness and regression.
+ 2. A single library for the main functionality.
+ 3. Unit tests, using Catch, and run with CTest - to enforce correctness and regression.
  4. A single command line application - to give the end user a functioning program.
- 5. KWStyle to check some basic code style - for consistency
+ 5. KWStyle to check some basic code style - for consistent code style
  6. CppCheck to check some code features - for performance, style and correctness
  7. Doxygen config - for documentation
  8. CI build with Travis and appveyor (if project is open-source).
@@ -98,6 +98,32 @@ then when you run executables, you should look for the batch file
 StartVS_Debug.bat or StartVS_Release.bat in the MYPROJECT-build folder.
 This sets the path before launching Visual Studio, so that dynamically
 loaded libraries are found at run time.
+
+
+A Note On Packaging
+-------------------
+
+There are many different issues and combinations to test when packaging:
+
+ * Windows, Linux, Mac
+ * Shared libraries / Statically linked libraries
+ * Command line applications / GUI applications / Command line applications bundled with GUI applications.
+ * The developer runs ```make install``` to install it in a specific directory, linked against known libraries.
+ * The developer runs ```make package``` to make a relocatable and distributable bundle so that another user can install it anywhere.
+
+It would simply take too long to document all of them and all of the issues involved. So, this project suggests
+some simple starting points, and recommendations.
+
+Lets start with some assumptions:
+
+ 1. This example is only suitable for small research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then each project like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) have much larger examples, but each one is written by an excellent software engineer, and is way beyond the scope of this small example.
+ 2. This project does not support dynamically loaded plugins. This would require much more CMake coding.
+ 3. You have built your own Qt. Lots of people would like to take a shortcut and use Qt that comes with a package manager on Linux, or with Homebrew or Macports on MacOSX, or pre-compiled on Windows. I believe its quicker to learn how to build it, than it is to cope with the wrong version, or a version that you did not compile. It really doesn't take long to learn, and is quicker than debugging all the numerous problems.
+
+So, to simplify matters, lets consider the following Use-Cases.
+
+ 1. You are developing a small library or command line app, and NOT a GUI. Your focus is the core algorithm. In that case, build everything statically. The packaging code will produce an SDK to link against, so other people can be responsible for integrating your new algorithm into their app.
+ 2. You are developing a GUI, or you are an application developer, or integration developer. In that case, you can use static or shared, you get a GUI, but no SDK.
 
 
 Preferred Branching Workflow
