@@ -22,7 +22,7 @@ set(MYPROJECT_HDRS
   mpExceptionMacro.h
 )
 
-add_library(myproject ${MYPROJECT_SRCS})
+add_library(myproject ${MYPROJECT_HDRS} ${MYPROJECT_SRCS})
 
 if(BUILD_SHARED_LIBS)
   if(WIN32)
