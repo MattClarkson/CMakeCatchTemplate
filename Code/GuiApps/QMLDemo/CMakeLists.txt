@@ -15,14 +15,38 @@
 set(APP_NAME QMLDemo)
 
 # Install all Qt qml infrastructure.
-set(_qml_dest_dir bin)
+# Note: Im trying to install everything under the bin/qml folder EXCEPT QtTest.
+#       Im sure there's a nicer way of doing it using the QtQuickCompiler or something.
+set(_qml_dest_dir bin/qml)
 if(APPLE)
-  set(_qml_dest_dir ${APP_NAME}.app/Contents/MacOS)
+  set(_qml_dest_dir ${APP_NAME}.app/Contents/MacOS/qml)
 endif()
-install(DIRECTORY ${Qt5_DIR}/../../../qml DESTINATION ${_qml_dest_dir})
+foreach (d
+  Enginio
+  Qt
+  Qt3D
+  QtAudioEngine
+  QtBluetooth
+  QtCanvas3D
+  QtGraphicalEffects
+  QtLocation
+  QtMultimedia
+  QtNfc
+  QtPositioning
+  QtQml
+  QtQuick
+  QtQuick.2
+  QtSensors
+  QtWebChannel
+  QtWebEngine
+  QtWebSockets
+  QtWebView
+  )
+  install(DIRECTORY ${Qt5_DIR}/../../../qml/${d} DESTINATION ${_qml_dest_dir})
+endforeach()
+install(FILES ${Qt5_DIR}/../../../qml/builtins.qmltypes DESTINATION ${_qml_dest_dir})
 
-# If all qml files for this project are referenced in the
-# .qrc file, then they get compiled into the main executable.
+# Now compile in our own qml files into the resource filesystem.
 qt5_add_resources(QML_QRC View/qml.qrc)
 add_executable(${APP_NAME} MACOSX_BUNDLE ${QML_QRC} App/main.cpp)
 
