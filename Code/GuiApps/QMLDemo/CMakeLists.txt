@@ -17,34 +17,22 @@ set(APP_NAME QMLDemo)
 # Install all Qt qml infrastructure.
 # Note: Im trying to install everything under the bin/qml folder EXCEPT QtTest.
 #       Im sure there's a nicer way of doing it using the QtQuickCompiler or something.
+set(_qml_source_dir ${Qt5_DIR}/../../../qml)
 set(_qml_dest_dir bin/qml)
 if(APPLE)
   set(_qml_dest_dir ${APP_NAME}.app/Contents/MacOS/qml)
 endif()
-foreach (d
-  Enginio
-  Qt
-  Qt3D
-  QtAudioEngine
-  QtBluetooth
-  QtCanvas3D
-  QtGraphicalEffects
-  QtLocation
-  QtMultimedia
-  QtNfc
-  QtPositioning
-  QtQml
-  QtQuick
-  QtQuick.2
-  QtSensors
-  QtWebChannel
-  QtWebEngine
-  QtWebSockets
-  QtWebView
-  )
-  install(DIRECTORY ${Qt5_DIR}/../../../qml/${d} DESTINATION ${_qml_dest_dir})
+file(GLOB children RELATIVE ${_qml_source_dir} ${_qml_source_dir}/*)
+foreach( c ${children})
+  if( NOT ("QtTest" STREQUAL "${c}" ) )
+    if( IS_DIRECTORY ${_qml_source_dir}/${c} )
+      install(DIRECTORY ${_qml_source_dir}/${c} DESTINATION ${_qml_dest_dir})
+    else()
+      install(FILES ${_qml_source_dir}/${c} DESTINATION ${_qml_dest_dir})
+    endif()
+  endif()
 endforeach()
-install(FILES ${Qt5_DIR}/../../../qml/builtins.qmltypes DESTINATION ${_qml_dest_dir})
+
 
 # Now compile in our own qml files into the resource filesystem.
 qt5_add_resources(QML_QRC View/qml.qrc)
