@@ -6,32 +6,35 @@ CMakeCatchTemplate
 
 
 This is a simple project to demonstrate a reasonable
-structure for CMake/CTest and Catch based projects.
+structure for CMake/CTest/Catch based projects.
 
-You can either
- 1. Clone this repo, and use directly
- 2. Export the project (download without a .git folder), and then rename all instances of MYPROJECT,
- myproject, MyProject and the namespace mp with names of your choice, and then rename the top-level project folder.
+The main way to use it is:
+ 1. Export the project (download without a .git folder)
+ 2. Rename all instances of MYPROJECT, myproject, MyProject and the namespace mp with names of your choice
+ 3. Rename the top-level project folder to the folder name of your choice.
+ 4. Check it all still builds.
+ 5. Commit it to your own git repository.
  
-
-The substitutions for the second option can be achieved manually or by editing and running `rename.sh`.
+The substitutions for the second part can be achieved manually or by editing and running `rename.sh`.
 Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`.
 
 Note: Running `rename.sh` should be performed on a non-git folder and before running CMake for the first time.
+
 
 Overview
 --------
 
 The features provided are:
- 1. Meta-Build, a.k.a. SuperBuild to download and build Boost, Eigen, OpenCV, glog, gflags, VTK and PCL.
+ 1. Meta-Build, a.k.a. SuperBuild to optionally download and build Boost, Eigen, OpenCV, glog, gflags, VTK and PCL.
  2. A single library for the main functionality.
- 3. Unit tests, using Catch, and run with CTest - to enforce correctness and regression.
+ 3. Unit tests, using Catch, and run with CTest - to ensure correctness and enable regression testing.
  4. A single command line application - to give the end user a functioning program.
  5. KWStyle to check some basic code style - for consistent code style
  6. CppCheck to check some code features - for performance, style and correctness
  7. Doxygen config - for documentation
  8. CI build with Travis and appveyor (if project is open-source).
  9. CPack setup for GUI apps QtVTKApp and QMLDemo along with command line apps.
+
 
 Tested On
 -----------------------------
@@ -40,7 +43,9 @@ Tested On
  * Linux - Centos 7, g++ 4.8.5, CMake 3.5.1
  * Mac - OSX 10.10.5, clang 6.0, CMake 3.9.4
 
-Minimum CMake is 3.5. With all other versions - good luck.
+Minimum CMake version is 3.5.
+
+With all other versions - good luck.
 
 
 Build Instructions
@@ -103,11 +108,11 @@ loaded libraries are found at run time.
 A Note On Packaging
 -------------------
 
-There are many different issues and combinations to test when packaging:
+There are many different issues and combinations to test when packaging. For example:
 
- * Windows, Linux, Mac
- * Shared libraries / Statically linked libraries
- * Command line applications / GUI applications / Command line applications bundled with GUI applications.
+ * System: Windows / Linux / Mac
+ * Linkage: Shared libraries / Static libraries
+ * Executable style: Command line applications / GUI applications / Command line applications bundled with GUI applications.
  * The developer runs ```make install``` to install it in a specific directory, linked against known libraries.
  * The developer runs ```make package``` to make a relocatable and distributable bundle so that another user can install it anywhere.
 
@@ -116,16 +121,22 @@ some simple starting points, and recommendations.
 
 Lets start with some assumptions:
 
- 1. This example is only suitable for small research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then example projects like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) have much larger examples, but each one is written by an excellent software engineer, each project has their own nuances so its difficult to define a standard, and each is way beyond the scope of this small example.
+ 1. This project is only a demonstration for small research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then example projects like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) are much larger examples, but each one is written by an excellent software engineer and each project has their own nuances so its difficult to define a standard.
  2. This project does not support dynamically loaded plugins. This would require much more CMake coding.
- 3. You have built your own Qt. Lots of people would like to take a shortcut and use Qt that comes with a package manager on Linux, or with Homebrew or Macports on MacOSX, or pre-compiled on Windows. I believe its quicker to learn how to build it, than it is to cope with the wrong version, or a version that you did not compile. It really doesn't take long to learn, and is quicker than debugging all the numerous problems.
+ 3. You have built your own Qt.
 
-So, to simplify matters, lets consider the following Use-Cases.
+Lots of people would like to take a shortcut and use Qt that comes with a package manager on Linux,
+or with Homebrew or Macports on MacOSX, or pre-compiled on Windows. I believe its quicker to
+learn how to build it, than it is to cope with the wrong version, or a version that you did not compile.
+It really doesn't take long to learn, and is quicker than debugging all the numerous problems, and its
+quicker than sorting out deployment issues.
+
+So, to further simplify matters, lets consider the following Use-Cases.
 
  1. You are developing a small library or command line app, and NOT a GUI. Your focus is the core algorithm. In that case, build everything statically. The packaging code will produce an SDK to link against, so other people can be responsible for integrating your new algorithm into their app. You can use non-GUI Qt, by turning on the flag MYPROJECT_USE_QT, but you should still compile Qt statically. Static linking makes ```make install``` and ```make package``` for command line apps and libraries so much easier.
- 2. You are developing a GUI, or you are an application developer, or integration developer. In that case, you can use static or shared linking, you get a GUI, but no SDK.
+ 2. You are developing a GUI, or you are an application developer, or integration developer. In that case, you can use shared linking. This package will provide you with examples on how to build a GUI, but will not build a separate SDK. Any command line apps will be bundled with the GUI.
 
-and then, if you switch between 1 and 2, you will probably need a complete rebuild at the SuperBuild level.
+If you switch between 1 and 2, you will need a complete rebuild at the SuperBuild level.
 For example, if you start with a command line app, and build without Qt, but you are using VTK filters.
 Then at some point you decide you want to add a Qt GUI, then you will also need to rebuild VTK to pick up the
 Qt support classes like QVTKWidget.
