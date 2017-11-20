@@ -60,7 +60,7 @@ macro(mpCreateGuiApplication APP_NAME ADDITIONAL_SEARCH_PATHS)
     get_filename_component(_qmake_path "${_qmake_location}" DIRECTORY)
     if(APPLE)
       install(FILES "${_qmake_path}/../plugins/platforms/libqcocoa.dylib"
-              DESTINATION "${APP_NAME}.app/Contents/MacOS/platforms"
+              DESTINATION "${APP_NAME}.app/Contents/MacOS/plugins/platforms"
               CONFIGURATIONS Release)
     elseif(WIN32)
       install(FILES "${_qmake_path}/../plugins/platforms/qwindows.dll"
