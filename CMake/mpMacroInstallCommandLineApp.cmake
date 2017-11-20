@@ -28,7 +28,7 @@ macro(MYPROJECT_INSTALL_CL)
         set(_app_installed TRUE)
       endforeach()
     endif()
-    if(NOT _app_installed OR BUILD_SHARED_LIBS)
+    if(NOT _app_installed)
       install(${ARGS} DESTINATION ${MYPROJECT_INSTALL_BIN_DIR})
     endif()
 
