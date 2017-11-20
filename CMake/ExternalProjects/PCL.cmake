@@ -47,8 +47,6 @@ if(NOT DEFINED PCL_DIR)
     set(_build_static OFF)
   endif()
 
-  set(boost_no_system_paths COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/PCL-BoostWithoutSystemPaths.patch)
-
   ExternalProject_Add(${proj}
     LIST_SEPARATOR ^^
     PREFIX ${proj_CONFIG}
@@ -58,7 +56,6 @@ if(NOT DEFINED PCL_DIR)
     URL ${proj_LOCATION}
     URL_MD5 ${proj_CHECKSUM}
     PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/PCL.patch
-                  ${boost_no_system_paths} 
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
       ${EP_COMMON_ARGS}
@@ -67,6 +64,7 @@ if(NOT DEFINED PCL_DIR)
       -DBOOST_ROOT:PATH=${BOOST_ROOT}
       -DBOOST_INCLUDEDIR:PATH=${BOOST_ROOT}/include
       -DBOOST_LIBRARYDIR:PATH=${BOOST_ROOT}/lib
+      -DBoost_LIBRARY_DIR:PATH=${BOOST_ROOT}/lib 
       -DBoost_NO_SYSTEM_PATHS:BOOL=ON
       -DBoost_USE_STATIC_LIBS:BOOL=${_build_static}
       -DBoost_USE_STATIC_RUNTIME:BOOL=${_build_static}
