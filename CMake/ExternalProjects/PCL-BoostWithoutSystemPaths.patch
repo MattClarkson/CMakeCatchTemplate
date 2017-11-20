@@ -1,0 +1,14 @@
+diff --git a/cmake/pcl_find_boost.cmake b/cmake/pcl_find_boost.cmake
+index fece19e..f5f7b74 100644
+--- a/cmake/pcl_find_boost.cmake
++++ b/cmake/pcl_find_boost.cmake
+@@ -29,6 +29,9 @@ endif(${CMAKE_VERSION} VERSION_LESS 2.8.5)
+ # Disable the config mode of find_package(Boost)
+ set(Boost_NO_BOOST_CMAKE ON)
+ 
++# PCL should only use the Boost we provide in SuperBuild.
++set(Boost_NO_SYSTEM_PATHS ON)
++
+ # Optional boost modules
+ find_package(Boost 1.40.0 QUIET COMPONENTS serialization mpi)
+ if(Boost_SERIALIZATION_FOUND)
