@@ -69,7 +69,7 @@ if(NOT DEFINED VTK_DIR)
        -DVTK_WINDOWS_PYTHON_DEBUGGABLE:BOOL=OFF
       )
 
-  if(Qt5_DIR AND BUILDING_GUIS)
+  if(Qt5_DIR AND MYPROJECT_USE_QT)
     list(APPEND additional_cmake_args
         -DVTK_QT_VERSION:STRING=5
         -DVTK_Group_Qt:BOOL=ON
