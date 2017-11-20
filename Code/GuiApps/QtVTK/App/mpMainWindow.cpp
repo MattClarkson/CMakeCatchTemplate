@@ -36,6 +36,7 @@ MainWindow::MainWindow(mp::VolumeRenderingModel* model)
 
   setupUi(this);
   setCentralWidget(m_CentralWidget);
+  this->setWindowIcon(QIcon(":/QtVTK/icon.png"));
 
   m_Model = model;
 

@@ -33,6 +33,7 @@ set(APP_HDRS
 )
 
 set(APP_RES
+  Resources/QtVTK.rc
 )
 
 qt5_wrap_ui(QT5_UIS ${APP_UIS})

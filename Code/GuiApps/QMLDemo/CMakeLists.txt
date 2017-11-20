@@ -33,10 +33,15 @@ foreach( c ${children})
   endif()
 endforeach()
 
+# Add any additional icons/resources, that are nothing to do with QML.
+set(APP_RES
+  Resources/QMLDemo.rc
+)
+qt5_add_resources(QT5_RES ${APP_RES})
 
-# Now compile in our own qml files into the resource filesystem.
-qt5_add_resources(QML_QRC View/qml.qrc)
-add_executable(${APP_NAME} MACOSX_BUNDLE ${QML_QRC} App/main.cpp)
+# Now compile in our QML files into the resource filesystem.
+qt5_add_resources(QT5_QML View/qml.qrc)
+add_executable(${APP_NAME} MACOSX_BUNDLE ${QT5_RES} ${QT5_QML} App/main.cpp)
 
 # Add libraries here if necessary.
 set(APP_LIBS)

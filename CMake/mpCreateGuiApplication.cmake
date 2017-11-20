@@ -43,6 +43,17 @@ macro(mpCreateGuiApplication APP_NAME ADDITIONAL_SEARCH_PATHS)
   \")" COMPONENT Runtime)
 
 
+  if(APPLE)
+    set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_NAME "${APP_NAME}")
+    set(icon_name "icon.icns")
+    set(icon_full_path "${CMAKE_CURRENT_SOURCE_DIR}/icons/${icon_name}")
+    if(EXISTS "${icon_full_path}")
+      set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_ICON_FILE "${icon_name}")
+      file(COPY ${icon_full_path} DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${APP_NAME}.app/Contents/Resources/")
+      install(FILES ${icon_full_path} DESTINATION "${APP_NAME}.app/Contents/Resources/")
+    endif()
+  endif()
+
   if(Qt5_DIR)
     get_property(_qmake_location TARGET ${Qt5Core_QMAKE_EXECUTABLE}
                  PROPERTY IMPORT_LOCATION)
