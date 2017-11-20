@@ -43,9 +43,14 @@ else()
 endif()
 
 
-##############################################################################
-# We have a super-build option. (Terminology comes from Kitware/ITK/MITK etc).
-##############################################################################
+######################################################################
+# Set main build options.
+######################################################################
+option(BUILD_TESTING "Build Unit tests." ON)
+option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+if(WIN32 AND NOT BUILD_SHARED_LIBS)
+  add_definitions(-DMYPROJECT_STATIC)
+endif()
 option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via SuperBuild.cmake." ON)
 option(BUILD_gflags "Build gflags." OFF)
 option(BUILD_glog "Build glog." OFF)
@@ -182,10 +187,9 @@ if(MYPROJECT_USE_QT)
   if(BUILD_QMLDEMO)
     list(APPEND _qt_components Quick Qml)
   endif()
-  if(UNIX AND NOT APPLE)
+  if(UNIX AND NOT APPLE AND BUILD_SHARED_LIBS)
     list(APPEND _qt_components X11Extras)
   endif()
-  set(QT5_LINK_LIBRARIES)
   find_package(Qt5 5.4.2 QUIET COMPONENTS ${_qt_components})
   if(Qt5_DIR)
     message(STATUS "Found Qt5: ${Qt5_DIR}")
@@ -268,16 +272,6 @@ mitkFunctionCheckCompilerFlags("-std=c++11" MYPROJECT_CXX11_FLAG)
 if(NOT MYPROJECT_CXX11_FLAG)
   # Older gcc compilers use -std=c++0x
   mitkFunctionCheckCompilerFlags("-std=c++0x" MYPROJECT_CXX11_FLAG)
-endif()
-
-
-######################################################################
-# Build options.
-######################################################################
-option(BUILD_TESTING "Build Unit tests." ON)
-option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
-if(WIN32 AND NOT BUILD_SHARED_LIBS)
-  add_definitions(-DMYPROJECT_STATIC)
 endif()
 
 
