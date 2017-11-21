@@ -121,13 +121,13 @@ some simple starting points, and recommendations.
 
 Lets start with some assumptions:
 
- 1. This project is only a demonstration for small research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then example projects like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) are much larger examples, but each one is written by an excellent software engineer and each project has their own nuances so its difficult to define a standard.
- 2. This project does not support dynamically loaded plugins. This would require much more CMake coding.
+ 1. This project is only a demonstration for small research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then example projects like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) can be used as illustrations of much larger examples. However each one is written by an excellent software engineer who makes a lot of custom made packaging code. So, anything more complex than this, and you will have to write all your own CMake code.
+ 2. This project does not support dynamically loaded plugins. This would require more CMake coding. This isn't too bad, if its a pure Qt plugin. Follow Qt documentation to compile it, but then you'd have to write packaging code yourself, as most Qt documentation assumes you are using qmake not cmake.
  3. You have built your own Qt.
 
 Lots of people would like to take a shortcut and use Qt that comes with a package manager on Linux,
 or with Homebrew or Macports on MacOSX, or pre-compiled on Windows. I believe its quicker to
-learn how to build it, than it is to cope with the wrong version, or a version that you did not compile.
+learn how to build it, than it is to cope with the wrong version, or a version that does not have the features you want.
 It really doesn't take long to learn, and is quicker than debugging all the numerous problems, and its
 quicker than sorting out deployment issues.
 
