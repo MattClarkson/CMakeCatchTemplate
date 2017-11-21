@@ -179,7 +179,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
     set(_install_rpath "@loader_path")
   elseif(UNIX)
     # this works for libraries as well as executables
-    set(_install_rpath "\$ORIGIN/../bin")
+    set(_install_rpath "\$ORIGIN")
   endif()
 
   set(proj MYPROJECT)
