@@ -31,15 +31,20 @@ macro(mpCreateGuiApplication APP_NAME ADDITIONAL_SEARCH_PATHS)
           RUNTIME DESTINATION bin COMPONENT Runtime
          )
 
-  set(_qt_conf_plugin_install_prefix .)
+  set(_qt_conf_plugin_install_prefix "Prefix=.")
   if(APPLE)
-    set(_qt_conf_plugin_install_prefix ./MacOS)
+    set(_qt_conf_plugin_install_prefix "Prefix=./MacOS")
   endif()
 
+  set(_qt_conf_lib_prefix)
+  if(NOT APPLE)
+    set(_qt_conf_lib_prefix "Libraries=.")
+  endif()
   install(CODE "
           file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${qtconf_dest_dir}/qt.conf\" \"
   [Paths]
-  Prefix=${_qt_conf_plugin_install_prefix}
+  ${_qt_conf_plugin_install_prefix}
+  ${_qt_conf_lib_prefix}
   \")" COMPONENT Runtime)
 
 
