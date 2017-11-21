@@ -60,15 +60,15 @@ macro(mpCreateGuiApplication APP_NAME ADDITIONAL_SEARCH_PATHS)
     get_filename_component(_qmake_path "${_qmake_location}" DIRECTORY)
     if(APPLE)
       install(FILES "${_qmake_path}/../plugins/platforms/libqcocoa.dylib"
-              DESTINATION "${APP_NAME}.app/Contents/MacOS/plugins/platforms"
+              DESTINATION "${APP_NAME}.app/Contents/MacOS/platforms"
               CONFIGURATIONS Release)
     elseif(WIN32)
       install(FILES "${_qmake_path}/../plugins/platforms/qwindows.dll"
-              DESTINATION "bin/plugins/platforms"
+              DESTINATION "bin/platforms"
               CONFIGURATIONS Release)
     elseif(UNIX)
       install(FILES "${_qmake_path}/../plugins/platforms/libqxcb.so"
-              DESTINATION "bin/plugins/platforms"
+              DESTINATION "bin/platforms"
               CONFIGURATIONS Release)
     else()
       message(WARNING "Unrecognised platform, so cannot install Qt platforms.")
@@ -77,7 +77,7 @@ macro(mpCreateGuiApplication APP_NAME ADDITIONAL_SEARCH_PATHS)
 
   install(CODE "
           file(GLOB_RECURSE QTPLUGINS
-          \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/plugins/platforms/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
+          \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/platforms/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
           file(GLOB_RECURSE QMLPLUGINS
           \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/qml/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
           list(APPEND QTPLUGINS \"\${QMLPLUGINS}\")
