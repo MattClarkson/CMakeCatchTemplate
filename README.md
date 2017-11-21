@@ -15,7 +15,7 @@ The main way to use it is:
  4. Check it all still builds.
  5. Commit it to your own git repository.
  
-The substitutions for the second part can be achieved manually or by editing and running `rename.sh`.
+The substitutions for the second part can be achieved manually or by editing and running `rename.sh` in a unix style environment.
 Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`.
 
 Note: Running `rename.sh` should be performed on a non-git folder and before running CMake for the first time.
