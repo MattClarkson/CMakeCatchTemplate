@@ -20,6 +20,9 @@ Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`.
 
 Note: Running `rename.sh` should be performed on a non-git folder and before running CMake for the first time.
 
+Purely for testing purposes, you could just clone the repo, and build it, but then the project would
+be called CMakeCatchTemplate which might sound a bit wierd for your own personal endeavours.
+
 
 Overview
 --------
