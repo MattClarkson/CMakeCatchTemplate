@@ -31,8 +31,7 @@ namespace mp
 * and communicate entirely via signals and slots. Ideally, it should
 * have no domain (application) specific knowledge.
 */
-MYPROJECT_QTVTKCONTROLLERWINEXPORT
-class TwinSliderWidget : public QWidget, Ui_TwinSliderWidget
+class MYPROJECT_QTVTKCONTROLLERWINEXPORT TwinSliderWidget : public QWidget, Ui_TwinSliderWidget
 {
   Q_OBJECT
 

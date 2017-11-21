@@ -31,8 +31,7 @@ namespace mp
 * You could just use QVTKWidget2 directly, as at the moment,
 * this is just a placeholder in case we want more logic.
 */
-MYPROJECT_QTVTKVIEWWINEXPORT
-class VTKViewWidget : public QVTKWidget2
+class MYPROJECT_QTVTKVIEWWINEXPORT VTKViewWidget : public QVTKWidget2
 {
   Q_OBJECT
 
