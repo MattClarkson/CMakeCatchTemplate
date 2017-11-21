@@ -506,8 +506,6 @@ if(BUILD_OpenCV)
   install(FILES ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt DESTINATION . COMPONENT CONFIG)
 endif()
 
-message("Matt, OpenCV_LIB_PATH=${OpenCV_LIB_PATH}")
-
 if(BUILD_VTK)
   # Example of:
   #   (1) Large Rendering library - oooooh, pretty pictures etc.
