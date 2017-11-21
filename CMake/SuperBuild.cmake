@@ -174,6 +174,14 @@ endforeach()
 ######################################################################
 if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET)
 
+  set(_install_rpath)
+  if(APPLE)
+    set(_install_rpath "@loader_path")
+  elseif(UNIX)
+    # this works for libraries as well as executables
+    set(_install_rpath "\$ORIGIN/../bin")
+  endif()
+
   set(proj MYPROJECT)
   set(proj_DEPENDENCIES ${OpenCV_DEPENDS} ${Eigen_DEPENDS} ${Boost_DEPENDS} ${gflags_DEPENDS} ${glog_DEPENDS} ${VTK_DEPENDS} ${FLANN_DEPENDS} ${PCL_DEPENDS})
 
@@ -199,6 +207,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DMYPROJECT_USE_CPPCHECK:BOOL=${MYPROJECT_USE_CPPCHECK}
       -DMYPROJECT_USE_QT:BOOL=${MYPROJECT_USE_QT}
       -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+      "-DCMAKE_INSTALL_RPATH:STRING=${_install_rpath}"
       -DCMAKE_VERBOSE_MAKEFILE:BOOL=${CMAKE_VERBOSE_MAKEFILE}
       -DBUILD_TESTING:BOOL=${BUILD_TESTING} # The value set in EP_COMMON_ARGS normally forces this off, but we may need MYPROJECT to be on.
       -DBUILD_SUPERBUILD:BOOL=OFF           # Must force this to be off, or else you will loop forever.
