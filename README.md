@@ -46,9 +46,7 @@ Tested On
  * Linux - Centos 7, g++ 4.8.5, CMake 3.5.1
  * Mac - OSX 10.10.5, clang 6.0, CMake 3.9.4
 
-Minimum CMake version is 3.5.
-
-With all other versions - good luck.
+Minimum CMake version is 3.5. With all other versions - good luck.
 
 
 Build Instructions
@@ -145,6 +143,21 @@ Then at some point you decide you want to add a Qt GUI, then you will also need 
 Qt support classes like QVTKWidget.
 
 So, basically, pick your main options, up front, for the SuperBuild, and then don't change them or be prepared for a full clean build.
+
+
+Remove Unwanted Code
+--------------------
+
+Given the above 2 use-cases, you might be either:
+
+ 1. Developing a small library with command line applications
+ 2. Developing an end user GUI application
+ 3. Both
+
+So, you may find that you do not need all of the code in this repository. We could have
+made a different repository for each of the above 3 cases. But then there would be a lot of code
+duplication and overlap. So, for now, its all one repository. Take a look in the ```Code``` folder.
+Remove the directories you do not need, and change ```Code/CMakeLists.txt``` accordingly.
 
 
 Preferred Branching Workflow
