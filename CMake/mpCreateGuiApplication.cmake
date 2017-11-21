@@ -14,28 +14,33 @@
 
 macro(mpCreateGuiApplication APP_NAME ADDITIONAL_SEARCH_PATHS)
 
+  # Installs the main application.
+
   set(plugin_dest_dir bin)
-  set(qtconf_dest_dir bin)
   set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/${APP_NAME}")
   if(APPLE)
     set(plugin_dest_dir ${APP_NAME}.app/Contents/MacOS)
-    set(qtconf_dest_dir ${APP_NAME}.app/Contents/Resources)
+
     set(APPS "\${CMAKE_INSTALL_PREFIX}/${APP_NAME}.app")
   endif()
   if(WIN32)
     set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/${APP_NAME}.exe")
   endif()
-
   install(TARGETS ${APP_NAME}
           BUNDLE DESTINATION . COMPONENT Runtime
           RUNTIME DESTINATION bin COMPONENT Runtime
          )
 
+  # Writes out qt.conf which sets up the paths.
+
+  set(qtconf_dest_dir bin)
+  if(APPLE)
+    set(qtconf_dest_dir ${APP_NAME}.app/Contents/Resources)
+  endif()
   set(_qt_conf_plugin_install_prefix "Prefix=.")
   if(APPLE)
     set(_qt_conf_plugin_install_prefix "Prefix=./MacOS")
   endif()
-
   set(_qt_conf_lib_prefix)
   if(NOT APPLE)
     set(_qt_conf_lib_prefix "Libraries=.")
@@ -47,6 +52,7 @@ macro(mpCreateGuiApplication APP_NAME ADDITIONAL_SEARCH_PATHS)
   ${_qt_conf_lib_prefix}
   \")" COMPONENT Runtime)
 
+  # Setup the Icon for Macs.
 
   if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_NAME "${APP_NAME}")
@@ -59,26 +65,29 @@ macro(mpCreateGuiApplication APP_NAME ADDITIONAL_SEARCH_PATHS)
     endif()
   endif()
 
+  # Installs ALL Qt plugins.
+
   if(Qt5_DIR)
     get_property(_qmake_location TARGET ${Qt5Core_QMAKE_EXECUTABLE}
                  PROPERTY IMPORT_LOCATION)
     get_filename_component(_qmake_path "${_qmake_location}" DIRECTORY)
+
+    set(_plugin_source_dir ${_qmake_path}/../plugins)
+    set(_plugin_dest_dir bin/)
     if(APPLE)
-      install(FILES "${_qmake_path}/../plugins/platforms/libqcocoa.dylib"
-              DESTINATION "${APP_NAME}.app/Contents/MacOS/platforms"
-              CONFIGURATIONS Release)
-    elseif(WIN32)
-      install(FILES "${_qmake_path}/../plugins/platforms/qwindows.dll"
-              DESTINATION "bin/platforms"
-              CONFIGURATIONS Release)
-    elseif(UNIX)
-      install(FILES "${_qmake_path}/../plugins/platforms/libqxcb.so"
-              DESTINATION "bin/platforms"
-              CONFIGURATIONS Release)
-    else()
-      message(WARNING "Unrecognised platform, so cannot install Qt platforms.")
+      set(_plugin_dest_dir ${APP_NAME}.app/Contents/MacOS/)
     endif()
+    file(GLOB children RELATIVE ${_plugin_source_dir} ${_plugin_source_dir}/*)
+    foreach( c ${children})
+      if( IS_DIRECTORY ${_plugin_source_dir}/${c} )
+        install(DIRECTORY ${_plugin_source_dir}/${c} DESTINATION ${_plugin_dest_dir})
+      else()
+        install(FILES ${_plugin_source_dir}/${c} DESTINATION ${_plugin_dest_dir})
+      endif()
+    endforeach()
   endif()
+
+  # Calls fixup_bundle.
 
   install(CODE "
           file(GLOB_RECURSE QTPLUGINS
