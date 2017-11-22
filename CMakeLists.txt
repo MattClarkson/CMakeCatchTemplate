@@ -91,17 +91,21 @@ if(BUILD_QTVTKGUI AND NOT MYPROJECT_USE_QT)
   set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt, normally for GUI development, but can be for anything." FORCE)
 endif()
 
-if(BUILD_QMLDEMO AND NOT MYPROJECT_USE_QT)
-  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QMLDEMO being ON.")
-  set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt, normally for GUI development, but can be for anything." FORCE)
-endif()
-
 if(BUILD_QTVTKGUI AND NOT BUILD_VTK)
   message("Forcing BUILD_VTK to ON due to BUILD_QTVTKGUI being ON.")
   set(BUILD_VTK ON CACHE BOOL "Build VTK." FORCE)
 endif()
 
+if(BUILD_QMLDEMO AND NOT MYPROJECT_USE_QT)
+  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QMLDEMO being ON.")
+  set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt, normally for GUI development, but can be for anything." FORCE)
+endif()
 
+if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
+  message("Forcing BUILD_SHARED_LIBS to ON due to BUILD_QMLDEMO being ON.")
+  set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
+endif()
+ 
 ######################################################################
 # This is a list of all known GUI apps. Used for things like
 # creating Mac OSX bundles, and each command line app gets copied
