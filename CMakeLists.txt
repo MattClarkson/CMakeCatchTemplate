@@ -32,15 +32,25 @@ endforeach()
 
 
 ##############################################################################
-# Further variables for the external project names and locations are defined
-# in the external project CMake files under CMake/ExternalProjects.
+# Setup project name, and version.
 ##############################################################################
-set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
+if (BUILD_SUPERBUILD)
+  project(MYPROJECT-superbuild)
+  set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
+  set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
+else()
+  project(MYPROJECT VERSION 00.00.1)
+endif()
 
 
-##############################################################################
-# We have a super-build option. (Terminology comes from Kitware/ITK/MITK etc).
-##############################################################################
+######################################################################
+# Set main build options.
+######################################################################
+option(BUILD_TESTING "Build Unit tests." ON)
+option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+if(WIN32 AND NOT BUILD_SHARED_LIBS)
+  add_definitions(-DMYPROJECT_STATIC)
+endif()
 option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via SuperBuild.cmake." ON)
 option(BUILD_gflags "Build gflags." OFF)
 option(BUILD_glog "Build glog." OFF)
@@ -54,6 +64,7 @@ option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
 
 option(MYPROJECT_USE_QT "Use Qt, normally for GUI development, but can be for anything." OFF)
+mark_as_advanced(MYPROJECT_USE_QT) # Qt gets baked into VTK, so really developers should not fiddle with this.
 
 if(BUILD_glog AND NOT BUILD_gflags)
   message("Forcing BUILD_gflags to ON due to BUILD_glog being ON.")
@@ -80,23 +91,44 @@ if(BUILD_QTVTKGUI AND NOT MYPROJECT_USE_QT)
   set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt, normally for GUI development, but can be for anything." FORCE)
 endif()
 
-if(BUILD_QMLDEMO AND NOT MYPROJECT_USE_QT)
-  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QMLDEMO being ON.")
-  set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt, normally for GUI development, but can be for anything." FORCE)
-endif()
-
 if(BUILD_QTVTKGUI AND NOT BUILD_VTK)
   message("Forcing BUILD_VTK to ON due to BUILD_QTVTKGUI being ON.")
   set(BUILD_VTK ON CACHE BOOL "Build VTK." FORCE)
 endif()
 
-if (BUILD_SUPERBUILD)
-  project(MYPROJECT-superbuild)
-  set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
-  set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
-else()
-  project(MYPROJECT VERSION 00.00.1)
+if(BUILD_QMLDEMO AND NOT MYPROJECT_USE_QT)
+  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QMLDEMO being ON.")
+  set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt, normally for GUI development, but can be for anything." FORCE)
 endif()
+
+if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
+  message("Forcing BUILD_SHARED_LIBS to ON due to BUILD_QMLDEMO being ON.")
+  set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
+endif()
+ 
+######################################################################
+# This is a list of all known GUI apps. Used for things like
+# creating Mac OSX bundles, and each command line app gets copied
+# into each OSX bundle.
+######################################################################
+set(_known_apps "")
+set(BUILDING_GUIS OFF)
+if (BUILD_QTVTKGUI)
+  list(APPEND _known_apps QtVTKApp)
+  set(BUILDING_GUIS ON)
+endif()
+if (BUILD_QMLDEMO)
+  list(APPEND _known_apps QMLDemo)
+  set(BUILDING_GUIS ON)
+endif()
+set_property(GLOBAL PROPERTY MYPROJECT_GUI_APPS ${_known_apps})
+
+
+##############################################################################
+# Further variables for the external project names and locations are defined
+# in the external project CMake files under CMake/ExternalProjects.
+##############################################################################
+set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
 
 
 ######################################################################
@@ -152,19 +184,18 @@ endif()
 ######################################################################
 # Check for Qt up-front, as VTK may need it in SuperBuild.
 ######################################################################
+set(ADDITIONAL_SEARCH_PATHS "")
+set(QT5_LINK_LIBRARIES)
 if(MYPROJECT_USE_QT)
-  set(ADDITIONAL_SEARCH_PATHS)
-  set(_qt_components Concurrent OpenGL PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
-  if(BUILD_VTK)
-    list(APPEND _qt_components WebKitWidgets)
-  endif()
+  set(_qt_components Concurrent OpenGL Gui PrintSupport Script Sql Svg Widgets Xml XmlPatterns UiTools Help)
   if(BUILD_QMLDEMO)
-    list(APPEND _qt_components Quick Qml Gui)
+    list(APPEND _qt_components Quick Qml)
   endif()
   if(UNIX AND NOT APPLE)
-    list(APPEND _qt_components X11Extras)
+    if(BUILD_SHARED_LIBS)
+      list(APPEND _qt_components X11Extras)
+    endif()
   endif()
-  set(QT5_LINK_LIBRARIES)
   find_package(Qt5 5.4.2 QUIET COMPONENTS ${_qt_components})
   if(Qt5_DIR)
     message(STATUS "Found Qt5: ${Qt5_DIR}")
@@ -207,7 +238,7 @@ if(MYPROJECT_USE_QT)
       message(WARNING "The qmake executable could not be found.")
     endif()
   endif()
-endif(MYPROJECT_USE_QT)
+endif()
 
 if(MYPROJECT_USE_QT AND NOT Qt5_DIR)
   message(FATAL " Qt was required but not found")
@@ -224,7 +255,9 @@ set(CMAKE_MODULE_PATH
    )
 include(mitkMacroEmptyExternalProject)
 include(mitkFunctionCheckCompilerFlags)
-include(mpMacroInstall)
+include(mpMacroInstallCommandLineApp)
+include(mpMacroInstallHeaders)
+include(mpMacroInstallLibrary)
 include(mpCreateGuiApplication)
 
 
@@ -245,16 +278,6 @@ mitkFunctionCheckCompilerFlags("-std=c++11" MYPROJECT_CXX11_FLAG)
 if(NOT MYPROJECT_CXX11_FLAG)
   # Older gcc compilers use -std=c++0x
   mitkFunctionCheckCompilerFlags("-std=c++0x" MYPROJECT_CXX11_FLAG)
-endif()
-
-
-######################################################################
-# Build options.
-######################################################################
-option(BUILD_TESTING "Build Unit tests." ON)
-option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
-if(WIN32 AND NOT BUILD_SHARED_LIBS)
-  add_definitions(-DMYPROJECT_STATIC)
 endif()
 
 
@@ -349,8 +372,10 @@ message("CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 ######################################################################
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/License.dox ${CMAKE_BINARY_DIR}/Doxygen/License.dox)
 configure_file(${CMAKE_SOURCE_DIR}/LICENSE.txt ${CMAKE_BINARY_DIR}/LICENSE.txt @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/LICENSE.txt DESTINATION . COMPONENT CONFIG)
 configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/README.txt ${CMAKE_BINARY_DIR}/README.txt @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/README.txt DESTINATION . COMPONENT CONFIG)
 configure_file(${CMAKE_SOURCE_DIR}/INSTALLATION.txt ${CMAKE_BINARY_DIR}/INSTALLATION.txt @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/CMake/Findglog.cmake.in ${CMAKE_BINARY_DIR}/Findglog.cmake @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/CMake/Findgflags.cmake.in ${CMAKE_BINARY_DIR}/Findgflags.cmake @ONLY)
@@ -373,16 +398,16 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Add Mandatory Requirements
 ######################################################################
 set(ALL_THIRD_PARTY_LIBRARIES)
-list(APPEND ADDITIONAL_SEARCH_PATHS ${CMAKE_BINARY_DIR}/bin/${VS_BUILD_TYPE})
+list(APPEND ADDITIONAL_SEARCH_PATHS "${CMAKE_BINARY_DIR}/bin/${VS_BUILD_TYPE}")
 
 
 ######################################################################
 # Add Optional Requirements
 ######################################################################
 if(WIN32)
-  set(_library_sub_dir "/bin")
+  set(_library_sub_dir "bin")
 else()
-  set(_library_sub_dir "/lib")
+  set(_library_sub_dir "lib")
 endif()
 
 if(BUILD_gflags)
@@ -397,8 +422,13 @@ if(BUILD_gflags)
     add_definitions(-DGOOGLE_GLOG_DLL_DECL=)
     list(APPEND ALL_THIRD_PARTY_LIBRARIES Shlwapi)
   endif()
-  set(ADDITIONAL_SEARCH_PATHS "${gflags_DIR}${_library_sub_dir};${ADDITIONAL_SEARCH_PATHS}")
+  if(WIN32)
+    list(APPEND ADDITIONAL_SEARCH_PATHS "${gflags_DIR}/Lib")
+  else()
+    list(APPEND ADDITIONAL_SEARCH_PATHS "${gflags_DIR}/${_library_sub_dir}")
+  endif()
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/gflags.txt ${CMAKE_BINARY_DIR}/LICENSE_gflags.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_gflags.txt DESTINATION . COMPONENT CONFIG)
 endif()
 
 if(BUILD_glog)
@@ -408,8 +438,9 @@ if(BUILD_glog)
   include_directories(${glog_INCLUDE_DIR})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${glog_LIBRARY})
   add_definitions(-DBUILD_glog)
-  set(ADDITIONAL_SEARCH_PATHS "${glog_DIR}${_library_sub_dir};${ADDITIONAL_SEARCH_PATHS}")
+  list(APPEND ADDITIONAL_SEARCH_PATHS "${glog_DIR}/${_library_sub_dir}")
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/glog.txt ${CMAKE_BINARY_DIR}/LICENSE_glog.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_glog.txt DESTINATION . COMPONENT CONFIG)
 endif()
 
 if(BUILD_Eigen)
@@ -418,6 +449,7 @@ if(BUILD_Eigen)
   include_directories(${Eigen_INCLUDE_DIR})
   add_definitions(-DBUILD_Eigen)
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt DESTINATION . COMPONENT CONFIG)
 endif()
 
 if(BUILD_Boost)
@@ -454,8 +486,9 @@ if(BUILD_Boost)
   endif()
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${Boost_LIBRARIES})
   add_definitions(-DBUILD_Boost)
-  set(ADDITIONAL_SEARCH_PATHS "${BOOST_ROOT}/bin;${ADDITIONAL_SEARCH_PATHS}")
+  list(APPEND ADDITIONAL_SEARCH_PATHS "${BOOST_ROOT}/${_library_sub_dir}")
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Boost.txt ${CMAKE_BINARY_DIR}/LICENSE_Boost.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_Boost.txt DESTINATION . COMPONENT CONFIG)
 endif()
 
 if(BUILD_OpenCV)
@@ -468,8 +501,13 @@ if(BUILD_OpenCV)
   include_directories(${OpenCV_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${OpenCV_LIBS})
   add_definitions(-DBUILD_OpenCV)
-  set(ADDITIONAL_SEARCH_PATHS "${OpenCV_LIB_DIR}/../bin;${ADDITIONAL_SEARCH_PATHS}")
+  if(WIN32)
+    list(APPEND ADDITIONAL_SEARCH_PATHS "${OpenCV_LIB_PATH}/../${_library_sub_dir}")
+  else()
+    list(APPEND ADDITIONAL_SEARCH_PATHS "${OpenCV_INSTALL_PATH}/${_library_sub_dir}")
+  endif()
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/OpenCV.txt ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_OpenCV.txt DESTINATION . COMPONENT CONFIG)
 endif()
 
 if(BUILD_VTK)
@@ -481,10 +519,14 @@ if(BUILD_VTK)
   #       Its the preferred approach because VTK can then control what is exposed.
   find_package(VTK REQUIRED)
   include(${VTK_USE_FILE})
-  include_directories(${VTK_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${VTK_LIBRARIES})
   add_definitions(-DBUILD_VTK)
+  list(APPEND ADDITIONAL_SEARCH_PATHS "${VTK_INSTALL_PREFIX}/${_library_sub_dir}")
+  if(UNIX AND NOT APPLE)
+    list(APPEND ADDITIONAL_SEARCH_PATHS "${VTK_INSTALL_PREFIX}/lib64")
+  endif()
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/VTK.txt ${CMAKE_BINARY_DIR}/LICENSE_VTK.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_VTK.txt DESTINATION . COMPONENT CONFIG)
 endif()
 
 if(BUILD_PCL)
@@ -500,11 +542,11 @@ if(BUILD_PCL)
   add_definitions(${PCL_DEFINITIONS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${PCL_LIBRARIES})
   add_definitions(-DBUILD_PCL)
-  set(ADDITIONAL_SEARCH_PATHS "${PCL_LIBRARY_DIRS};${ADDITIONAL_SEARCH_PATHS}")
+  list(APPEND ADDITIONAL_SEARCH_PATHS "${PCL_LIBRARY_DIRS}/../${_library_sub_dir}")
+  list(APPEND ADDITIONAL_SEARCH_PATHS "${FLANN_DIR}/${_library_sub_dir}")
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/PCL.txt ${CMAKE_BINARY_DIR}/LICENSE_PCL.txt)
+  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_PCL.txt DESTINATION . COMPONENT CONFIG)
 endif()
-
-set(ALL_LIBRARIES myproject ${ALL_THIRD_PARTY_LIBRARIES})
 
 
 ######################################################################
@@ -520,21 +562,19 @@ endif(WIN32)
 
 
 ######################################################################
-# This is a list of all known GUI apps. Used for things like
-# creating Mac OSX bundles, and each command line app gets copied
-# into each OSX bundle.
+# A few shortcuts for lists of libraries.
 ######################################################################
-set(_known_apps "")
-if (BUILD_QTVTKGUI)
-  list(APPEND _known_apps QtVTKApp)
-endif()
-set_property(GLOBAL PROPERTY MYPROJECT_APPS ${_known_apps})
+set(MYPROJECT_LIBRARIES myproject)
+set(ALL_LIBRARIES ${MYPROJECT_LIBRARIES} ${ALL_THIRD_PARTY_LIBRARIES} ${QT5_LINK_LIBRARIES})
 
 
 ######################################################################
-# Add code folders.
+# Set up a few paths.
 ######################################################################
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+set(MYPROJECT_INSTALL_LIB_DIR lib)
+set(MYPROJECT_INSTALL_INC_DIR include)
+set(MYPROJECT_INSTALL_BIN_DIR bin)
 
 foreach(type LIBRARY RUNTIME ARCHIVE)
   set(output_dir ${CMAKE_BINARY_DIR}/bin)
@@ -544,10 +584,23 @@ endforeach()
 
 include_directories(${CMAKE_SOURCE_DIR}/Code/Lib)
 
+
+##########################################################################################
+# The next two generate CMake code to enable external projects to correctly use MYPROJECT.
+##########################################################################################
+configure_file(${CMAKE_SOURCE_DIR}/UseMYPROJECT.cmake.in ${CMAKE_BINARY_DIR}/UseMYPROJECT.cmake @ONLY IMMEDIATE)
+configure_file(${CMAKE_SOURCE_DIR}/MYPROJECTConfig.cmake.in ${CMAKE_BINARY_DIR}/MYPROJECTConfig.cmake @ONLY IMMEDIATE)
+if(NOT BUILDING_GUIS)
+  install(FILES ${CMAKE_BINARY_DIR}/UseMYPROJECT.cmake DESTINATION . COMPONENT CONFIG)
+  install(FILES ${CMAKE_BINARY_DIR}/MYPROJECTConfig.cmake DESTINATION . COMPONENT CONFIG)
+endif()
+
+
+######################################################################
+# Add code folders.
+######################################################################
 add_subdirectory(Code)
-
 add_subdirectory(Documentation)
-
 if(BUILD_TESTING)
   set(TEMP_DIR ${CMAKE_BINARY_DIR}/Testing/Temporary)
   include_directories(${CMAKE_SOURCE_DIR}/Testing/)
@@ -579,7 +632,7 @@ if (WIN32)
   set(DESKTOP_ICONS_REMOVE_STRING "")
   set(DESKTOP_ICONS_REMOVE_STRING "")
 
-  get_property(_apps GLOBAL PROPERTY MYPROJECT_APPS)
+  get_property(_apps GLOBAL PROPERTY MYPROJECT_GUI_APPS)
 
   foreach(app_name ${_apps})
 

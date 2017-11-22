@@ -64,6 +64,7 @@ if(NOT DEFINED PCL_DIR)
       -DBOOST_ROOT:PATH=${BOOST_ROOT}
       -DBOOST_INCLUDEDIR:PATH=${BOOST_ROOT}/include
       -DBOOST_LIBRARYDIR:PATH=${BOOST_ROOT}/lib
+      -DBoost_LIBRARY_DIR:PATH=${BOOST_ROOT}/lib 
       -DBoost_NO_SYSTEM_PATHS:BOOL=ON
       -DBoost_USE_STATIC_LIBS:BOOL=${_build_static}
       -DBoost_USE_STATIC_RUNTIME:BOOL=${_build_static}
@@ -75,8 +76,14 @@ if(NOT DEFINED PCL_DIR)
       -DOPENGL_glu_LIBRARY=${OPENGL_glu_LIBRARY}
       -DOPENGL_gl_LIBRARY=${OPENGL_gl_LIBRARY}
       -DBUILD_apps:BOOL=OFF
-      -DBUILD_tools:BOOL=OFF
+      -DBUILD_tools:BOOL=ON
       -DBUILD_examples:BOOL=OFF
+      -DWITH_LIBUSB:BOOL=OFF    # On my Mac, this pulls in a dependency to /opt/local (MacPorts) which has the wrong version of boost.
+      -DWITH_PNG:BOOL=OFF       # Same problem
+      -DWITH_QHULL:BOOL=OFF     # Same problem
+      -DWITH_OPENNI:BOOL=OFF    # Same problem, but worse: For each device, PCL defaults this to TRUE, so FindX is always executed.
+      -DWITH_OPENNI2:BOOL=OFF   # Same problem, but worse: For each device, PCL defaults this to TRUE, so FindX is always executed.
+      -DWITH_PCAP:BOOL=OFF      # On my Mac, this is 32 bit, so barfs when linking 64 bit.
       ${_vtk_options}
     CMAKE_CACHE_ARGS
       ${EP_COMMON_CACHE_ARGS}

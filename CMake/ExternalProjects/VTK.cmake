@@ -25,9 +25,13 @@ if(DEFINED VTK_DIR AND NOT EXISTS ${VTK_DIR})
 endif()
 
 if(APPLE AND BUILD_PCL)
-  set(version "6.1.0")
+  set(version "6.1.0") # due to https://github.com/PointCloudLibrary/pcl/issues/712
 else()
   set(version "7.1.0")
+endif()
+set(make_webkit_optional)
+if( "${version}" STREQUAL "6.1.0")
+  set(make_webkit_optional COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/VTK.patch)
 endif()
 
 set(location "${NIFTK_EP_TARBALL_LOCATION}/VTK-${version}.tar.gz")
@@ -65,7 +69,7 @@ if(NOT DEFINED VTK_DIR)
        -DVTK_WINDOWS_PYTHON_DEBUGGABLE:BOOL=OFF
       )
 
-  if(Qt5_DIR)
+  if(Qt5_DIR AND MYPROJECT_USE_QT)
     list(APPEND additional_cmake_args
         -DVTK_QT_VERSION:STRING=5
         -DVTK_Group_Qt:BOOL=ON
@@ -93,7 +97,7 @@ if(NOT DEFINED VTK_DIR)
     INSTALL_DIR ${proj_INSTALL}
     URL ${proj_LOCATION}
     URL_MD5 ${proj_CHECKSUM}
-#    PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/VTK.patch
+    PATCH_COMMAND ${make_webkit_optional}
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
         ${EP_COMMON_ARGS}

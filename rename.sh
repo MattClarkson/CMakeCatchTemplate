@@ -45,14 +45,22 @@ find_and_replace_string(){
     find . -type f > $HOME/tmp.$$.files.txt
     for f in `cat $HOME/tmp.$$.files.txt`
     do
-      cat $f | sed s/"${1}"/"${2}"/g > $HOME/tmp.$$.file.txt
-      mv $HOME/tmp.$$.file.txt $f
+      wc1=`file -i $f | grep text | wc -l`
+      wc2=`file -i $f | grep "application/xml" | wc -l`
+      if [ $wc1 -gt 0 -o $wc2 -gt 0 ]; then
+        cat $f | sed s/"${1}"/"${2}"/g > $HOME/tmp.$$.file.txt
+        mv $HOME/tmp.$$.file.txt $f
+      fi
     done
     rm $HOME/tmp.$$.files.txt
 }
 
 find_and_replace_filename(){
-    find . -name *$1* | sed -e "p;s/$1/$2/" | xargs -n2 mv
+    find . -name "*$1*" > $HOME/tmp.$$.files.txt
+    wc=`wc -l $HOME/tmp.$$.files.txt | cut -f 1 -d " "`
+    if [ $wc -gt 0 ]; then
+      cat $HOME/tmp.$$.files.txt | sed -e "p;s/$1/$2/" | xargs -n2 mv
+    fi
 }
 
 find_and_replace_filename_and_string(){

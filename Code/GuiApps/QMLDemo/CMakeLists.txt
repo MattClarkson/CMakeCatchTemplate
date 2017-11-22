@@ -13,25 +13,39 @@
 #============================================================================*/
 
 set(APP_NAME QMLDemo)
-get_property(_apps GLOBAL PROPERTY MYPROJECT_APPS)
-list(APPEND _apps ${APP_NAME})
-set_property(GLOBAL PROPERTY MYPROJECT_APPS ${_apps})
 
 # Install all Qt qml infrastructure.
-set(_qml_dest_dir bin)
+# Note: Im trying to install everything under the bin/qml folder EXCEPT QtTest.
+#       Im sure there's a nicer way of doing it using the QtQuickCompiler or something.
+set(_qml_source_dir ${Qt5_DIR}/../../../qml)
+set(_qml_dest_dir bin/qml)
 if(APPLE)
-  set(_qml_dest_dir ${APP_NAME}.app/Contents/MacOS)
+  set(_qml_dest_dir ${APP_NAME}.app/Contents/MacOS/qml)
 endif()
-install(DIRECTORY ${Qt5_DIR}/../../../qml DESTINATION ${_qml_dest_dir})
+file(GLOB children RELATIVE ${_qml_source_dir} ${_qml_source_dir}/*)
+foreach( c ${children})
+  if( NOT ("QtTest" STREQUAL "${c}" ) )
+    if( IS_DIRECTORY ${_qml_source_dir}/${c} )
+      install(DIRECTORY ${_qml_source_dir}/${c} DESTINATION ${_qml_dest_dir})
+    else()
+      install(FILES ${_qml_source_dir}/${c} DESTINATION ${_qml_dest_dir})
+    endif()
+  endif()
+endforeach()
 
-# If all qml files for this project are referenced in the
-# .qrc file, then they get compiled into the main executable.
-qt5_add_resources(QML_QRC View/qml.qrc)
-add_executable(${APP_NAME} MACOSX_BUNDLE ${QML_QRC} App/main.cpp)
+# Add any additional icons/resources, that are nothing to do with QML.
+set(APP_RES
+  Resources/QMLDemo.rc
+)
+qt5_add_resources(QT5_RES ${APP_RES})
+
+# Now compile in our QML files into the resource filesystem.
+qt5_add_resources(QT5_QML View/qml.qrc)
+add_executable(${APP_NAME} MACOSX_BUNDLE ${QT5_RES} ${QT5_QML} App/main.cpp)
 
 # Add libraries here if necessary.
 set(APP_LIBS)
 target_link_libraries(${APP_NAME} ${APP_LIBS} ${QT5_LINK_LIBRARIES})
 
 # This sorts out the fixup_bundle.
-mpCreateGuiApplication(${APP_NAME} ${ADDITIONAL_SEARCH_PATHS})
+mpCreateGuiApplication(${APP_NAME} "${ADDITIONAL_SEARCH_PATHS}")

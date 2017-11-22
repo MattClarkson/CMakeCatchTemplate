@@ -13,9 +13,6 @@
 #=================================================================================*/
 
 set(APP_NAME QtVTKApp)
-get_property(_apps GLOBAL PROPERTY MYPROJECT_APPS)
-list(APPEND _apps ${APP_NAME})
-set_property(GLOBAL PROPERTY MYPROJECT_APPS ${_apps})
 
 set(APP_UIS
   mpMainWindow.ui
@@ -36,6 +33,7 @@ set(APP_HDRS
 )
 
 set(APP_RES
+  Resources/QtVTK.rc
 )
 
 qt5_wrap_ui(QT5_UIS ${APP_UIS})
@@ -62,4 +60,4 @@ set(APP_LIBS
 )
 
 target_link_libraries(${APP_NAME} ${APP_LIBS} ${ALL_THIRD_PARTY_LIBRARIES} ${QT5_LINK_LIBRARIES})
-mpCreateGuiApplication(${APP_NAME} ${ADDITIONAL_SEARCH_PATHS})
+mpCreateGuiApplication(${APP_NAME} "${ADDITIONAL_SEARCH_PATHS}")

@@ -105,38 +105,6 @@ elseif(UNIX)
   set(_install_rpath "\$ORIGIN/../lib")
 endif()
 
-# Experimental code to install external project libraries with RPATH.
-# It is used when EP_ALWAYS_USE_INSTALL_DIR is enabled.
-# It is known to break the packaging on Mac and Linux.
-set(INSTALL_WITH_RPATH ${EP_ALWAYS_USE_INSTALL_DIR})
-if (INSTALL_WITH_RPATH)
-
-  # This is a workaround for passing linker flags
-  # actually down to the linker invocation
-  set(_cmake_required_flags_orig ${CMAKE_REQUIRED_FLAGS})
-  set(CMAKE_REQUIRED_FLAGS "-Wl,-rpath")
-  mitkFunctionCheckCompilerFlags(${CMAKE_REQUIRED_FLAGS} _has_rpath_flag)
-  set(CMAKE_REQUIRED_FLAGS ${_cmake_required_flags_orig})
-
-  set(_install_rpath_linkflag )
-  if(_has_rpath_flag)
-    if(APPLE)
-      set(_install_rpath_linkflag "-Wl,-rpath,@loader_path/../lib")
-    else()
-      set(_install_rpath_linkflag "-Wl,-rpath='$ORIGIN/../lib'")
-    endif()
-  endif()
-
-  set(_install_rpath)
-  if(APPLE)
-    set(_install_rpath "@loader_path/../lib")
-  elseif(UNIX)
-    # this work for libraries as well as executables
-    set(_install_rpath "\$ORIGIN/../lib")
-  endif()
-
-endif (INSTALL_WITH_RPATH)
-
 set(EP_COMMON_ARGS
   -DCMAKE_CXX_EXTENSIONS:STRING=${CMAKE_CXX_EXTENSIONS}
   -DCMAKE_CXX_STANDARD:STRING=${CMAKE_CXX_STANDARD}
@@ -178,13 +146,6 @@ set(EP_COMMON_CACHE_DEFAULT_ARGS
   "-DCMAKE_LIBRARY_PATH:PATH=${CMAKE_LIBRARY_PATH}"
 )
 
-if(INSTALL_WITH_RPATH)
-  set(EP_COMMON_ARGS
-       "-DCMAKE_INSTALL_RPATH:STRING=${_install_rpath}"
-       ${EP_COMMON_ARGS}
-      )
-endif()
-
 if(APPLE)
   set(EP_COMMON_ARGS
        -DCMAKE_OSX_ARCHITECTURES:PATH=${CMAKE_OSX_ARCHITECTURES}
@@ -213,6 +174,14 @@ endforeach()
 ######################################################################
 if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET)
 
+  set(_install_rpath)
+  if(APPLE)
+    set(_install_rpath "@loader_path")
+  elseif(UNIX)
+    # this works for libraries as well as executables
+    set(_install_rpath "\$ORIGIN")
+  endif()
+
   set(proj MYPROJECT)
   set(proj_DEPENDENCIES ${OpenCV_DEPENDS} ${Eigen_DEPENDS} ${Boost_DEPENDS} ${gflags_DEPENDS} ${glog_DEPENDS} ${VTK_DEPENDS} ${FLANN_DEPENDS} ${PCL_DEPENDS})
 
@@ -238,6 +207,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DMYPROJECT_USE_CPPCHECK:BOOL=${MYPROJECT_USE_CPPCHECK}
       -DMYPROJECT_USE_QT:BOOL=${MYPROJECT_USE_QT}
       -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
+      "-DCMAKE_INSTALL_RPATH:STRING=${_install_rpath}"
       -DCMAKE_VERBOSE_MAKEFILE:BOOL=${CMAKE_VERBOSE_MAKEFILE}
       -DBUILD_TESTING:BOOL=${BUILD_TESTING} # The value set in EP_COMMON_ARGS normally forces this off, but we may need MYPROJECT to be on.
       -DBUILD_SUPERBUILD:BOOL=OFF           # Must force this to be off, or else you will loop forever.
@@ -256,6 +226,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DBOOST_ROOT:PATH=${BOOST_ROOT}
       -DEigen_ROOT:PATH=${Eigen_DIR}
       -DEigen_INCLUDE_DIR:PATH=${Eigen_INCLUDE_DIR}
+      -DFLANN_DIR:PATH=${FLANN_DIR}
       -DOpenCV_DIR:PATH=${OpenCV_DIR}
       -DOPENCV_WITH_FFMPEG:BOOL=${OPENCV_WITH_FFMPEG}
       -DOPENCV_WITH_NONFREE:BOOL=${OPENCV_WITH_NONFREE}

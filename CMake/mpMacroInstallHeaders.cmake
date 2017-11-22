@@ -12,24 +12,18 @@
 #
 #============================================================================*/
 
-macro(MYPROJECT_INSTALL)
+macro(MYPROJECT_INSTALL_HEADERS)
 
   set(ARGS ${ARGN})
-
-  set(install_directories "")
   list(FIND ARGS DESTINATION _destination_index)
-
   if(_destination_index GREATER -1)
-    message(SEND_ERROR "MITK_INSTALL macro must not be called with a DESTINATION parameter.")
+    message(SEND_ERROR "MYPROJECT_INSTALL_HEADERS macro must not be called with a DESTINATION parameter.")
   else()
-    get_property(_apps GLOBAL PROPERTY MYPROJECT_APPS)
-    if(NOT APPLE)
-      install(${ARGS} DESTINATION bin)
-    else()
-      foreach(app ${_apps})
-        install(${ARGS} DESTINATION ${app}.app/Contents/MacOS/)
-      endforeach()
-    endif()
-  endif()
 
+    if(NOT BUILDING_GUIS)
+      file(GLOB_RECURSE HEADERS *.h)
+      install(FILES ${HEADERS} DESTINATION ${MYPROJECT_INSTALL_INC_DIR} COMPONENT HEADERS)
+    endif()
+
+  endif()
 endmacro()

@@ -13,5 +13,5 @@
 #============================================================================*/
 
 add_subdirectory(Lib)
-add_subdirectory(CommandLineApps)
+add_subdirectory(CommandLineApps) # Must go before GuiApps for fixup_bundle to work.
 add_subdirectory(GuiApps)

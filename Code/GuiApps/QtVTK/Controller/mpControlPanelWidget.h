@@ -31,8 +31,7 @@ namespace mp
 * and communicate entirely via signals and slots and also that we can
 * combine both Qt widgets and our own widgets in the Designer.
 */
-MYPROJECT_QTVTKCONTROLLERWINEXPORT
-class ControlPanelWidget : public QWidget, Ui_ControlPanelWidget
+class MYPROJECT_QTVTKCONTROLLERWINEXPORT ControlPanelWidget : public QWidget, Ui_ControlPanelWidget
 {
   Q_OBJECT
 

@@ -12,11 +12,12 @@
 #
 #============================================================================*/
 
-set(MYPROJECT_APPS
+set(_command_line_apps
   mpMyFirstApp
 )
-foreach(app ${MYPROJECT_APPS})
-  add_executable(${app} ${app}.cpp)
-  target_link_libraries(${app} myproject ${ALL_THIRD_PARTY_LIBRARIES})
-  MYPROJECT_INSTALL(TARGETS ${app})
+
+foreach(_app ${_command_line_apps})
+  add_executable(${_app} ${_app}.cpp)
+  target_link_libraries(${_app} myproject ${ALL_THIRD_PARTY_LIBRARIES})
+  MYPROJECT_INSTALL_CL(TARGETS ${_app})
 endforeach()

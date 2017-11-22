@@ -44,8 +44,7 @@ namespace mp
 * I have kept it all in the model. The View layer therefore just renders
 * the actors, so should remain quite thin.
 */
-MYPROJECT_QTVTKMODELWINEXPORT
-class VolumeRenderingModel : public QObject
+  class MYPROJECT_QTVTKMODELWINEXPORT VolumeRenderingModel : public QObject
 {
   Q_OBJECT
 
