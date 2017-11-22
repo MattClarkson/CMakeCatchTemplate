@@ -42,11 +42,11 @@ The features provided are:
 Tested On
 -----------------------------
 
- * Windows - Windows 8, VS2013, CMake 3.6.3
- * Linux - Centos 7, g++ 4.8.5, CMake 3.5.1
- * Mac - OSX 10.10.5, clang 6.0, CMake 3.9.4
+ * Windows - Windows 8, VS2013, CMake 3.6.3, Qt 5.4.2
+ * Linux - Centos 7, g++ 4.8.5, CMake 3.5.1, Qt 5.6.2
+ * Mac - OSX 10.10.5, clang 6.0, CMake 3.9.4, Qt 5.6.2
 
-Minimum CMake version is 3.5. With all other versions - good luck.
+Minimum CMake version is 3.5.
 
 
 Build Instructions
