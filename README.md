@@ -37,6 +37,7 @@ The main way to use this project is:
  3. Rename the top-level project folder to the folder name of your choice.
  4. Check it all still builds.
  5. Commit it to your own git repository.
+ 6. Set your KWStyle and CppCheck settings in ```Utilities/KWStyle``` and ```Utilities/CppCheck```.
 
 So, right from your first commit, you will have a lot of functionality inherited from this project.
 
