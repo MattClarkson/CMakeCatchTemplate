@@ -39,7 +39,7 @@ if (BUILD_SUPERBUILD)
   set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
   set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
 else()
-  project(MYPROJECT VERSION 00.00.1)
+  project(MYPROJECT VERSION 0.1.0)
 endif()
 
 
@@ -618,7 +618,7 @@ else()
   set(MYPROJECT_BASE_NAME "myproject" CACHE STRING "")
 endif()
 set(MYPROJECT_VERSION_STRING "${MYPROJECT_VERSION_MAJOR}.${MYPROJECT_VERSION_MINOR}.${MYPROJECT_VERSION_PATCH}" CACHE STRING "String to describe fully named version" FORCE)
-set(MYPROJECT_DEPLOY_NAME "${MYPROJECT_BASE_NAME}-${MYPROJECT_VERSION_STRING}" CACHE STRING "")
+set(MYPROJECT_DEPLOY_NAME "${MYPROJECT_BASE_NAME}-${MYPROJECT_VERSION_STRING}" CACHE STRING "" FORCE)
 set(MYPROJECT_CONTACT "Your Name Here <your@email.com>" CACHE STRING "")
 
 # 1. Setup defaults, common for all generators.
@@ -655,7 +655,7 @@ endif()
 #    cmake_install.cmake files.
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CPackOptions.cmake.in
-               ${CMAKE_BINARY_DIR}/MYPROJECTCPackOptions.cmake)
+               ${CMAKE_BINARY_DIR}/MYPROJECTCPackOptions.cmake @ONLY IMMEDIATE)
 
 # 4. Set a variable with the name of this file.
 set(CPACK_PROJECT_CONFIG_FILE "${CMAKE_BINARY_DIR}/MYPROJECTCPackOptions.cmake")
