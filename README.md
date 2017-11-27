@@ -71,8 +71,8 @@ learn how to build it, than it is to cope with the wrong version, or a version t
 It really doesn't take long to learn, and is quicker than debugging all the numerous problems, and its
 quicker than sorting out deployment or packaging issues.
 
-Note that Assumption 2 refers to dynamically loaded (i.e. loaded at run-time) plugins which are not supported.
-This project does support dynamically linked libraries.
+Note that Assumption 2 refers to dynamically loaded (i.e. discovered at run-time, with no link-time dependency) plugins which are not supported.
+This project does support dynamically linked libraries (i.e. required at link time and run time, but shared between translation units).
 
 
 Supported Use-Cases
