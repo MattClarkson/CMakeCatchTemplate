@@ -13,12 +13,23 @@
 #============================================================================*/
 
 set(MYPROJECT_USE_Boost 1)
-set(MYPROJECT_USE_Boost_LIBRARIES "filesystem;system;date_time;regex;thread;iostreams")
+set(MYPROJECT_USE_Boost_LIBRARIES)
+if(BUILD_PYTHON_BINDINGS)
+  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "python")
+endif()
+if(BUILD_Boost)
+  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "filesystem")
+  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "system")
+  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "date_time")
+  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "regex")
+  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "thread")
+  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "iostreams")
+endif()
 
 #-----------------------------------------------------------------------------
 # Boost
 #-----------------------------------------------------------------------------
-if(NOT BUILD_Boost)
+if(NOT BUILD_Boost AND NOT BUILD_PYTHON_BINDINGS)
   return()
 endif()
 

@@ -60,8 +60,16 @@ option(BUILD_FLANN "Build FLANN." OFF)
 option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_VTK "Build VTK." OFF)
 option(BUILD_PCL "Build PCL." OFF)
+option(BUILD_PYTHON_BINDINGS "Build Python Bindings." OFF)
 option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
+
+if(BUILD_PYTHON_BINDINGS)
+  set(BUILD_QTVTKGUI OFF CACHE BOOL "Build QtVTK Gui." FORCE)
+  set(BUILD_QMLDEMO OFF CACHE BOOL "Build QMLDemo Gui." FORCE)
+  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Shared Libraries" FORCE)
+  message("Forcing BUILD_QTVTKGUI, BUILD_QMLDEMO, BUILD_SHARED_LIBS to OFF as you want a python module.")
+endif()
 
 option(MYPROJECT_USE_QT "Use Qt, normally for GUI development, but can be for anything." OFF)
 mark_as_advanced(MYPROJECT_USE_QT) # Qt gets baked into VTK, so really developers should not fiddle with this.
@@ -105,7 +113,8 @@ if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
   message("Forcing BUILD_SHARED_LIBS to ON due to BUILD_QMLDEMO being ON.")
   set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
 endif()
- 
+
+
 ######################################################################
 # This is a list of all known GUI apps. Used for things like
 # creating Mac OSX bundles, and each command line app gets copied
