@@ -26,9 +26,9 @@ namespace mp
 {
 
 /**
-* \brief My first function, computes something.
+* \brief My first function, adds two integers.
 */
-MYPROJECT_WINEXPORT double MyFirstFunction(int a);
+MYPROJECT_WINEXPORT int MyFirstAddFunction(int a, int b);
 
 } // end namespace
 
