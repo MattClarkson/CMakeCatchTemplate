@@ -39,7 +39,7 @@
 
 /**
 * \file mpBasicTypes.h
-* \brief Defines types used in this library.
+* \brief Defines types and typedefs used in this library.
 * \ingroup types
 */
 

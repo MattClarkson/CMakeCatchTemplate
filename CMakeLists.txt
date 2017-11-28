@@ -64,11 +64,19 @@ option(BUILD_PYTHON_BINDINGS "Build Python Bindings." OFF)
 option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
 
-if(BUILD_PYTHON_BINDINGS)
+if(BUILD_PYTHON_BINDINGS AND BUILD_QTVTKGUI)
   set(BUILD_QTVTKGUI OFF CACHE BOOL "Build QtVTK Gui." FORCE)
+  message("Forcing BUILD_QTVTKGUI to OFF as you want a python module.")
+endif()
+
+if(BUILD_PYTHON_BINDINGS AND BUILD_QMLDEMO)
   set(BUILD_QMLDEMO OFF CACHE BOOL "Build QMLDemo Gui." FORCE)
+  message("Forcing BUILD_QMLDEMO to OFF as you want a python module.")
+endif()
+
+if(BUILD_PYTHON_BINDINGS AND BUILD_SHARED_LIBS)
   set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Shared Libraries" FORCE)
-  message("Forcing BUILD_QTVTKGUI, BUILD_QMLDEMO, BUILD_SHARED_LIBS to OFF as you want a python module.")
+  message("Forcing BUILD_SHARED_LIBS to OFF as you want a python module.")
 endif()
 
 option(MYPROJECT_USE_QT "Use Qt, normally for GUI development, but can be for anything." OFF)

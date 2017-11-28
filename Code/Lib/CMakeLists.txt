@@ -34,3 +34,7 @@ target_link_libraries(myproject PRIVATE ${ALL_THIRD_PARTY_LIBRARIES})
 
 MYPROJECT_INSTALL_HEADERS()
 MYPROJECT_INSTALL_LIBRARY(myproject)
+
+if(BUILD_PYTHON_BINDINGS)
+  add_subdirectory(PythonWrapping)
+endif()
