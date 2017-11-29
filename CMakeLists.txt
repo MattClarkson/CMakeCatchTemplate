@@ -145,6 +145,7 @@ if(BUILD_PYTHON_BINDINGS)
   list(REMOVE_DUPLICATES MYPROJECT_BOOST_LIBS)
 endif()
 
+
 ######################################################################
 # This is a list of all known GUI apps. Used for things like
 # creating Mac OSX bundles, and each command line app gets copied
@@ -511,7 +512,6 @@ if(BUILD_Boost OR BUILD_PYTHON_BINDINGS)
     set(Boost_USE_STATIC_LIBS ON)
     set(Boost_USE_STATIC_RUNTIME ON) 
   endif()
-message("Matt, MYPROJECT_BOOST_LIBS=${MYPROJECT_BOOST_LIBS}")
   find_package(Boost 1.64 EXACT COMPONENTS ${MYPROJECT_BOOST_LIBS} REQUIRED)
   include_directories(${Boost_INCLUDE_DIRS})
   link_directories(${Boost_LIBRARY_DIRS})
@@ -593,6 +593,7 @@ if(BUILD_PYTHON_BINDINGS)
   link_libraries(${PYTHON_LIBRARIES})
   link_libraries(${Boost_LIBRARIES})
 endif()
+
 
 ######################################################################
 # Compilation specific stuff, like flags etc.
@@ -711,6 +712,7 @@ include(MYPROJECTCPackOptions)
 # 6. Include CPack module once all variables are set.
 include(CPack)
 
+
 ######################################################################
 # If we are under Windows, create batch files which correctly
 # set up the environment for Visual Studio. These are only used to
@@ -723,4 +725,3 @@ if(WIN32)
     message( "CreateWindowsBatchScript: Creating ${PROJECT_BINARY_DIR}/StartVS_${VS_BUILD_TYPE}.bat" )
   endforeach()
 endif(WIN32)
-
