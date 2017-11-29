@@ -13,18 +13,7 @@
 #============================================================================*/
 
 set(MYPROJECT_USE_Boost 1)
-set(MYPROJECT_USE_Boost_LIBRARIES)
-if(BUILD_PYTHON_BINDINGS)
-  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "python")
-endif()
-if(BUILD_Boost)
-  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "filesystem")
-  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "system")
-  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "date_time")
-  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "regex")
-  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "thread")
-  list(APPEND MYPROJECT_USE_Boost_LIBRARIES "iostreams")
-endif()
+set(MYPROJECT_USE_Boost_LIBRARIES ${MYPROJECT_BOOST_LIBS})
 
 #-----------------------------------------------------------------------------
 # Boost
@@ -133,6 +122,15 @@ if(NOT DEFINED BOOST_ROOT AND NOT MYPROJECT_USE_SYSTEM_Boost)
     endif()
   endif()
 
+  if(BUILD_PYTHON_BINDINGS)
+    set(_python_exec "--with-python=${PYTHON_EXECUTABLE}")
+    set(_python_version "--with-python-version=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+    get_filename_component(_python_lib_dir ${PYTHON_LIBRARY} DIRECTORY)
+    get_filename_component(_python_root_dir ${_python_lib_dir} DIRECTORY)
+    set(_python_root "--with-python-root=${_python_root_dir}")
+    message("Building boost::python with:${_python_exec};${_python_version};${_python_root}")
+  endif()
+
   set(_boost_variant "$<$<CONFIG:Debug>:debug>$<$<CONFIG:Release>:release>")
   set(_boost_link shared)
   if(NOT BUILD_SHARED_LIBS)
@@ -190,6 +188,9 @@ if(NOT DEFINED BOOST_ROOT AND NOT MYPROJECT_USE_SYSTEM_Boost)
     CONFIGURE_COMMAND "<SOURCE_DIR>/bootstrap${_shell_extension}"
       --with-toolset=${_boost_with_toolset}
       --with-libraries=${_boost_libs}
+      ${_python_exec}
+      ${_python_version}
+      ${_python_root}
       "--prefix=<INSTALL_DIR>"
     ${_boost_build_cmd}
     INSTALL_COMMAND ${_install_cmd}

@@ -122,6 +122,29 @@ if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
   set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
 endif()
 
+set(MYPROJECT_BOOST_LIBS)
+if(BUILD_Boost)
+  list(APPEND MYPROJECT_BOOST_LIBS "filesystem")
+  list(APPEND MYPROJECT_BOOST_LIBS "system")
+  list(APPEND MYPROJECT_BOOST_LIBS "date_time")
+  list(APPEND MYPROJECT_BOOST_LIBS "regex")
+  list(APPEND MYPROJECT_BOOST_LIBS "thread")
+  list(APPEND MYPROJECT_BOOST_LIBS "iostreams")
+endif()
+if(BUILD_PYTHON_BINDINGS)
+  find_package(PythonInterp REQUIRED)
+  message("Found python interpreter: ${PYTHON_EXECUTABLE}")
+  find_package(PythonLibs REQUIRED)
+  message("Found python library version: ${PYTHONLIBS_VERSION_STRING}")
+  if (${PYTHON_VERSION_MAJOR} EQUAL 3)
+    set(BOOST_PYTHON_LIB_NAME "python3")
+  else()
+    set(BOOST_PYTHON_LIB_NAME "python")
+  endif()
+  list(APPEND MYPROJECT_BOOST_LIBS "python")
+  list(APPEND MYPROJECT_BOOST_LIBS "system")
+  list(REMOVE_DUPLICATES MYPROJECT_BOOST_LIBS)
+endif()
 
 ######################################################################
 # This is a list of all known GUI apps. Used for things like
@@ -469,7 +492,7 @@ if(BUILD_Eigen)
   install(FILES ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt DESTINATION . COMPONENT CONFIG)
 endif()
 
-if(BUILD_Boost)
+if(BUILD_Boost OR BUILD_PYTHON_BINDINGS)
   # Example of:
   #   (1) Standard, widely used library
   #   (2) Mostly header library, some compiled libraries
@@ -489,7 +512,7 @@ if(BUILD_Boost)
     set(Boost_USE_STATIC_LIBS ON)
     set(Boost_USE_STATIC_RUNTIME ON) 
   endif()
-  find_package(Boost 1.64 EXACT COMPONENTS filesystem system date_time regex REQUIRED)
+  find_package(Boost 1.64 EXACT COMPONENTS ${MYPROJECT_BOOST_LIBS} REQUIRED)
   include_directories(${Boost_INCLUDE_DIRS})
   link_directories(${Boost_LIBRARY_DIRS})
   if(WIN32)
@@ -565,6 +588,11 @@ if(BUILD_PCL)
   install(FILES ${CMAKE_BINARY_DIR}/LICENSE_PCL.txt DESTINATION . COMPONENT CONFIG)
 endif()
 
+if(BUILD_PYTHON_BINDINGS)
+  include_directories(${PYTHON_INCLUDE_DIRS})
+  link_libraries(${PYTHON_LIBRARIES})
+  link_libraries(${Boost_LIBRARIES})
+endif()
 
 ######################################################################
 # Compilation specific stuff, like flags etc.

@@ -12,3 +12,11 @@
 #
 #============================================================================*/
 
+set(MYPROJECT_PYTHON_LIBRARY_NAME ${MYPROJECT_LIBRARY_NAME}python)
+
+set(MYPROJECT_PYTHON_SRCS
+  mpLibPython.cpp
+)
+
+link_libraries(myproject)
+PYTHON_ADD_MODULE(${MYPROJECT_PYTHON_LIBRARY_NAME} ${MYPROJECT_PYTHON_SRCS})
