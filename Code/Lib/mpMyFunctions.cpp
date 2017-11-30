@@ -18,9 +18,9 @@
 namespace mp {
 
 //-----------------------------------------------------------------------------
-double MyFirstFunction(int a)
+int MyFirstAddFunction(int a, int b)
 {
-  return 0;
+  return a + b;
 }
 
 } // end namespace

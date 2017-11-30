@@ -25,6 +25,7 @@ The main features provided are:
  7. Doxygen config, so you can generate documentation.
  8. If your code is open-source, you can register with a Continuous Integration service, so this project provides Travis and Appveyor examples.
  9. CPack setup to produce installers for GUI apps QtVTKApp and QMLDemo along with installers for command line apps.
+10. An example of the CMake required to build python interfaces to your C++ code, using ```boost::python```.
 
 
 Usage
@@ -32,12 +33,15 @@ Usage
 
 The main way to use this project is:
 
- 1. Export the project (download without a .git folder)
- 2. Rename all instances of MYPROJECT, myproject, MyProject and the namespace mp with names of your choice
+ 1. Export the project (download without a .git folder).
+ 2. Rename all instances of ```MYPROJECT``` (all uppercase), ```myproject``` (all lowercase), ```MyProject``` (camelcase) and the namespace ```mp``` with names of your choice.
  3. Rename the top-level project folder to the folder name of your choice.
- 4. Check it all still builds.
- 5. Commit it to your own git repository.
- 6. Set your KWStyle and CppCheck settings in ```Utilities/KWStyle``` and ```Utilities/CppCheck```.
+ 4. Optionally strip out or turn off the bits you dont need.
+ 5. Set your KWStyle and CppCheck settings in ```Utilities/KWStyle``` and ```Utilities/CppCheck```.
+ 6. Check it all still builds.
+ 7. Check the unit tests pass.
+ 8. Fix anything that doesn't pass.
+ 9. Commit it to your own git repository.
 
 So, right from your first commit, you will have a lot of functionality inherited from this project.
 
@@ -50,9 +54,10 @@ A Note on Packaging
 
 There are many different issues and combinations to test when packaging an application. For example:
 
- * System: Windows / Linux / Mac
- * Linkage: Shared libraries / Static libraries
+ * System: Windows / Linux / Mac.
+ * Linkage: Shared libraries / Static libraries.
  * Executable style: Command line applications / GUI applications / Command line applications bundled with GUI applications.
+ * With or without python.
  * The developer runs ```make install``` to install it in a specific directory, linked against known libraries, in known locations.
  * The developer runs ```make package``` to make a relocatable and distributable bundle so that another user can install it anywhere.
 
@@ -61,8 +66,8 @@ some simple starting points, and recommendations.
 
 Assumptions:
 
- 1. This project is only suitable for small research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then example projects like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) can be used as illustrations of much larger examples. However each one is written by an excellent software engineer who makes a lot of custom made packaging code. So, anything more complex than this, and you will have to write a lot of CMake code yourself.
- 2. This project does not currently support dynamically loaded plugins. This would require more CMake coding. This isn't too bad, if its a pure Qt plugin. Follow Qt documentation to compile it, but then you'd have to write packaging code yourself, as most Qt documentation assumes you are using ```qmake``` not ```cmake```.
+ 1. This project is only suitable for small research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then example projects like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) can be used as illustrations of much larger examples. However each one is written by an excellent software engineer who makes a lot of custom made packaging code. So, anything more complex than what we have here, and you will have to write a lot of CMake code yourself.
+ 2. This project does not currently support dynamically discovered plugins that have no link-time dependency. This would require more CMake coding. This isn't too difficult, if its a pure Qt plugin. Follow Qt documentation to compile it, but then you'd have to write packaging code yourself, as most Qt documentation assumes you are using ```qmake``` not ```cmake```.
  3. You have built your own Qt.
 
 Lots of people would like to take a shortcut and use Qt that comes with a package manager on Linux,
@@ -71,8 +76,8 @@ learn how to build it, than it is to cope with the wrong version, or a version t
 It really doesn't take long to learn, and is quicker than debugging all the numerous problems, and its
 quicker than sorting out deployment or packaging issues.
 
-Note that Assumption 2 refers to dynamically loaded (i.e. loaded at run-time) plugins which are not supported.
-This project does support dynamically linked libraries.
+Note that Assumption 2 refers to dynamically loaded (i.e. discovered at run-time, with no link-time dependency) plugins which are not supported.
+This project does support dynamically linked libraries (i.e. required at link time and run time, but shared between other libraries).
 
 
 Supported Use-Cases
@@ -101,7 +106,7 @@ task in Visual Studio.
 
 For example, imagine you start with a command line app, and build without Qt, as you are just testing or using some VTK filters.
 Then at some point you decide you want to add a Qt GUI, then you will also need to rebuild VTK to pick up the
-Qt support classes like QVTKWidget.
+Qt support classes like QVTKWidget. So you end up doing a full clean SuperBuild.
 
 So, basically, pick your main options, up front, for the SuperBuild, and then don't change them or be prepared for a full clean build.
 

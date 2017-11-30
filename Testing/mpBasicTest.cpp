@@ -14,6 +14,7 @@
 
 #include "catch.hpp"
 #include "mpCatchMain.h"
+#include "mpMyFunctions.h"
 #include <iostream>
 #include <vector>
 
@@ -27,3 +28,6 @@ TEST_CASE( "My second test", "[some group identifier]" ) {
   REQUIRE( a.size() == 0 );
 }
 
+TEST_CASE( "Simple add", "[MyFirstAddFunction]") {
+  REQUIRE( mp::MyFirstAddFunction(1, 2) == 3);
+}

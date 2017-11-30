@@ -76,6 +76,6 @@ int main(int argc, char** argv)
   pcl::PointCloud<pcl::PointXYZ> cloud;
 #endif
 
-  std::cout << "Calculating ... " << mp::MyFirstFunction(1) << std::endl;
+  std::cout << "Calculating ... " << mp::MyFirstAddFunction(1, 2) << std::endl;
   return 0;
 }

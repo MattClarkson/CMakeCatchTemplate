@@ -12,24 +12,10 @@
 
 =============================================================================*/
 
-#ifndef mpMyFunctions_h
-#define mpMyFunctions_h
+#include <boost/python.hpp>
+#include "mpMyFunctions.h"
 
-#include "mpWin32ExportHeader.h"
-
-/**
-* \file mpMyFunctions.h
-* \brief Various Utilities.
-* \ingroup utilities
-*/
-namespace mp
+BOOST_PYTHON_MODULE(myprojectpython)
 {
-
-/**
-* \brief My first function, adds two integers.
-*/
-MYPROJECT_WINEXPORT int MyFirstAddFunction(int a, int b);
-
-} // end namespace
-
-#endif
+  boost::python::def("my_first_add_function", mp::MyFirstAddFunction);
+}

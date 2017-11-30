@@ -60,8 +60,24 @@ option(BUILD_FLANN "Build FLANN." OFF)
 option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_VTK "Build VTK." OFF)
 option(BUILD_PCL "Build PCL." OFF)
+option(BUILD_PYTHON_BINDINGS "Build Python Bindings." OFF)
 option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
+
+if(BUILD_PYTHON_BINDINGS AND BUILD_QTVTKGUI)
+  set(BUILD_QTVTKGUI OFF CACHE BOOL "Build QtVTK Gui." FORCE)
+  message("Forcing BUILD_QTVTKGUI to OFF as you want a python module.")
+endif()
+
+if(BUILD_PYTHON_BINDINGS AND BUILD_QMLDEMO)
+  set(BUILD_QMLDEMO OFF CACHE BOOL "Build QMLDemo Gui." FORCE)
+  message("Forcing BUILD_QMLDEMO to OFF as you want a python module.")
+endif()
+
+if(BUILD_PYTHON_BINDINGS AND BUILD_SHARED_LIBS)
+  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Shared Libraries" FORCE)
+  message("Forcing BUILD_SHARED_LIBS to OFF as you want a python module.")
+endif()
 
 option(MYPROJECT_USE_QT "Use Qt, normally for GUI development, but can be for anything." OFF)
 mark_as_advanced(MYPROJECT_USE_QT) # Qt gets baked into VTK, so really developers should not fiddle with this.
@@ -105,7 +121,31 @@ if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
   message("Forcing BUILD_SHARED_LIBS to ON due to BUILD_QMLDEMO being ON.")
   set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
 endif()
- 
+
+set(MYPROJECT_BOOST_LIBS)
+if(BUILD_Boost)
+  list(APPEND MYPROJECT_BOOST_LIBS "filesystem")
+  list(APPEND MYPROJECT_BOOST_LIBS "system")
+  list(APPEND MYPROJECT_BOOST_LIBS "date_time")
+  list(APPEND MYPROJECT_BOOST_LIBS "regex")
+  list(APPEND MYPROJECT_BOOST_LIBS "thread")
+  list(APPEND MYPROJECT_BOOST_LIBS "iostreams")
+endif()
+if(BUILD_PYTHON_BINDINGS)
+  find_package(PythonInterp REQUIRED)
+  message("Found python interpreter: ${PYTHON_EXECUTABLE}")
+  find_package(PythonLibs REQUIRED)
+  message("Found python library version: ${PYTHONLIBS_VERSION_STRING}")
+  list(APPEND MYPROJECT_BOOST_LIBS "system")
+  if (${PYTHON_VERSION_MAJOR} EQUAL 3 AND WITHIN_SUBBUILD)
+    list(APPEND MYPROJECT_BOOST_LIBS "python3")
+  else()
+    list(APPEND MYPROJECT_BOOST_LIBS "python")
+  endif()
+  list(REMOVE_DUPLICATES MYPROJECT_BOOST_LIBS)
+endif()
+
+
 ######################################################################
 # This is a list of all known GUI apps. Used for things like
 # creating Mac OSX bundles, and each command line app gets copied
@@ -452,7 +492,7 @@ if(BUILD_Eigen)
   install(FILES ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt DESTINATION . COMPONENT CONFIG)
 endif()
 
-if(BUILD_Boost)
+if(BUILD_Boost OR BUILD_PYTHON_BINDINGS)
   # Example of:
   #   (1) Standard, widely used library
   #   (2) Mostly header library, some compiled libraries
@@ -472,11 +512,11 @@ if(BUILD_Boost)
     set(Boost_USE_STATIC_LIBS ON)
     set(Boost_USE_STATIC_RUNTIME ON) 
   endif()
-  find_package(Boost 1.64 EXACT COMPONENTS filesystem system date_time regex REQUIRED)
+  find_package(Boost 1.64 EXACT COMPONENTS ${MYPROJECT_BOOST_LIBS} REQUIRED)
   include_directories(${Boost_INCLUDE_DIRS})
   link_directories(${Boost_LIBRARY_DIRS})
   if(WIN32)
-    if(WITHIN_SUPERBUILD)
+    if(WITHIN_SUBBUILD)
       add_definitions(-DBoost_LIB_DIAGNOSTIC_DEFINITIONS)  # To get debug messages
       add_definitions(-DBOOST_ALL_NO_LIB)                  # To stop auto-linking, which seems to be adding "lib" as library prefix in .obj files.
     endif()
@@ -548,6 +588,12 @@ if(BUILD_PCL)
   install(FILES ${CMAKE_BINARY_DIR}/LICENSE_PCL.txt DESTINATION . COMPONENT CONFIG)
 endif()
 
+if(BUILD_PYTHON_BINDINGS)
+  include_directories(${PYTHON_INCLUDE_DIRS})
+  link_libraries(${PYTHON_LIBRARIES})
+  link_libraries(${Boost_LIBRARIES})
+endif()
+
 
 ######################################################################
 # Compilation specific stuff, like flags etc.
@@ -555,7 +601,7 @@ endif()
 if(WIN32)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX /W2")
   set(CMAKE_CXX_WARNING_LEVEL 2)
-  if(BUILD_SHARED AND WITHIN_SUPERBUILD)
+  if(BUILD_SHARED AND WITHIN_SUBBUILD)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_LIB_PREFIX=\"\"")
   endif()
 endif(WIN32)
@@ -666,6 +712,7 @@ include(MYPROJECTCPackOptions)
 # 6. Include CPack module once all variables are set.
 include(CPack)
 
+
 ######################################################################
 # If we are under Windows, create batch files which correctly
 # set up the environment for Visual Studio. These are only used to
@@ -678,4 +725,3 @@ if(WIN32)
     message( "CreateWindowsBatchScript: Creating ${PROJECT_BINARY_DIR}/StartVS_${VS_BUILD_TYPE}.bat" )
   endforeach()
 endif(WIN32)
-
