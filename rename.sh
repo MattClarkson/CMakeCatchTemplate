@@ -57,7 +57,7 @@ find_and_replace_string(){
 
 find_and_replace_filename(){
     find . -name "*$1*" > $HOME/tmp.$$.files.txt
-    wc=`wc -l $HOME/tmp.$$.files.txt | cut -f 1 -d " "`
+    wc=`cat $HOME/tmp.$$.files.txt | wc -l`
     if [ $wc -gt 0 ]; then
       cat $HOME/tmp.$$.files.txt | sed -e "p;s/$1/$2/" | xargs -n2 mv
     fi
