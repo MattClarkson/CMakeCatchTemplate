@@ -37,7 +37,7 @@ if(NOT DEFINED PCL_DIR)
   set(_vtk_options)
   if(BUILD_VTK)
     set(_vtk_options
-      -DBUILD_visualization:BOOL=ON
+      -DBUILD_visualization:BOOL=${BUILD_PCL_VIS}
       -DVTK_DIR:PATH=${VTK_DIR}
     )
   endif()
