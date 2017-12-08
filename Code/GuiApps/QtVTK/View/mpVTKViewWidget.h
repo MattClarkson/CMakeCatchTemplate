@@ -59,6 +59,8 @@ namespace mp
 * \li If Qt >= 5.5.0, then use OpenGL2 backend, which means QVTKOpenGLWidget
 * \li If Qt < 5.5.0, then use OpenGL backend, which means QVTKWidget or QVTKWidget2, but lets chose QVTKWidget2.
 *
+* Also, if you look in the header file for QVTKOpenGLWidget in the VTK source code, you will seed
+* more instructions for use. These have been implemented in our main.cpp.
 */
 class MYPROJECT_QTVTKVIEWWINEXPORT VTKViewWidget
 #ifdef BUILD_VTK_OpenGL
