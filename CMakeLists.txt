@@ -130,21 +130,6 @@ if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
   set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
 endif()
 
-set(DEFAULT_VTK_VERSION "8.0.1")
-set(DEFAULT_VTK_BACKEND "OpenGL2")
-set(VTK_VERSION "${DEFAULT_VTK_VERSION}")
-set(VTK_BACKEND "${DEFAULT_VTK_BACKEND}")
-
-# due to https://github.com/PointCloudLibrary/pcl/issues/712
-if(APPLE AND BUILD_PCL AND BUILD_PCL_VIS AND "${VTK_VERSION}" STREQUAL "${DEFAULT_VTK_VERSION}")
-  set(VTK_VERSION "6.1.0")
-  message("Forcing VTK_VERSION to ${VTK_VERSION} as you are on Mac OSX and both BUILD_PCL and BUILD_PCL_VIS are on.")
-endif()
-if("${VTK_VERSION}" STREQUAL "6.1.0" AND "${VTK_BACKEND}" STREQUAL "${DEFAULT_VTK_BACKEND}")
-  set(VTK_BACKEND "OpenGL")
-  message("Forcing VTK backend to OpenGL instead of OpenGL2, due to VTK_VERSION=${VTK_VERSION}")
-endif()
-
 set(MYPROJECT_BOOST_LIBS)
 if(BUILD_Boost)
   list(APPEND MYPROJECT_BOOST_LIBS "filesystem")
@@ -166,6 +151,25 @@ if(BUILD_PYTHON_BINDINGS)
     list(APPEND MYPROJECT_BOOST_LIBS "python")
   endif()
   list(REMOVE_DUPLICATES MYPROJECT_BOOST_LIBS)
+endif()
+
+
+######################################################################
+# Setup VTK version and backend for SuperBuild.
+######################################################################
+set(DEFAULT_VTK_VERSION "8.0.1")
+set(DEFAULT_VTK_BACKEND "OpenGL2")
+set(VTK_VERSION "${DEFAULT_VTK_VERSION}")
+set(VTK_BACKEND "${DEFAULT_VTK_BACKEND}")
+
+# due to https://github.com/PointCloudLibrary/pcl/issues/712
+if(APPLE AND BUILD_PCL AND BUILD_PCL_VIS AND "${VTK_VERSION}" STREQUAL "${DEFAULT_VTK_VERSION}")
+  set(VTK_VERSION "6.1.0")
+  message("Forcing VTK_VERSION to ${VTK_VERSION} as you are on Mac OSX and both BUILD_PCL and BUILD_PCL_VIS are on.")
+endif()
+if("${VTK_VERSION}" STREQUAL "6.1.0" AND "${VTK_BACKEND}" STREQUAL "${DEFAULT_VTK_BACKEND}")
+  set(VTK_BACKEND "OpenGL")
+  message("Forcing VTK backend to OpenGL instead of OpenGL2, due to VTK_VERSION=${VTK_VERSION}")
 endif()
 
 
