@@ -30,7 +30,7 @@ if( "${VTK_VERSION}" STREQUAL "6.1.0")
 endif()
 
 set(location "${NIFTK_EP_TARBALL_LOCATION}/VTK-${VTK_VERSION}.tar.gz")
-mpMacroDefineExternalProjectVariables(VTK ${version} ${location})
+mpMacroDefineExternalProjectVariables(VTK ${VTK_VERSION} ${location})
 set(proj_DEPENDENCIES )
 
 if(WIN32)
