@@ -165,7 +165,7 @@ include(mpExternalProjectHelperMacros)
 ######################################################################
 # External projects
 ######################################################################
-foreach(p gflags glog Eigen OpenCV Boost VTK FLANN PCL)
+foreach(p gflags glog Eigen Boost VTK OpenCV FLANN PCL)
   include("CMake/ExternalProjects/${p}.cmake")
 endforeach()
 
