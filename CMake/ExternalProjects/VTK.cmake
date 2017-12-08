@@ -25,7 +25,7 @@ if(DEFINED VTK_DIR AND NOT EXISTS ${VTK_DIR})
 endif()
 
 set(make_webkit_optional)
-if( "${VTK_VERSION}" STREQUAL "6.1.0")
+if( "${VTK_VERSION}" STREQUAL "6.1.0") # As the patch is only valid for this version.
   set(make_webkit_optional COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/VTK.patch)
 endif()
 

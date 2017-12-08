@@ -158,18 +158,19 @@ endif()
 # Setup VTK version and backend for SuperBuild.
 ######################################################################
 set(DEFAULT_VTK_VERSION "8.0.1")
+set(FALLBACK_VTK_VERSION "6.1.0") # Should only be needed on Mac, if PCL visualization tools are on.
 set(DEFAULT_VTK_BACKEND "OpenGL2")
 set(VTK_VERSION "${DEFAULT_VTK_VERSION}")
 set(VTK_BACKEND "${DEFAULT_VTK_BACKEND}")
 
 # due to https://github.com/PointCloudLibrary/pcl/issues/712
 if(APPLE AND BUILD_PCL AND BUILD_PCL_VIS AND "${VTK_VERSION}" STREQUAL "${DEFAULT_VTK_VERSION}")
-  set(VTK_VERSION "6.1.0")
+  set(VTK_VERSION "${FALLBACK_VTK_VERSION}")
   message("Forcing VTK_VERSION to ${VTK_VERSION} as you are on Mac OSX and both BUILD_PCL and BUILD_PCL_VIS are on.")
 endif()
-if("${VTK_VERSION}" STREQUAL "6.1.0" AND "${VTK_BACKEND}" STREQUAL "${DEFAULT_VTK_BACKEND}")
+if("${VTK_VERSION}" STREQUAL "${FALLBACK_VTK_VERSION}" AND "${VTK_BACKEND}" STREQUAL "${DEFAULT_VTK_BACKEND}")
   set(VTK_BACKEND "OpenGL")
-  message("Forcing VTK backend to OpenGL instead of OpenGL2, due to VTK_VERSION=${VTK_VERSION}")
+  message("Forcing VTK_BACKEND to OpenGL instead of OpenGL2, due to VTK_VERSION=${VTK_VERSION}")
 endif()
 
 
@@ -269,7 +270,7 @@ if(MYPROJECT_USE_QT)
   find_package(Qt5 QUIET COMPONENTS ${_qt_components})
   if(Qt5_DIR)
     message(STATUS "Found Qt5: ${Qt5_DIR}")
-    if (Qt5Core_VERSION VERSION_LESS 5.5.0)
+    if (Qt5Core_VERSION VERSION_LESS 5.5.0 AND "${VTK_VERSION}" STREQUAL "${DEFAULT_VTK_VERSION}")
       message("Forcing VTK_BACKEND to OpenGL due to Qt version < 5.5.0")
       set(VTK_BACKEND "OpenGL")
     endif()
