@@ -12,20 +12,34 @@
 
 =============================================================================*/
 
-#include <QApplication>
+#include <QVTKApplication.h>
 #include "mpMainWindow.h"
 #include <mpVolumeRenderingModel.h>
 #include <QScopedPointer>
 
+#ifdef BUILD_VTK_OpenGL2
+#include <QSurfaceFormat>
+#include <QVTKOpenGLWidget.h>
+#include "vtkGenericOpenGLRenderWindow.h"
+#include "vtkNew.h"
+#endif
+
 int main(int argc, char** argv)
 {
-  QApplication app(argc, argv);
+
+#ifdef BUILD_VTK_OpenGL2
+  vtkOpenGLRenderWindow::SetGlobalMaximumNumberOfMultiSamples(0);
+  QSurfaceFormat::setDefaultFormat(QVTKOpenGLWidget::defaultFormat());
+#endif
+
+  QVTKApplication app(argc, argv);
   app.setOrganizationName("UCL");
   app.setApplicationName("Example QtVTK app.");
 
   QScopedPointer<mp::VolumeRenderingModel> mb(new mp::VolumeRenderingModel());
 
   mp::MainWindow mainWin(mb.data());
+
   mainWin.show();
   mainWin.ConnectRenderer();
   mainWin.showMaximized();

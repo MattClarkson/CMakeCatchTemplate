@@ -155,11 +155,12 @@ if(APPLE)
       )
 endif()
 
+
 ######################################################################
 # Include External Project helper macros
 ######################################################################
-
 include(mpExternalProjectHelperMacros)
+
 
 ######################################################################
 # External projects
@@ -221,6 +222,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DBUILD_OpenCV:BOOL=${BUILD_OpenCV}
       -DBUILD_VTK:BOOL=${BUILD_VTK}
       -DBUILD_PCL:BOOL=${BUILD_PCL}
+      -DBUILD_PCL_VIS:BOOL=${BUILD_PCL_VIS}
       -DBUILD_PYTHON_BINDINGS:BOOL=${BUILD_PYTHON_BINDINGS}
       -Dgflags_DIRECTORY:PATH=${gflags_DIR}
       -Dglog_DIRECTORY:PATH=${glog_DIR}

@@ -13,19 +13,30 @@
 =============================================================================*/
 #include "mpVTKViewWidget.h"
 #include <mpExceptionMacro.h>
-#include <vtkGenericOpenGLRenderWindow.h>
-#include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
+#include <vtkRenderWindow.h>
+#include <vtkGenericOpenGLRenderWindow.h>
 
 #include <cassert>
+#include <vtkNew.h>
 
 namespace mp
 {
 
 //-----------------------------------------------------------------------------
 VTKViewWidget::VTKViewWidget(QWidget* parent)
+#ifdef BUILD_VTK_OpenGL
 : QVTKWidget2(parent)
+#else
+: QVTKOpenGLWidget(parent)
+#endif
 {
+
+#ifdef BUILD_VTK_OpenGL2
+  m_RenderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
+  this->SetRenderWindow(m_RenderWindow);
+#endif
+
 }
 
 

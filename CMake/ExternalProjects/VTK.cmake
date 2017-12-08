@@ -24,18 +24,13 @@ if(DEFINED VTK_DIR AND NOT EXISTS ${VTK_DIR})
   message(FATAL_ERROR "VTK_DIR variable is defined but corresponds to non-existing directory")
 endif()
 
-if(APPLE AND BUILD_PCL)
-  set(version "6.1.0") # due to https://github.com/PointCloudLibrary/pcl/issues/712
-else()
-  set(version "7.1.0")
-endif()
 set(make_webkit_optional)
-if( "${version}" STREQUAL "6.1.0")
+if( "${VTK_VERSION}" STREQUAL "6.1.0") # As the patch is only valid for this version.
   set(make_webkit_optional COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/VTK.patch)
 endif()
 
-set(location "${NIFTK_EP_TARBALL_LOCATION}/VTK-${version}.tar.gz")
-mpMacroDefineExternalProjectVariables(VTK ${version} ${location})
+set(location "${NIFTK_EP_TARBALL_LOCATION}/VTK-${VTK_VERSION}.tar.gz")
+mpMacroDefineExternalProjectVariables(VTK ${VTK_VERSION} ${location})
 set(proj_DEPENDENCIES )
 
 if(WIN32)
@@ -110,7 +105,7 @@ if(NOT DEFINED VTK_DIR)
         -DModule_vtkTestingRendering:BOOL=ON
         -DVTK_MAKE_INSTANTIATORS:BOOL=ON
         -DVTK_USE_CXX11_FEATURES:BOOL=ON
-        -DVTK_RENDERING_BACKEND:STRING=OpenGL
+        -DVTK_RENDERING_BACKEND:STRING=${VTK_BACKEND}
         ${additional_cmake_args}
     CMAKE_CACHE_ARGS
       ${EP_COMMON_CACHE_ARGS}

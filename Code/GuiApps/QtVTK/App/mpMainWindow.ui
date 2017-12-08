@@ -20,7 +20,7 @@
    <string>QtVTKApp</string>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
-   <bool>true</bool>
+   <bool>false</bool>
   </property>
   <widget class="mp::CentralWidget" name="m_CentralWidget">
    <property name="sizePolicy">
