@@ -42,6 +42,7 @@ if(NOT DEFINED Eigen_DIR)
     #CONFIGURE_COMMAND ""
     UPDATE_COMMAND ""
     BUILD_COMMAND ""
+    INSTALL_COMMAND ""
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
       ${EP_COMMON_ARGS}
@@ -54,18 +55,8 @@ if(NOT DEFINED Eigen_DIR)
     DEPENDS ${proj_DEPENDENCIES}
   )
 
-  if(BUILD_PCL)
-    # We want to use the 'unsupported' folder, which is never installed.
-    # Then we must be consistently passing the same folder to PCL, and the project level build.
-    set(Eigen_DIR ${proj_SOURCE})
-    set(Eigen_INCLUDE_DIR ${proj_SOURCE})
-  else()
-    set(Eigen_DIR ${proj_INSTALL})
-    set(Eigen_INCLUDE_DIR ${Eigen_DIR}/include/eigen3)
-    set(MYPROJECT_PREFIX_PATH ${proj_INSTALL}^^${MYPROJECT_PREFIX_PATH})
-  endif()
-
-  mitkFunctionInstallExternalCMakeProject(${proj})
+  set(Eigen_DIR ${proj_SOURCE})
+  set(Eigen_INCLUDE_DIR ${proj_SOURCE})
 
   message("SuperBuild loading Eigen from ${Eigen_DIR} with Eigen_INCLUDE_DIR=${Eigen_INCLUDE_DIR}.")
 
