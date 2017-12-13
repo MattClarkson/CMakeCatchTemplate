@@ -12,7 +12,7 @@
 #
 #============================================================================*/
 
-# Compute the installation prefix from this MYPROJECTConfig.cmake file location.
+# Compute the installation prefix from this MyProjectConfig.cmake file location.
 get_filename_component(MYPROJECT_INSTALL_PREFIX "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
 set(MYPROJECT_VERSION_MAJOR "@MYPROJECT_VERSION_MAJOR@")
@@ -31,4 +31,4 @@ set(MYPROJECT_LIBRARY_DIRS "${MYPROJECT_INSTALL_PREFIX}/@MYPROJECT_INSTALL_LIB_D
 set(MYPROJECT_README_FILE  "${MYPROJECT_INSTALL_PREFIX}/README.md")
 set(MYPROJECT_LICENSE_FILE "${MYPROJECT_INSTALL_PREFIX}/LICENSE.txt")
 
-set(MYPROJECT_USE_FILE "${MYPROJECT_INSTALL_PREFIX}/UseMYPROJECT.cmake")
+set(MYPROJECT_USE_FILE "${MYPROJECT_INSTALL_PREFIX}/UseMyProject.cmake")

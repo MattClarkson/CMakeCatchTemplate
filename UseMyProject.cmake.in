@@ -15,7 +15,7 @@
 # This file sets up include directories, link directories, and
 # compiler settings for a project to compile against MYPROJECT.
 # It should not be included directly, but rather through the 
-# MYPROJECT_USE_FILE setting obtained from MYPROJECTConfig.cmake.
+# MYPROJECT_USE_FILE setting obtained from MyProjectConfig.cmake.
 
 if(MYPROJECT_BUILD_SETTINGS_FILE AND NOT SKIP_MYPROJECT_BUILD_SETTINGS_FILE)
   include(${CMAKE_ROOT}/Modules/CMakeImportBuildSettings.cmake)
