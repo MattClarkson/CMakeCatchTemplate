@@ -42,6 +42,7 @@ The main way to use this project is:
  7. Check the unit tests pass.
  8. Fix anything that doesn't pass.
  9. Commit it to your own git repository.
+10. Set the remote URL correctly.
 
 So, right from your first commit, you will have a lot of functionality inherited from this project, and the commit log.
 
