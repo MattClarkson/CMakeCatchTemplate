@@ -47,7 +47,7 @@ The main way to use this project is:
 So, right from your first commit, you will have a lot of functionality inherited from this project, and the commit log.
 
 The substitutions for the second part can be achieved manually or by editing and running `rename.sh` in a unix bash environment (not git bash).
-Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`. Running `rename.sh` should be performed on a non-git folder and before running CMake for the first time.
+Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`. Running `rename.sh` should be performed before running CMake for the first time.
 
 
 A Note on Packaging
