@@ -674,11 +674,11 @@ include_directories(${CMAKE_SOURCE_DIR}/Code/Lib)
 ##########################################################################################
 # The next two generate CMake code to enable external projects to correctly use MYPROJECT.
 ##########################################################################################
-configure_file(${CMAKE_SOURCE_DIR}/UseMYPROJECT.cmake.in ${CMAKE_BINARY_DIR}/UseMYPROJECT.cmake @ONLY IMMEDIATE)
-configure_file(${CMAKE_SOURCE_DIR}/MYPROJECTConfig.cmake.in ${CMAKE_BINARY_DIR}/MYPROJECTConfig.cmake @ONLY IMMEDIATE)
+configure_file(${CMAKE_SOURCE_DIR}/UseMyProject.cmake.in ${CMAKE_BINARY_DIR}/UseMyProject.cmake @ONLY IMMEDIATE)
+configure_file(${CMAKE_SOURCE_DIR}/MyProjectConfig.cmake.in ${CMAKE_BINARY_DIR}/MyProjectConfig.cmake @ONLY IMMEDIATE)
 if(NOT BUILDING_GUIS)
-  install(FILES ${CMAKE_BINARY_DIR}/UseMYPROJECT.cmake DESTINATION . COMPONENT CONFIG)
-  install(FILES ${CMAKE_BINARY_DIR}/MYPROJECTConfig.cmake DESTINATION . COMPONENT CONFIG)
+  install(FILES ${CMAKE_BINARY_DIR}/UseMyProject.cmake DESTINATION . COMPONENT CONFIG)
+  install(FILES ${CMAKE_BINARY_DIR}/MyProjectConfig.cmake DESTINATION . COMPONENT CONFIG)
 endif()
 
 

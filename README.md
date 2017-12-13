@@ -33,17 +33,18 @@ Usage
 
 The main way to use this project is:
 
- 1. Export the project (download without a .git folder).
- 2. Rename all instances of ```MYPROJECT``` (all uppercase), ```myproject``` (all lowercase), ```MyProject``` (camelcase) and the namespace ```mp``` with names of your choice.
- 3. Rename the top-level project folder to the folder name of your choice.
+ 1. Clone this project.
+ 2. Rename the top-level project folder to the folder name of your choice.
+ 3. Rename all instances of ```MYPROJECT``` (all uppercase), ```myproject``` (all lowercase), ```MyProject``` (camelcase) and the namespace ```mp``` with names of your choice.
  4. Optionally strip out or turn off the bits you dont need.
  5. Set your KWStyle and CppCheck settings in ```Utilities/KWStyle``` and ```Utilities/CppCheck```.
  6. Check it all still builds.
  7. Check the unit tests pass.
  8. Fix anything that doesn't pass.
  9. Commit it to your own git repository.
+10. Set the remote URL correctly.
 
-So, right from your first commit, you will have a lot of functionality inherited from this project.
+So, right from your first commit, you will have a lot of functionality inherited from this project, and the commit log.
 
 The substitutions for the second part can be achieved manually or by editing and running `rename.sh` in a unix bash environment (not git bash).
 Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`. Running `rename.sh` should be performed on a non-git folder and before running CMake for the first time.
