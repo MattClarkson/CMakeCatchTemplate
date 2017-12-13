@@ -54,14 +54,20 @@ if(NOT DEFINED Eigen_DIR)
     DEPENDS ${proj_DEPENDENCIES}
   )
 
-  set(Eigen_SOURCE_DIR ${proj_SOURCE})
-  set(Eigen_DIR ${proj_INSTALL})
-  set(Eigen_INCLUDE_DIR ${Eigen_DIR}/include/eigen3)
+  if(BUILD_PCL)
+    # We want to use the 'unsupported' folder, which is never installed.
+    # Then we must be consistently passing the same folder to PCL, and the project level build.
+    set(Eigen_DIR ${proj_SOURCE})
+    set(Eigen_INCLUDE_DIR ${proj_SOURCE})
+  else()
+    set(Eigen_DIR ${proj_INSTALL})
+    set(Eigen_INCLUDE_DIR ${Eigen_DIR}/include/eigen3)
+    set(MYPROJECT_PREFIX_PATH ${proj_INSTALL}^^${MYPROJECT_PREFIX_PATH})
+  endif()
 
-  set(MYPROJECT_PREFIX_PATH ${proj_INSTALL}^^${MYPROJECT_PREFIX_PATH})
   mitkFunctionInstallExternalCMakeProject(${proj})
 
-  message("SuperBuild loading Eigen from ${Eigen_SOURCE_DIR} (PCL) or ${Eigen_DIR} (anything else).")
+  message("SuperBuild loading Eigen from ${Eigen_DIR} with Eigen_INCLUDE_DIR=${Eigen_INCLUDE_DIR}.")
 
 else(NOT DEFINED Eigen_DIR)
 
