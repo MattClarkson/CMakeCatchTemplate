@@ -25,6 +25,7 @@
 
 #ifdef BUILD_Eigen
 #include <Eigen/Dense>
+#include <unsupported/Eigen/NonLinearOptimization>
 #endif
 
 #ifdef BUILD_Boost
