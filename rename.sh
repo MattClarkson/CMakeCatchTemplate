@@ -2,7 +2,7 @@
 
 #/*============================================================================
 #
-#  NEWPROJECT: A software package for whatever.
+#  MYPROJECT: A software package for whatever.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #
@@ -21,33 +21,33 @@
 ##                 EDIT THIS PART                   ##
 ######################################################
 
-NEW_PROJECT_NAME_CAMEL_CASE='MyProject';
-NEW_PROJECT_NAME_LOWER_CASE='myproject';
-NEW_PROJECT_NAME_CAPS='MYPROJECT';
-NEW_SHORT_DESCRIPTION='A software package for whatever.';
-NEW_NAMESPACE='mp';
+NEW_PROJECT_NAME_CAMEL_CASE='MyProject'
+NEW_PROJECT_NAME_LOWER_CASE='myproject'
+NEW_PROJECT_NAME_CAPS='MYPROJECT'
+NEW_SHORT_DESCRIPTION='A software package for whatever.'
+NEW_NAMESPACE='mp'
 
 
 ######################################################
 
 # Strings to replace
-OLD_DIR_NAME='CMakeCatchTemplate';
-OLD_PROJECT_NAME_CAMEL_CASE='MyProject';
-OLD_PROJECT_NAME_LOWER_CASE='myproject';
-OLD_PROJECT_NAME_CAPS='MYPROJECT';
+OLD_DIR_NAME='CMakeCatchTemplate'
+OLD_PROJECT_NAME_CAMEL_CASE='MyProject'
+OLD_PROJECT_NAME_LOWER_CASE='myproject'
+OLD_PROJECT_NAME_CAPS='MYPROJECT'
 OLD_DOXYGEN_INTRO='A software package for whatever.'
-OLD_SHORT_DESCRIPTION='A software package for whatever.';
-OLD_NAMESPACE='mp';
+OLD_SHORT_DESCRIPTION='A software package for whatever.'
+OLD_NAMESPACE='mp'
 
 #### Replacements ###
 
 find_and_replace_string(){
-    find . -type f > $HOME/tmp.$$.files.txt
+    find . -type f | grep -v "[.]git" > $HOME/tmp.$$.files.txt
     for f in `cat $HOME/tmp.$$.files.txt`
     do
-      wc1=`file -i $f | grep text | wc -l`
-      wc2=`file -i $f | grep "application/xml" | wc -l`
-      if [ $wc1 -gt 0 -o $wc2 -gt 0 ]; then
+      wc1=`file $f | grep text | wc -l`
+      wc2=`file --mime $f | grep "application/xml" | wc -l`
+      if [ ${wc1} -gt 0 -o ${wc2} -gt 0 ]; then
         cat $f | sed s/"${1}"/"${2}"/g > $HOME/tmp.$$.file.txt
         mv $HOME/tmp.$$.file.txt $f
       fi
@@ -59,7 +59,7 @@ find_and_replace_filename(){
     find . -name "*$1*" > $HOME/tmp.$$.files.txt
     wc=`cat $HOME/tmp.$$.files.txt | wc -l`
     if [ $wc -gt 0 ]; then
-      cat $HOME/tmp.$$.files.txt | sed -e "p;s/$1/$2/" | xargs -n2 mv
+      cat $HOME/tmp.$$.files.txt | sed -e "p;s/$1/$2/" | xargs -n2 git mv --force
     fi
 }
 
@@ -69,12 +69,12 @@ find_and_replace_filename_and_string(){
 }
 
 # Change comment at top of each file describing project
-find_and_replace_string "${OLD_SHORT_DESCRIPTION}" "${NEW_SHORT_DESCRIPTION}" ;
+find_and_replace_string "${OLD_SHORT_DESCRIPTION}" "${NEW_SHORT_DESCRIPTION}"
 
 # Change Doxygen intro
-find_and_replace_string "${OLD_DOXYGEN_INTRO}" "${NEW_SHORT_DESCRIPTION}";
+find_and_replace_string "${OLD_DOXYGEN_INTRO}" "${NEW_SHORT_DESCRIPTION}"
 
-# Replace name NewProject, newproject, NEWPROJECT
+# Replace name MyProject, myproject, MYPROJECT etc.
 find_and_replace_string "$OLD_PROJECT_NAME_CAMEL_CASE" "$NEW_PROJECT_NAME_CAMEL_CASE"
 find_and_replace_string "$OLD_PROJECT_NAME_LOWER_CASE" "$NEW_PROJECT_NAME_LOWER_CASE"
 find_and_replace_string "$OLD_PROJECT_NAME_CAPS" "$NEW_PROJECT_NAME_CAPS"
@@ -89,12 +89,13 @@ find_and_replace_filename "$OLD_PROJECT_NAME_LOWER_CASE" "$NEW_PROJECT_NAME_LOWE
 find_and_replace_filename "$OLD_PROJECT_NAME_CAPS" "$NEW_PROJECT_NAME_CAPS"
 
 # mp prefixes
+nc=`echo ${OLD_NAMESPACE} | wc -c | tr -d '[:space:]'`
 for g in .h .cpp .ui
 do
   find . -name "${OLD_NAMESPACE}*${g}" > $HOME/tmp.$$.${OLD_NAMESPACE}.${g}.txt
   for f in `cat $HOME/tmp.$$.${OLD_NAMESPACE}.${g}.txt`
   do
-    basename $f $g | cut -c 5-10000 >> $HOME/tmp.$$.prefixes.txt
+    basename $f $g | cut -c ${nc}-10000 >> $HOME/tmp.$$.prefixes.txt
   done
   rm $HOME/tmp.$$.${OLD_NAMESPACE}.${g}.txt
 done
