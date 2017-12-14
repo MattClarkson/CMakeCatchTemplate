@@ -20,11 +20,11 @@ The main features provided are:
  2. A single library into which you can provide your main algorithms.
  3. Unit tests, using Catch, and run with CTest, so you can ensure correctness and enable regression testing of your functionality.
  4. A single command line application, to give the end user a minimalist runnable program.
- 5. KWStyle to check some basic code style, so you can check for consistent code style.
- 6. CppCheck to check some code features, so you can check for some performance, style and correctness issues.
+ 5. KWStyle config, so you can check for consistent code style, when you have KWStyle installed on your system.
+ 6. CppCheck config, so you can check for some performance, style and correctness issues, when you have CppCheck installed on your system.
  7. Doxygen config, so you can generate documentation.
  8. If your code is open-source, you can register with a Continuous Integration service, so this project provides Travis and Appveyor examples.
- 9. CPack setup to produce installers for GUI apps QtVTKApp and QMLDemo along with installers for command line apps.
+ 9. CPack setup to produce installers for GUI apps QtVTKApp and QMLDemo along with installation code for command line apps.
 10. An example of the CMake required to build python interfaces to your C++ code, using ```boost::python```.
 
 
@@ -35,19 +35,18 @@ The main way to use this project is:
 
  1. Clone this project.
  2. Rename the top-level project folder to the folder name of your choice.
- 3. Rename all instances of ```MYPROJECT``` (all uppercase), ```myproject``` (all lowercase), ```MyProject``` (camelcase) and the namespace ```mp``` with names of your choice.
- 4. Optionally strip out or turn off the bits you dont need.
- 5. Set your KWStyle and CppCheck settings in ```Utilities/KWStyle``` and ```Utilities/CppCheck```.
- 6. Check it all still builds.
- 7. Check the unit tests pass.
- 8. Fix anything that doesn't pass.
- 9. Commit it to your own git repository.
-10. Set the remote URL correctly.
+ 3. Rename all instances of ```MYPROJECT``` (all uppercase), ```myproject``` (all lowercase), ```MyProject``` (camelcase) and the namespace ```mp``` with names of your choice, by running the `rename.sh` script in a ```bash``` environment. Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`. Running `rename.sh` should be performed before running CMake for the first time if you plan on doing an "in source" build (not recommended).
+ 4. Set your KWStyle and CppCheck settings in ```Utilities/KWStyle``` and ```Utilities/CppCheck```.
+ 5. Check it all builds.
+ 6. Check the unit tests pass.
+ 7. Fix anything that doesn't pass.
+ 8. Optionally strip out or turn off the bits you dont need.
+ 9. Check it all builds and the tests pass again.
+10. Commit it to your own git repository.
+11. Set the remote URL correctly.
+12. Push to remote.
 
 So, right from your first commit, you will have a lot of functionality inherited from this project, and the commit log.
-
-The substitutions for the second part can be achieved manually or by editing and running `rename.sh` in a unix bash environment (not git bash).
-Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`. Running `rename.sh` should be performed before running CMake for the first time.
 
 
 A Note on Packaging
@@ -67,18 +66,18 @@ some simple starting points, and recommendations.
 
 Assumptions:
 
- 1. This project is only suitable for small research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then example projects like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) can be used as illustrations of much larger examples. However each one is written by an excellent software engineer who makes a lot of custom made packaging code. So, anything more complex than what we have here, and you will have to write a lot of CMake code yourself.
+ 1. This project is only suitable for small C++ research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then example projects like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) can be used as illustrations of much larger examples. However each one is written by an excellent software engineer who makes a lot of custom made packaging code. So, anything more complex than what we have here, and you will have to write a lot of CMake code yourself.
  2. This project does not currently support dynamically discovered plugins that have no link-time dependency. This would require more CMake coding. This isn't too difficult, if its a pure Qt plugin. Follow Qt documentation to compile it, but then you'd have to write packaging code yourself, as most Qt documentation assumes you are using ```qmake``` not ```cmake```.
  3. You have built your own Qt.
 
 Lots of people would like to take a shortcut and use Qt that comes with a package manager on Linux,
 or with Homebrew or Macports on MacOSX, or pre-compiled on Windows. I believe its quicker to
 learn how to build it, than it is to cope with the wrong version, or a version that does not have the features you want.
-It really doesn't take long to learn, and is quicker than debugging all the numerous problems, and its
-quicker than sorting out deployment or packaging issues.
+It really doesn't take long to learn, and is quicker than debugging all the numerous packaging and deployment problems that
+come from using a Qt that you did not compile yourself.
 
 Note that Assumption 2 refers to dynamically loaded (i.e. discovered at run-time, with no link-time dependency) plugins which are not supported.
-This project does support dynamically linked libraries (i.e. required at link time and run time, but shared between other libraries).
+This project does support shared libraries (i.e. required at link time and run time, but shared between other libraries).
 
 
 Supported Use-Cases
@@ -86,7 +85,7 @@ Supported Use-Cases
 
 This project is intended for the following 2 Use-Cases:
 
- 1. You are developing a small library or command line app, and NOT a GUI. Your focus is the core algorithm.
+ 1. You are developing a small library or command line app, and NOT a GUI. Your focus is the core algorithm. You are an algorithm developer.
  2. You are developing a GUI, or a GUI with supporting command line apps, so you are an application developer, or an integration developer.
 
 For the first Use-Case it is recommended that you build everything statically. The packaging code will produce an
@@ -94,10 +93,10 @@ SDK to link against, so other people can be responsible for integrating your new
 You can use non-GUI Qt, by turning on the flag MYPROJECT_USE_QT, but you should still use a version of Qt that has been compiled statically.
 Be aware that CMake will search around your system for various Qt libraries. If your statically compiled version of
 Qt has missing libraries, as you only compiled a subset of them, then CMake may well find other Qt libraries, possibly
-with dynamic linkage, from somewhere unexpected on your system. This will cause a problem when running CPack.
+with dynamic linkage, from somewhere unexpected on your system. This will cause a problem when running ```make install```.
 
 For the second Use-Case, with GUI development, and particularly with Qt (which has various plugins) you should use shared linking.
-This package will provide you with examples on how to build a GUI, but if you are building a GUI, this project will not build an installable SDK.
+This project will provide you with examples on how to build a GUI, but if you are building a GUI, this project will not build an installable SDK.
 Any command line apps will be bundled with the GUI, and should refer to the same bundled libraries for consistency.
 On Mac, proper ```.app``` bundles will be created.
 
