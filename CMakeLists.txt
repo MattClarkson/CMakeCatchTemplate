@@ -621,6 +621,18 @@ if(BUILD_PCL)
   link_directories(${PCL_LIBRARY_DIRS})
   add_definitions(${PCL_DEFINITIONS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${PCL_LIBRARIES})
+
+  # This appears to be missing from the list of PCL_LIBRARIES,
+  # but I don't yet know why.
+  find_library(_pcl_io_ply_LIBRARY
+    NAMES pcl_io_ply
+    PATHS ${PCL_LIBRARY_DIRS}
+    NO_DEFAULT_PATH
+  )
+  if(_pcl_io_ply_LIBRARY)
+    list(APPEND ALL_THIRD_PARTY_LIBRARIES ${_pcl_io_ply_LIBRARY})
+  endif()
+
   add_definitions(-DBUILD_PCL)
   list(APPEND ADDITIONAL_SEARCH_PATHS "${PCL_LIBRARY_DIRS}/../${_library_sub_dir}")
   list(APPEND ADDITIONAL_SEARCH_PATHS "${FLANN_DIR}/${_library_sub_dir}")
