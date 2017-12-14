@@ -66,6 +66,7 @@ endif()
 option(BUILD_PYTHON_BINDINGS "Build Python Bindings." OFF)
 option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
+option(MYPROJECT_USE_OPENMP "Use OpenMP." OFF)
 
 if(BUILD_PYTHON_BINDINGS AND BUILD_QTVTKGUI)
   set(BUILD_QTVTKGUI OFF CACHE BOOL "Build QtVTK Gui." FORCE)
@@ -398,49 +399,6 @@ endif()
 
 
 ######################################################################
-# Add support for OpenMP. Note, other libraries (e.g. PCL) in the
-# SuperBuild may automatically pick up OpenMP flags, and not provide
-# the way of turning these things off. So, be aware how your
-# dependencies are using OpenMP flags.
-######################################################################
-option(MYPROJECT_USE_OPENMP "Use OpenMP." OFF)
-if(MYPROJECT_USE_OPENMP)
-  # Borrowed from PCL-1.8
-  if((NOT APPLE) OR (NOT CMAKE_COMPILER_IS_GNUCXX) OR (GCC_VERSION VERSION_GREATER 4.2.1) OR (CMAKE_COMPILER_IS_CLANG))
-    find_package(OpenMP)
-    if(OpenMP_FOUND)
-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-      if(MSVC)
-        if(MSVC_VERSION EQUAL 1500)
-          set(OPENMP_DLL VCOMP90)
-        elseif(MSVC_VERSION EQUAL 1600)
-          set(OPENMP_DLL VCOMP100)
-        elseif(MSVC_VERSION EQUAL 1700)
-          set(OPENMP_DLL VCOMP110)
-        elseif(MSVC_VERSION EQUAL 1800)
-          set(OPENMP_DLL VCOMP120)
-        elseif(MSVC_VERSION EQUAL 1900)
-          set(OPENMP_DLL VCOMP140)
-        elseif(MSVC_VERSION EQUAL 1910)
-          set(OPENMP_DLL VCOMP140)
-        endif()
-        if(OPENMP_DLL)
-          set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} /DELAYLOAD:${OPENMP_DLL}D.dll")
-          set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DELAYLOAD:${OPENMP_DLL}.dll")
-        else(OPENMP_DLL)
-          message(WARNING "Delay loading flag for OpenMP DLL is invalid.")
-        endif(OPENMP_DLL)
-      endif(MSVC)
-    endif()
-  endif()
-  if(NOT OpenMP_FOUND)
-    message(FATAL_ERROR "You requested OpenMP, but your compiler does not support it. Please turn MYPROJECT_USE_OPENMP off.")
-  endif()
-endif()
-
-
-######################################################################
 # Configure Dart testing support.  This should be done before any
 # message(FATAL_ERROR ...) commands are invoked.
 ######################################################################
@@ -700,6 +658,49 @@ if(WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_LIB_PREFIX=\"\"")
   endif()
 endif(WIN32)
+
+
+######################################################################
+# Add support for OpenMP. Note, other libraries (e.g. PCL) in the
+# SuperBuild may automatically pick up OpenMP flags, and not provide
+# the way of turning these things off. So, be aware how your
+# dependencies are using OpenMP flags.
+######################################################################
+
+if(MYPROJECT_USE_OPENMP)
+  # Borrowed from PCL-1.8
+  if((NOT APPLE) OR (NOT CMAKE_COMPILER_IS_GNUCXX) OR (GCC_VERSION VERSION_GREATER 4.2.1) OR (CMAKE_COMPILER_IS_CLANG))
+    find_package(OpenMP)
+    if(OpenMP_FOUND)
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+      if(MSVC)
+        if(MSVC_VERSION EQUAL 1500)
+          set(OPENMP_DLL VCOMP90)
+        elseif(MSVC_VERSION EQUAL 1600)
+          set(OPENMP_DLL VCOMP100)
+        elseif(MSVC_VERSION EQUAL 1700)
+          set(OPENMP_DLL VCOMP110)
+        elseif(MSVC_VERSION EQUAL 1800)
+          set(OPENMP_DLL VCOMP120)
+        elseif(MSVC_VERSION EQUAL 1900)
+          set(OPENMP_DLL VCOMP140)
+        elseif(MSVC_VERSION EQUAL 1910)
+          set(OPENMP_DLL VCOMP140)
+        endif()
+        if(OPENMP_DLL)
+          set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} /DELAYLOAD:${OPENMP_DLL}D.dll")
+          set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DELAYLOAD:${OPENMP_DLL}.dll")
+        else(OPENMP_DLL)
+          message(WARNING "Delay loading flag for OpenMP DLL is invalid.")
+        endif(OPENMP_DLL)
+      endif(MSVC)
+    endif()
+  endif()
+  if(NOT OpenMP_FOUND)
+    message(FATAL_ERROR "You requested OpenMP, but your compiler does not support it. Please turn MYPROJECT_USE_OPENMP off.")
+  endif()
+endif()
 
 
 ######################################################################
