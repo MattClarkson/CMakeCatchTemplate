@@ -67,6 +67,8 @@ option(BUILD_PYTHON_BINDINGS "Build Python Bindings." OFF)
 option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
 option(MYPROJECT_USE_OPENMP "Use OpenMP." OFF)
+option(MYPROJECT_USE_CUDA "Use CUDA." OFF)
+option(MYPROJECT_DELAYLOAD_CUDA "(Windows only) If enabled the CUDA DLLs will be a soft delay-load dependency and NifTK can run without them." OFF)
 
 if(BUILD_PYTHON_BINDINGS AND BUILD_QTVTKGUI)
   set(BUILD_QTVTKGUI OFF CACHE BOOL "Build QtVTK Gui." FORCE)
@@ -395,6 +397,26 @@ if(MSVC)
     message(STATUS "  '${variable}': ${${variable}}")
   endforeach()
   message(STATUS "")
+endif()
+
+
+######################################################################
+# Try finding CUDA before SuperBuild, so that hopefully these vars
+# are more likely to be set consistently throughought all dependencies.
+######################################################################
+if(MYPROJECT_USE_CUDA)
+  find_package(CUDA)
+  if(CUDA_FOUND)
+    include_directories(${CUDA_TOOLKIT_INCLUDE})
+    add_definitions(-DMYPROJECT_USE_CUDA)
+    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};-DMYPROJECT_USE_CUDA")
+    message("Found CUDA")
+    if(APPLE)
+      set(CMAKE_SHARED_LINKER_FLAGS "-F/Library/Frameworks ${CMAKE_SHARED_LINKER_FLAGS}")
+    endif()
+  else()
+    message(FATAL_ERROR "You requested CUDA, but it was not found. Please turn MYPROJECT_USE_CUDA off.")
+  endif()
 endif()
 
 

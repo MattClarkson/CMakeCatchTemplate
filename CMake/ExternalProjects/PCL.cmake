@@ -78,6 +78,8 @@ if(NOT DEFINED PCL_DIR)
       -DBUILD_apps:BOOL=OFF
       -DBUILD_tools:BOOL=ON
       -DBUILD_examples:BOOL=OFF
+      -DBUILD_CUDA:BOOL=${MYPROJECT_USE_CUDA}
+      -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
       -DWITH_LIBUSB:BOOL=OFF    # On my Mac, this pulls in a dependency to /opt/local (MacPorts) which has the wrong version of boost.
       -DWITH_PNG:BOOL=OFF       # Same problem
       -DWITH_QHULL:BOOL=OFF     # Same problem
