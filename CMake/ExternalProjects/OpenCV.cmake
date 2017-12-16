@@ -42,16 +42,20 @@ if(NOT DEFINED OpenCV_DIR)
     )
   endif()
 
+  set(_cuda_options)
+  if(MYPROJECT_USE_CUDA)
+    set(_cuda_options
+      -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
+      -DCUDA_ARCH_BIN:STRING=${MYPROJECT_CUDA_ARCH_BIN}
+      -DCUDA_NVCC_FLAGS:STRING=${MYPROJECT_CXX11_FLAG}
+      -DCUDA_PROPAGATE_HOST_FLAGS:BOOL=OFF
+    )
+  endif()
+
   if(CTEST_USE_LAUNCHERS)
     list(APPEND additional_cmake_args
       "-DCMAKE_PROJECT_${proj}_INCLUDE:FILEPATH=${CMAKE_ROOT}/Modules/CTestUseLaunchers.cmake"
     )
-  endif()
-
-  set(_cuda_flag "-DWITH_CUDA:BOOL=${MYPROJECT_USE_CUDA}")
-  if(APPLE)
-    # I've not had much luck with CUDA on Mac. Might only work with gcc compilers.
-    set(_cuda_flag "-DWITH_CUDA:BOOL=OFF")
   endif()
 
   ExternalProject_Add(${proj}
@@ -85,9 +89,8 @@ if(NOT DEFINED OpenCV_DIR)
       -DWITH_EIGEN:BOOL=OFF
       -DWITH_FFMPEG:BOOL=${OPENCV_WITH_FFMPEG}
       -DWITH_OPENMP:BOOL=${MYPROJECT_USE_OPENMP}
-      ${_cuda_flag}
-      -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
-      -DCUDA_ARCH_BIN:STRING=${MYPROJECT_CUDA_ARCH_BIN}
+      -DWITH_CUDA:BOOL=${MYPROJECT_USE_CUDA}
+      ${_cuda_options}
       -DADDITIONAL_C_FLAGS:STRING=${OPENCV_ADDITIONAL_C_FLAGS}
       -DADDITIONAL_CXX_FLAGS:STRING=${OPENCV_ADDITIONAL_CXX_FLAGS}
       ${additional_cmake_args}
