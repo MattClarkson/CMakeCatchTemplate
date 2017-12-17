@@ -37,7 +37,6 @@ if(NOT DEFINED OpenCV_DIR)
   set(_vtk_options)
   if(BUILD_VTK)
     set(_vtk_options
-      -DWITH_VTK:BOOL=OFF
       -DVTK_DIR:PATH=${VTK_DIR}
     )
   endif()
@@ -66,8 +65,6 @@ if(NOT DEFINED OpenCV_DIR)
     INSTALL_DIR ${proj_INSTALL}
     URL ${proj_LOCATION}
     URL_MD5 ${proj_CHECKSUM}
-    # Related bug: http://bugs.mitk.org/show_bug.cgi?id=5912
-    #PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/OpenCV-2.4.11.patch
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
       ${EP_COMMON_ARGS}
@@ -91,10 +88,10 @@ if(NOT DEFINED OpenCV_DIR)
       -DWITH_OPENMP:BOOL=${MYPROJECT_USE_OPENMP}
       -DWITH_CUDA:BOOL=${MYPROJECT_USE_CUDA}
       ${_cuda_options}
-      -DADDITIONAL_C_FLAGS:STRING=${OPENCV_ADDITIONAL_C_FLAGS}
-      -DADDITIONAL_CXX_FLAGS:STRING=${OPENCV_ADDITIONAL_CXX_FLAGS}
-      ${additional_cmake_args}
+      -DWITH_VTK:BOOL=${BUILD_VTK}
       ${_vtk_options}
+      "-DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS} -DVTK_MAJOR_VERSION=6"
+      ${additional_cmake_args}
     CMAKE_CACHE_ARGS
       ${EP_COMMON_CACHE_ARGS}
     CMAKE_CACHE_DEFAULT_ARGS
