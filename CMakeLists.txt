@@ -423,7 +423,7 @@ if(MYPROJECT_USE_CUDA)
       set(CMAKE_SHARED_LINKER_FLAGS "-F/Library/Frameworks ${CMAKE_SHARED_LINKER_FLAGS}")
     endif()
   else()
-    message(FATAL_ERROR "You requested CUDA, but it was not found. Please turn MYPROJECT_USE_CUDA off.")
+    message(FATAL_ERROR "You requested CUDA, but it was not found. Please set CUDA_TOOLKIT_ROOT_DIR or turn MYPROJECT_USE_CUDA off.")
   endif()
 endif()
 
