@@ -39,7 +39,7 @@ if (BUILD_SUPERBUILD)
   set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
   set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
 else()
-  project(MYPROJECT VERSION 0.2.0)
+  project(MYPROJECT VERSION 0.0.0)
 endif()
 
 
@@ -331,6 +331,7 @@ endif()
 if(BUILD_VTK)
   message("Configuring VTK with VTK_VERSION=${VTK_VERSION} and VTK_BACKEND=${VTK_BACKEND}")
 endif()
+
 
 ######################################################################
 # Setup the path to load CMake macros, and extra CMake files.
@@ -696,7 +697,6 @@ endif(WIN32)
 # the way of turning these things off. So, be aware how your
 # dependencies are using OpenMP flags.
 ######################################################################
-
 if(MYPROJECT_USE_OPENMP)
   # Borrowed from PCL-1.8
   if((NOT APPLE) OR (NOT CMAKE_COMPILER_IS_GNUCXX) OR (GCC_VERSION VERSION_GREATER 4.2.1) OR (CMAKE_COMPILER_IS_CLANG))
