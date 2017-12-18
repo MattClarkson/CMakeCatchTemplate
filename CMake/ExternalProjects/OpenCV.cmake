@@ -92,7 +92,7 @@ if(NOT DEFINED OpenCV_DIR)
       -DWITH_OPENMP:BOOL=${MYPROJECT_USE_OPENMP}
       ${_vtk_options}
       ${_cuda_options}
-      "-DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS} -DVTK_MAJOR_VERSION=6" # Doesn't matter what version, as long as > 5.
+      "-DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS} ${MYPROJECT_CXX11_FLAG} -DVTK_MAJOR_VERSION=6" # Doesn't matter what version, as long as > 5.
       ${additional_cmake_args}
     CMAKE_CACHE_ARGS
       ${EP_COMMON_CACHE_ARGS}
