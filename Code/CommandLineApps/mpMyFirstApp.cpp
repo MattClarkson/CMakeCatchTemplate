@@ -13,6 +13,7 @@
 =============================================================================*/
 
 #include <mpMyFunctions.h>
+#include <mpExceptionMacro.h>
 #include <iostream>
 
 #ifdef BUILD_gflags
@@ -36,6 +37,9 @@
 
 #ifdef BUILD_OpenCV
 #include <cv.h>
+#ifdef MYPROJECT_USE_CUDA
+#include "opencv2/core/cuda.hpp"
+#endif
 #endif
 
 #ifdef BUILD_PCL
@@ -59,7 +63,7 @@ int main(int argc, char** argv)
 
 #ifdef BUILD_Eigen
   Eigen::MatrixXd m(2,2);
-  std::cout << "Printing 2x2 matrix ..." << m << std::endl;
+  std::cout << "Printing 2x2 Eigen::MatrixXd ..." << std::endl << m << std::endl;
 #endif
 
 #ifdef BUILD_Boost
@@ -70,8 +74,23 @@ int main(int argc, char** argv)
 
 #ifdef BUILD_OpenCV
   cv::Matx44d matrix = cv::Matx44d::eye();
-  std::cout << "Printing 4x4 matrix ..." << matrix << std::endl;
+  std::cout << "Printing 4x4 matrix ..." << std::endl << matrix << std::endl;
+
+#ifdef MYPROJECT_USE_CUDA
+  int deviceCount = cv::cuda::getCudaEnabledDeviceCount();
+  if (deviceCount == 0)
+  {
+    mpExceptionThrow() << "No CUDA support compiled in.";
+  }
+  if (deviceCount == -1)
+  {
+    mpExceptionThrow() << "Cannot load CUDA driver, or CUDA is incompatible.";
+  }
+  std::cout << "Number of CUDA devices:" << deviceCount << std::endl;
+  cv::cuda::printCudaDeviceInfo(0); // just check first device, as its a proof-of-concept.
 #endif
+
+#endif // BUILD_OpenCV
 
 #ifdef BUILD_PCL
   pcl::PointCloud<pcl::PointXYZ> cloud;
