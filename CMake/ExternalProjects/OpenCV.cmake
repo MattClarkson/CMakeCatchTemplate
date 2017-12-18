@@ -34,16 +34,20 @@ endif()
 
 if(NOT DEFINED OpenCV_DIR)
 
-  set(_vtk_options)
+  set(_vtk_options
+    -DWITH_VTK:BOOL=${BUILD_VTK}
+  )
   if(BUILD_VTK)
-    set(_vtk_options
+    list(APPEND _vtk_options
       -DVTK_DIR:PATH=${VTK_DIR}
     )
   endif()
 
-  set(_cuda_options)
+  set(_cuda_options
+    -DWITH_CUDA:BOOL=${MYPROJECT_USE_CUDA}
+  )
   if(MYPROJECT_USE_CUDA)
-    set(_cuda_options
+    list(APPEND _cuda_options
       -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
       -DCUDA_ARCH_BIN:STRING=${MYPROJECT_CUDA_ARCH_BIN}
       -DCUDA_NVCC_FLAGS:STRING=${MYPROJECT_CXX11_FLAG}
@@ -86,11 +90,9 @@ if(NOT DEFINED OpenCV_DIR)
       -DWITH_EIGEN:BOOL=OFF
       -DWITH_FFMPEG:BOOL=${OPENCV_WITH_FFMPEG}
       -DWITH_OPENMP:BOOL=${MYPROJECT_USE_OPENMP}
-      -DWITH_CUDA:BOOL=${MYPROJECT_USE_CUDA}
-      ${_cuda_options}
-      -DWITH_VTK:BOOL=${BUILD_VTK}
       ${_vtk_options}
-      "-DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS} -DVTK_MAJOR_VERSION=6"
+      ${_cuda_options}
+      "-DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS} -DVTK_MAJOR_VERSION=6" # Doesn't matter what version, as long as > 5.
       ${additional_cmake_args}
     CMAKE_CACHE_ARGS
       ${EP_COMMON_CACHE_ARGS}
