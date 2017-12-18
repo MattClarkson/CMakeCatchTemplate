@@ -42,6 +42,27 @@ if(NOT DEFINED PCL_DIR)
     )
   endif()
 
+  set(_cuda_options
+    -DBUILD_CUDA:BOOL=${MYPROJECT_USE_CUDA}
+    -DBUILD_GPU:BOOL=${MYPROJECT_USE_CUDA}
+  )
+  endif()
+  if(MYPROJECT_USE_CUDA)
+    list(APPEND _cuda_options
+      -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
+      -DCUDA_ARCH_BIN:STRING=${MYPROJECT_CUDA_ARCH_BIN}
+      -DCUDA_NVCC_FLAGS:STRING=${MYPROJECT_CXX11_FLAG}
+      -DCUDA_PROPAGATE_HOST_FLAGS:BOOL=OFF
+      -DBUILD_gpu_tracking:BOOL=ON
+      -DBUILD_gpu_utils:BOOL=ON
+    )
+    if(NOT APPLE)
+      list(APPEND _cuda_options
+        -DBUILD_gpu_surface:BOOL=OFF # Can't compile this on OSX 10.10, CUDA 7.0, clang 6.0. Other platforms and versions may work.
+      )
+    endif()
+  endif()
+
   set(_build_static ON)
   if(BUILD_SHARED_LIBS)
     set(_build_static OFF)
@@ -78,9 +99,6 @@ if(NOT DEFINED PCL_DIR)
       -DBUILD_apps:BOOL=OFF
       -DBUILD_tools:BOOL=ON
       -DBUILD_examples:BOOL=OFF
-      -DBUILD_CUDA:BOOL=${MYPROJECT_USE_CUDA}
-      -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
-      -DCUDA_ARCH_BIN:STRING=${MYPROJECT_CUDA_ARCH_BIN}
       -DWITH_LIBUSB:BOOL=OFF    # On my Mac, this pulls in a dependency to /opt/local (MacPorts) which has the wrong version of boost.
       -DWITH_PNG:BOOL=OFF       # Same problem
       -DWITH_QHULL:BOOL=OFF     # Same problem
@@ -88,6 +106,7 @@ if(NOT DEFINED PCL_DIR)
       -DWITH_OPENNI2:BOOL=OFF   # Same problem, but worse: For each device, PCL defaults this to TRUE, so FindX is always executed.
       -DWITH_PCAP:BOOL=OFF      # On my Mac, this is 32 bit, so barfs when linking 64 bit.
       ${_vtk_options}
+      ${_cuda_options}
     CMAKE_CACHE_ARGS
       ${EP_COMMON_CACHE_ARGS}
     CMAKE_CACHE_DEFAULT_ARGS
