@@ -74,7 +74,7 @@ option(MYPROJECT_DELAYLOAD_CUDA "(Windows only) If enabled the CUDA DLLs will be
 mark_as_advanced(MYPROJECT_DELAYLOAD_CUDA)
 set(MYPROJECT_CUDA_ARCH_BIN "" CACHE STRING "CUDA compute capability to build for.") # See: https://en.wikipedia.org/wiki/CUDA
 mark_as_advanced(MYPROJECT_CUDA_ARCH_BIN)
-set(MYPROJECT_USE_MPI "Use OpenMPI." OFF)
+set(MYPROJECT_USE_MPI "Use MPI." OFF)
 mark_as_advanced(MYPROJECT_USE_MPI)
 
 if(BUILD_PYTHON_BINDINGS AND BUILD_QTVTKGUI)
