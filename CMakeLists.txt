@@ -71,7 +71,7 @@ option(MYPROJECT_USE_CUDA "Use CUDA." OFF)
 option(MYPROJECT_DELAYLOAD_CUDA "(Windows only) If enabled the CUDA DLLs will be a soft delay-load dependency and NifTK can run without them." OFF)
 mark_as_advanced(MYPROJECT_DELAYLOAD_CUDA)
 set(MYPROJECT_CUDA_ARCH_BIN "" CACHE STRING "CUDA compute capability to build for.") # See: https://en.wikipedia.org/wiki/CUDA
-set(MYPROJECT_USE_MPI "Use MPI." OFF)
+option(MYPROJECT_USE_MPI "Use MPI." OFF)
 
 if(BUILD_PYTHON_BINDINGS AND BUILD_QTVTKGUI)
   set(BUILD_QTVTKGUI OFF CACHE BOOL "Build QtVTK Gui." FORCE)
@@ -734,10 +734,11 @@ endif()
 # Add support for MPI.
 ######################################################################
 if(MYPROJECT_USE_MPI)
-  find_package(MPI REQUIRED) # This may find any implementation (c, c++, fortran).
+  find_package(MPI REQUIRED)
   message("Found MPI, with mpiexec=${MPIEXEC}")
 
   # Assume, for the purpose of this example project, that we are doing c++.
+  # If you fork this project, you should set the variables in your chosen language.
   include_directories(${MPI_CXX_INCLUDE_PATH})
   list(APPEND CMAKE_CXX_FLAGS ${MPI_CXX_COMPILE_FLAGS})
   list(APPEND CMAKE_EXE_LINKER_FLAGS ${MPI_CXX_LINK_FLAGS})
