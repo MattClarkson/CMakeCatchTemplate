@@ -67,13 +67,11 @@ option(BUILD_PYTHON_BINDINGS "Build Python Bindings." OFF)
 option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
 option(MYPROJECT_USE_OPENMP "Use OpenMP." OFF)
-mark_as_advanced(MYPROJECT_USE_OPENMP)
 option(MYPROJECT_USE_CUDA "Use CUDA." OFF)
-mark_as_advanced(MYPROJECT_USE_CUDA)
 option(MYPROJECT_DELAYLOAD_CUDA "(Windows only) If enabled the CUDA DLLs will be a soft delay-load dependency and NifTK can run without them." OFF)
 mark_as_advanced(MYPROJECT_DELAYLOAD_CUDA)
 set(MYPROJECT_CUDA_ARCH_BIN "" CACHE STRING "CUDA compute capability to build for.") # See: https://en.wikipedia.org/wiki/CUDA
-mark_as_advanced(MYPROJECT_CUDA_ARCH_BIN)
+option(MYPROJECT_USE_MPI "Use MPI." OFF)
 
 if(BUILD_PYTHON_BINDINGS AND BUILD_QTVTKGUI)
   set(BUILD_QTVTKGUI OFF CACHE BOOL "Build QtVTK Gui." FORCE)
@@ -692,10 +690,7 @@ endif(WIN32)
 
 
 ######################################################################
-# Add support for OpenMP. Note, other libraries (e.g. PCL) in the
-# SuperBuild may automatically pick up OpenMP flags, and not provide
-# the way of turning these things off. So, be aware how your
-# dependencies are using OpenMP flags.
+# Add support for OpenMP.
 ######################################################################
 if(MYPROJECT_USE_OPENMP)
   # Borrowed from PCL-1.8
@@ -726,10 +721,32 @@ if(MYPROJECT_USE_OPENMP)
         endif(OPENMP_DLL)
       endif(MSVC)
     endif()
-  endif()
-  if(NOT OpenMP_FOUND)
+  else()
     message(FATAL_ERROR "You requested OpenMP, but your compiler does not support it. Please turn MYPROJECT_USE_OPENMP off.")
   endif()
+  if(NOT OpenMP_FOUND)
+    message(FATAL_ERROR "You requested OpenMP, but it was not found. Please turn MYPROJECT_USE_OPENMP off.")
+  endif()
+endif()
+
+
+######################################################################
+# Add support for MPI.
+######################################################################
+if(MYPROJECT_USE_MPI)
+  find_package(MPI REQUIRED)
+  message("Found MPI, with mpiexec=${MPIEXEC}")
+
+  # Assume, for the purpose of this example project, that we are doing c++.
+  # If you fork this project, you should set the variables in your chosen language.
+  include_directories(${MPI_CXX_INCLUDE_PATH})
+  list(APPEND CMAKE_CXX_FLAGS ${MPI_CXX_COMPILE_FLAGS})
+  list(APPEND CMAKE_EXE_LINKER_FLAGS ${MPI_CXX_LINK_FLAGS})
+  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${MPI_CXX_LIBRARIES})
+
+  message("Adding MPI include: ${MPI_CXX_INCLUDE_PATH}.")
+  message("Adding MPI libs: ${MPI_CXX_LIBRARIES}.")
+
 endif()
 
 

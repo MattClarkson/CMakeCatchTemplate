@@ -16,7 +16,7 @@ Features
 
 The main features provided are:
 
- 1. A Meta-Build, also known as a SuperBuild, to optionally download and build Boost, Eigen, OpenCV, glog, gflags, VTK and PCL.
+ 1. A Meta-Build, also known as a SuperBuild, to optionally download and build Boost, Eigen, FLANN, OpenCV, glog, gflags, VTK and PCL.
  2. A single library into which you can provide your main algorithms.
  3. Unit tests, using Catch, and run with CTest, so you can ensure correctness and enable regression testing of your functionality.
  4. A single command line application, to give the end user a minimalist runnable program.
@@ -26,7 +26,9 @@ The main features provided are:
  8. If your code is open-source, you can register with a Continuous Integration service, so this project provides Travis and Appveyor examples.
  9. CPack setup to produce installers for GUI apps QtVTKApp and QMLDemo along with installation code for command line apps.
 10. An example of the CMake required to build python interfaces to your C++ code, using ```boost::python```.
-
+11. Support for OpenMP, which is passed through to FLANN, OpenCV and PCL.
+12. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.
+13. Support for MPI, which by default sets up the C++ libraries.
 
 Usage
 -----
@@ -35,7 +37,7 @@ The main way to use this project is:
 
  1. Clone this project.
  2. Rename the top-level project folder to the folder name of your choice.
- 3. Rename all instances of ```MYPROJECT``` (all uppercase), ```myproject``` (all lowercase), ```MyProject``` (camelcase) and the namespace ```mp``` with names of your choice, by running the `rename.sh` script in a ```bash``` environment. Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`. Running `rename.sh` should be performed before running CMake for the first time if you plan on doing an "in source" build (not recommended).
+ 3. Rename all instances of ```MYPROJECT``` (all uppercase), ```myproject``` (all lowercase), ```MyProject``` (camelcase) and the namespace ```mp``` with names of your choice, by running the `rename.sh` script in a ```bash``` environment. Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`. Running `rename.sh` should be performed before running CMake for the first time if you plan on doing an "in source" build.
  4. Set your KWStyle and CppCheck settings in ```Utilities/KWStyle``` and ```Utilities/CppCheck```.
  5. Check it all builds.
  6. Check the unit tests pass.
@@ -46,7 +48,7 @@ The main way to use this project is:
 11. Set the remote URL correctly.
 12. Push to remote.
 
-So, right from your first commit, you will have a lot of functionality inherited from this project, and the commit log.
+So, right from your first commit, you will have a lot of functionality inherited from this project, along with the full commit log.
 
 
 A Note on Packaging
@@ -79,34 +81,31 @@ come from using a Qt that you did not compile yourself.
 Note that Assumption 2 refers to dynamically loaded (i.e. discovered at run-time, with no link-time dependency) plugins which are not supported.
 This project does support shared libraries (i.e. required at link time and run time, but shared between other libraries).
 
-
-Supported Use-Cases
--------------------
-
-This project is intended for the following 2 Use-Cases:
+Therefore, this project is intended for the following 2 Use-Cases:
 
  1. You are developing a small library or command line app, and NOT a GUI. Your focus is the core algorithm. You are an algorithm developer.
  2. You are developing a GUI, or a GUI with supporting command line apps, so you are an application developer, or an integration developer.
 
-For the first Use-Case it is recommended that you build everything statically. The packaging code will produce an
-SDK to link against, so other people can be responsible for integrating your new algorithm into their app.
-You can use non-GUI Qt, by turning on the flag MYPROJECT_USE_QT, but you should still use a version of Qt that has been compiled statically.
-Be aware that CMake will search around your system for various Qt libraries. If your statically compiled version of
-Qt has missing libraries, as you only compiled a subset of them, then CMake may well find other Qt libraries, possibly
-with dynamic linkage, from somewhere unexpected on your system. This will cause a problem when running ```make install```.
+For the first Use-Case it is recommended that you build everything statically. You should run ```make install``` to install the software
+or the ```INSTALL``` task in Visual Studio, which will produce an SDK to link against. You can use non-GUI Qt, by turning on the flag MYPROJECT_USE_QT, but
+you should still use a version of Qt that has been compiled statically. Be aware that CMake will search around your system
+for various Qt libraries. If your statically compiled version of Qt has missing libraries, as you only compiled a
+subset of them, then CMake may well find other Qt libraries, possibly with dynamic linkage, from somewhere unexpected
+on your system. This will cause a problem when running ```make install```.
 
-For the second Use-Case, with GUI development, and particularly with Qt (which has various plugins) you should use shared linking.
-This project will provide you with examples on how to build a GUI, but if you are building a GUI, this project will not build an installable SDK.
+For the second Use-Case, with GUI development, and particularly with Qt (which has various plugins) you should use shared linking,
+and run the ```make package``` command or ```PACKAGE``` task in Visual Studio to produce an installer,
+This project provides you with examples on how to build a GUI, but if you are building a GUI, this project will not build an installable SDK.
 Any command line apps will be bundled with the GUI, and should refer to the same bundled libraries for consistency.
 On Mac, proper ```.app``` bundles will be created.
 
 If you switch between Use-Case 1 and 2, you will need a complete rebuild at the SuperBuild level.
 This means, completely destroying the SuperBuild folder, and not just running ```make clean``` or the ```Clean```
-task in Visual Studio.
+tasks in Visual Studio.
 
 For example, imagine you start with a command line app, and build without Qt, as you are just testing or using some VTK filters.
 Then at some point you decide you want to add a Qt GUI, then you will also need to rebuild VTK to pick up the
-Qt support classes like QVTKWidget. So you end up doing a full clean SuperBuild.
+Qt support classes like QVTKWidget. So you must do a full clean SuperBuild.
 
 So, basically, pick your main options, up front, for the SuperBuild, and then don't change them or be prepared for a full clean build.
 
@@ -124,6 +123,7 @@ Tested On
  * Mac - OSX 10.10.5, clang 6.0, CMake 3.9.4, Qt 5.6.2
 
 Minimum CMake version is 3.5. Minimum Qt is version 5. Qt4 is not supported and not planned to be supported.
+If you are using VTK you should try a Qt version >= 5.5.0 to take advantage of the new OpenGL2 backend.
 
 
 Build Instructions
