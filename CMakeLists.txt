@@ -39,7 +39,7 @@ if (BUILD_SUPERBUILD)
   set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
   set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
 else()
-  project(MYPROJECT VERSION 0.2.0)
+  project(MYPROJECT VERSION 0.0.0)
 endif()
 
 
@@ -67,6 +67,13 @@ option(BUILD_PYTHON_BINDINGS "Build Python Bindings." OFF)
 option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
 option(MYPROJECT_USE_OPENMP "Use OpenMP." OFF)
+mark_as_advanced(MYPROJECT_USE_OPENMP)
+option(MYPROJECT_USE_CUDA "Use CUDA." OFF)
+mark_as_advanced(MYPROJECT_USE_CUDA)
+option(MYPROJECT_DELAYLOAD_CUDA "(Windows only) If enabled the CUDA DLLs will be a soft delay-load dependency and NifTK can run without them." OFF)
+mark_as_advanced(MYPROJECT_DELAYLOAD_CUDA)
+set(MYPROJECT_CUDA_ARCH_BIN "" CACHE STRING "CUDA compute capability to build for.") # See: https://en.wikipedia.org/wiki/CUDA
+mark_as_advanced(MYPROJECT_CUDA_ARCH_BIN)
 
 if(BUILD_PYTHON_BINDINGS AND BUILD_QTVTKGUI)
   set(BUILD_QTVTKGUI OFF CACHE BOOL "Build QtVTK Gui." FORCE)
@@ -318,12 +325,13 @@ if(MYPROJECT_USE_QT)
 endif()
 
 if(MYPROJECT_USE_QT AND NOT Qt5_DIR)
-  message(FATAL " Qt was required but not found")
+  message(FATAL_ERROR "Qt was required but not found")
 endif()
 
 if(BUILD_VTK)
   message("Configuring VTK with VTK_VERSION=${VTK_VERSION} and VTK_BACKEND=${VTK_BACKEND}")
 endif()
+
 
 ######################################################################
 # Setup the path to load CMake macros, and extra CMake files.
@@ -395,6 +403,29 @@ if(MSVC)
     message(STATUS "  '${variable}': ${${variable}}")
   endforeach()
   message(STATUS "")
+endif()
+
+
+######################################################################
+# Try finding CUDA before SuperBuild, so that hopefully these vars
+# are more likely to be set consistently throughought all dependencies.
+######################################################################
+if(MYPROJECT_USE_CUDA)
+  if( "${MYPROJECT_CUDA_ARCH_BIN}" STREQUAL "")
+    message(FATAL_ERROR "If you turn MYPROJECT_USE_CUDA, you must specify a target architecture in MYPROJECT_CUDA_ARCH_BIN.")
+  endif()
+  find_package(CUDA)
+  if(CUDA_FOUND)
+    include_directories(${CUDA_TOOLKIT_INCLUDE})
+    add_definitions(-DMYPROJECT_USE_CUDA)
+    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};-DMYPROJECT_USE_CUDA")
+    message("Found CUDA, version ${CUDA_VERSION_STRING}")
+    if(APPLE)
+      set(CMAKE_SHARED_LINKER_FLAGS "-F/Library/Frameworks ${CMAKE_SHARED_LINKER_FLAGS}")
+    endif()
+  else()
+    message(FATAL_ERROR "You requested CUDA, but it was not found. Please set CUDA_TOOLKIT_ROOT_DIR or turn MYPROJECT_USE_CUDA off.")
+  endif()
 endif()
 
 
@@ -666,7 +697,6 @@ endif(WIN32)
 # the way of turning these things off. So, be aware how your
 # dependencies are using OpenMP flags.
 ######################################################################
-
 if(MYPROJECT_USE_OPENMP)
   # Borrowed from PCL-1.8
   if((NOT APPLE) OR (NOT CMAKE_COMPILER_IS_GNUCXX) OR (GCC_VERSION VERSION_GREATER 4.2.1) OR (CMAKE_COMPILER_IS_CLANG))
