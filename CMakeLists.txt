@@ -74,6 +74,8 @@ option(MYPROJECT_DELAYLOAD_CUDA "(Windows only) If enabled the CUDA DLLs will be
 mark_as_advanced(MYPROJECT_DELAYLOAD_CUDA)
 set(MYPROJECT_CUDA_ARCH_BIN "" CACHE STRING "CUDA compute capability to build for.") # See: https://en.wikipedia.org/wiki/CUDA
 mark_as_advanced(MYPROJECT_CUDA_ARCH_BIN)
+set(MYPROJECT_USE_MPI "Use OpenMPI." OFF)
+mark_as_advanced(MYPROJECT_USE_MPI)
 
 if(BUILD_PYTHON_BINDINGS AND BUILD_QTVTKGUI)
   set(BUILD_QTVTKGUI OFF CACHE BOOL "Build QtVTK Gui." FORCE)
@@ -692,10 +694,7 @@ endif(WIN32)
 
 
 ######################################################################
-# Add support for OpenMP. Note, other libraries (e.g. PCL) in the
-# SuperBuild may automatically pick up OpenMP flags, and not provide
-# the way of turning these things off. So, be aware how your
-# dependencies are using OpenMP flags.
+# Add support for OpenMP.
 ######################################################################
 if(MYPROJECT_USE_OPENMP)
   # Borrowed from PCL-1.8
@@ -726,10 +725,21 @@ if(MYPROJECT_USE_OPENMP)
         endif(OPENMP_DLL)
       endif(MSVC)
     endif()
-  endif()
-  if(NOT OpenMP_FOUND)
+  else()
     message(FATAL_ERROR "You requested OpenMP, but your compiler does not support it. Please turn MYPROJECT_USE_OPENMP off.")
   endif()
+  if(NOT OpenMP_FOUND)
+    message(FATAL_ERROR "You requested OpenMP, but it was not found. Please turn MYPROJECT_USE_OPENMP off.")
+  endif()
+endif()
+
+
+######################################################################
+# Add support for MPI.
+######################################################################
+if(MYPROJECT_USE_MPI)
+  find_package(MPI REQUIRED) # This may find any implementation (c, c++, fortran).
+  message("Found MPI, with mpiexec=${MPIEXEC}")
 endif()
 
 
