@@ -8,7 +8,16 @@ CMakeCatchTemplate
 Purpose
 -------
 
-This is a demo project to demonstrate a reasonable structure for CMake/CTest/Catch based projects.
+This is a demo project to demonstrate a reasonable structure for [CMake](https://cmake.org/) based projects,
+that use [CTest](https://cmake.org/) to run unit tests via [Catch](https://github.com/catchorg/Catch2).
+
+
+Credits
+-------
+
+This project was developed as a teaching aid for UCL's ["Research Computing with C++"](http://rits.github-pages.ucl.ac.uk/research-computing-with-cpp/)
+course developed by [Dr. James Hetherington](http://www.ucl.ac.uk/research-it-services/people/james)
+and [Dr. Matt Clarkson](https://iris.ucl.ac.uk/iris/browse/profile?upi=MJCLA42).
 
 
 Features
@@ -30,6 +39,7 @@ The main features provided are:
 12. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.
 13. Support for MPI, which by default sets up the C++ libraries.
 
+
 Usage
 -----
 
@@ -44,7 +54,7 @@ The main way to use this project is:
  7. Fix anything that doesn't pass.
  8. Optionally strip out or turn off the bits you dont need.
  9. Check it all builds and the tests pass again.
-10. Commit it to your own git repository.
+10. Commit it to your own local git repository.
 11. Set the remote URL correctly.
 12. Push to remote.
 
