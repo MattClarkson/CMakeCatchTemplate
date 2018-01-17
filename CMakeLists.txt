@@ -83,8 +83,10 @@ include(mpAddPythonBindings)
 
 option(BUILD_PCL "Build PCL." OFF)
 if(BUILD_PCL)
+  find_package(OpenGL REQUIRED)
   option(BUILD_PCL_VIS "Build PCL Visualisation tools." OFF)
 endif()
+
 option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
 
@@ -212,14 +214,6 @@ if(WIN32)
   # Note: it's set to FORCE so that both CMAKE_BUILD_TYPE and CMAKE_CONFIGURATION_TYPES match up.
   set(CMAKE_CONFIGURATION_TYPES ${CMAKE_BUILD_TYPE} CACHE STRING "Build configurations to generate." FORCE)
   mark_as_advanced(CMAKE_CONFIGURATION_TYPES)
-endif()
-
-
-######################################################################
-# PCL requires OpenGL.
-######################################################################
-if(BUILD_PCL)
-  find_package(OpenGL REQUIRED)
 endif()
 
 
