@@ -347,7 +347,7 @@ endif()
 ###############################################################################################
 # The next section generates CMake code to enable external projects to correctly use MYPROJECT.
 ###############################################################################################
-include(mpSetupExternalConfig.cmake)
+include(mpSetupExternalConfig)
 
 
 ######################################################################
