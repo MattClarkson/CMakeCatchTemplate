@@ -85,13 +85,8 @@ include(mpAddFLANN)
 include(mpAddVTK)
 include(mpAddOpenCV)
 include(mpAddBoost)
+include(mpAddPCL)
 include(mpAddPythonBindings)
-
-option(BUILD_PCL "Build PCL." OFF)
-if(BUILD_PCL)
-  find_package(OpenGL REQUIRED)
-  option(BUILD_PCL_VIS "Build PCL Visualisation tools." OFF)
-endif()
 
 option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
@@ -114,26 +109,6 @@ endif()
 option(MYPROJECT_USE_QT "Use Qt." OFF)
 mark_as_advanced(MYPROJECT_USE_QT) # Qt gets baked into VTK, so really developers should not fiddle with this.
 
-if(BUILD_PCL AND NOT BUILD_Boost)
-  set(BUILD_Boost ON CACHE BOOL "Build Boost." FORCE)
-  message("Forcing BUILD_Boost to ON due to BUILD_PCL being ON.")
-endif()
-
-if(BUILD_PCL AND NOT BUILD_Eigen)
-  set(BUILD_Eigen ON CACHE BOOL "Build Eigen." FORCE)
-  message("Forcing BUILD_Eigen to ON due to BUILD_PCL being ON.")
-endif()
-
-if(BUILD_PCL AND NOT BUILD_FLANN)
-  set(BUILD_FLANN ON CACHE BOOL "Build FLANN." FORCE)
-  message("Forcing BUILD_FLANN to ON due to BUILD_PCL being ON.")
-endif()
-
-if(BUILD_PCL_VIS AND NOT BUILD_PCL)
-  set(BUILD_PCL_VIS ON CACHE BOOL "Build PCL Visualisation tools." FORCE)
-  message("Forcing BUILD_PCL_VIS to OFF due to BUILD_PCL being OFF.")
-endif()
-
 if(BUILD_QTVTKGUI AND NOT MYPROJECT_USE_QT)
   set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt." FORCE)
   message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QTVTKGUI being ON.")
@@ -154,11 +129,6 @@ if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
   set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
 endif()
 
-# due to https://github.com/PointCloudLibrary/pcl/issues/712
-if(APPLE AND BUILD_PCL AND BUILD_PCL_VIS AND "${VTK_VERSION}" STREQUAL "${DEFAULT_VTK_VERSION}")
-  set(VTK_VERSION "${FALLBACK_VTK_VERSION}")
-  message("Forcing VTK_VERSION to ${VTK_VERSION} as you are on Mac OSX and both BUILD_PCL and BUILD_PCL_VIS are on.")
-endif()
 if("${VTK_VERSION}" STREQUAL "${FALLBACK_VTK_VERSION}" AND "${VTK_BACKEND}" STREQUAL "${DEFAULT_VTK_BACKEND}")
   set(VTK_BACKEND "OpenGL")
   message("Forcing VTK_BACKEND to OpenGL instead of OpenGL2, due to VTK_VERSION=${VTK_VERSION}")
