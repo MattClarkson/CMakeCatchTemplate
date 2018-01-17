@@ -60,9 +60,6 @@ include(mpCreateGuiApplication)
 ######################################################################
 option(BUILD_TESTING "Build Unit tests." ON)
 option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
-if(WIN32 AND NOT BUILD_SHARED_LIBS)
-  add_definitions(-DMYPROJECT_STATIC)
-endif()
 option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via SuperBuild.cmake." ON)
 
 
@@ -569,6 +566,9 @@ if(WIN32)
   set(CMAKE_CXX_WARNING_LEVEL 2)
 endif(WIN32)
 
+if(WIN32 AND NOT BUILD_SHARED_LIBS)
+  add_definitions(-DMYPROJECT_STATIC)
+endif()
 
 ######################################################################
 # Add support for OpenMP.
