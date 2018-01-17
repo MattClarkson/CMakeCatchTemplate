@@ -63,8 +63,14 @@ if(WIN32 AND NOT BUILD_SHARED_LIBS)
   add_definitions(-DMYPROJECT_STATIC)
 endif()
 option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via SuperBuild.cmake." ON)
+
+
+######################################################################
+# Add some third party options. Note: Ordering is important.
+######################################################################
 include(mpAddgflags)
-option(BUILD_glog "Build glog." OFF)
+include(mpAddglog)
+
 option(BUILD_Boost "Build Boost." OFF)
 option(BUILD_Eigen "Build Eigen." OFF)
 option(BUILD_FLANN "Build FLANN." OFF)
@@ -101,11 +107,6 @@ endif()
 
 option(MYPROJECT_USE_QT "Use Qt." OFF)
 mark_as_advanced(MYPROJECT_USE_QT) # Qt gets baked into VTK, so really developers should not fiddle with this.
-
-if(BUILD_glog AND NOT BUILD_gflags)
-  set(BUILD_gflags ON CACHE BOOL "Build gflags." FORCE)
-  message("Forcing BUILD_gflags to ON due to BUILD_glog being ON.")
-endif()
 
 if(BUILD_PCL AND NOT BUILD_Boost)
   set(BUILD_Boost ON CACHE BOOL "Build Boost." FORCE)
@@ -492,7 +493,6 @@ configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY
 configure_file(${CMAKE_SOURCE_DIR}/README.txt ${CMAKE_BINARY_DIR}/README.txt @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/README.txt DESTINATION . COMPONENT CONFIG)
 configure_file(${CMAKE_SOURCE_DIR}/INSTALLATION.txt ${CMAKE_BINARY_DIR}/INSTALLATION.txt @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/CMake/Findglog.cmake.in ${CMAKE_BINARY_DIR}/Findglog.cmake @ONLY)
 
 
 ######################################################################
@@ -524,17 +524,9 @@ else()
   set(_library_sub_dir "lib")
 endif()
 
-if(BUILD_glog)
-  # Example of: Small library where Findglog.cmake is
-  #             generated into the build folder to always pick up our one.
-  find_package(glog REQUIRED)
-  include_directories(${glog_INCLUDE_DIR})
-  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${glog_LIBRARY})
-  add_definitions(-DBUILD_glog)
-  list(APPEND ADDITIONAL_SEARCH_PATHS "${glog_DIR}/${_library_sub_dir}")
-  configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/glog.txt ${CMAKE_BINARY_DIR}/LICENSE_glog.txt)
-  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_glog.txt DESTINATION . COMPONENT CONFIG)
-endif()
+# These are dependent on ordering
+include(mpIncludegflags)
+include(mpIncludeglog)
 
 if(BUILD_Eigen)
   # Example of: Header only library, where FindEigen.cmake is
