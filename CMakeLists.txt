@@ -70,9 +70,9 @@ option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via Supe
 ######################################################################
 include(mpAddgflags)
 include(mpAddglog)
+include(mpAddEigen)
 
 option(BUILD_Boost "Build Boost." OFF)
-option(BUILD_Eigen "Build Eigen." OFF)
 option(BUILD_FLANN "Build FLANN." OFF)
 option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_VTK "Build VTK." OFF)
@@ -527,18 +527,7 @@ endif()
 # These are dependent on ordering
 include(mpIncludegflags)
 include(mpIncludeglog)
-
-if(BUILD_Eigen)
-  # Example of: Header only library, where FindEigen.cmake is
-  #             in ${CMAKE_SOURCE_DIR}/CMake, which itself
-  #             works because Eigen_ROOT and Eigen_INCLUDE_DIR
-  #             are passed in from SuperBuild level.
-  find_package(Eigen REQUIRED)
-  include_directories(${Eigen_INCLUDE_DIR})
-  add_definitions(-DBUILD_Eigen)
-  configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/Eigen.txt ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt)
-  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_Eigen.txt DESTINATION . COMPONENT CONFIG)
-endif()
+include(mpIncludeEigen)
 
 if(BUILD_Boost OR BUILD_PYTHON_BINDINGS)
   # Example of:
