@@ -71,9 +71,9 @@ option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via Supe
 include(mpAddgflags)
 include(mpAddglog)
 include(mpAddEigen)
+include(mpAddFLANN)
 
 option(BUILD_Boost "Build Boost." OFF)
-option(BUILD_FLANN "Build FLANN." OFF)
 option(BUILD_OpenCV "Build OpenCV." OFF)
 option(BUILD_VTK "Build VTK." OFF)
 option(BUILD_PCL "Build PCL." OFF)
