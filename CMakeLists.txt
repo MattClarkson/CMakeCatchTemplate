@@ -404,9 +404,9 @@ endforeach()
 include_directories(${CMAKE_SOURCE_DIR}/Code/Lib)
 
 
-##########################################################################################
-# The next two generate CMake code to enable external projects to correctly use MYPROJECT.
-##########################################################################################
+###############################################################################################
+# The next section generates CMake code to enable external projects to correctly use MYPROJECT.
+###############################################################################################
 configure_file(${CMAKE_SOURCE_DIR}/UseMyProject.cmake.in ${CMAKE_BINARY_DIR}/UseMyProject.cmake @ONLY IMMEDIATE)
 configure_file(${CMAKE_SOURCE_DIR}/MyProjectConfig.cmake.in ${CMAKE_BINARY_DIR}/MyProjectConfig.cmake @ONLY IMMEDIATE)
 if(NOT BUILDING_GUIS)
