@@ -54,6 +54,7 @@ include(mpMacroInstallHeaders)
 include(mpMacroInstallLibrary)
 include(mpCreateGuiApplication)
 
+
 ######################################################################
 # Set main build options.
 ######################################################################
@@ -74,13 +75,13 @@ include(mpAddEigen)
 include(mpAddFLANN)
 include(mpAddOpenCV)
 include(mpAddBoost)
+include(mpAddPythonBindings)
 
 option(BUILD_VTK "Build VTK." OFF)
 option(BUILD_PCL "Build PCL." OFF)
 if(BUILD_PCL)
   option(BUILD_PCL_VIS "Build PCL Visualisation tools." OFF)
 endif()
-option(BUILD_PYTHON_BINDINGS "Build Python Bindings." OFF)
 option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
 option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
 option(MYPROJECT_USE_OPENMP "Use OpenMP." OFF)
@@ -146,20 +147,6 @@ endif()
 if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
   message("Forcing BUILD_SHARED_LIBS to ON due to BUILD_QMLDEMO being ON.")
   set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
-endif()
-
-if(BUILD_PYTHON_BINDINGS)
-  find_package(PythonInterp REQUIRED)
-  message("Found python interpreter: ${PYTHON_EXECUTABLE}")
-  find_package(PythonLibs REQUIRED)
-  message("Found python library version: ${PYTHONLIBS_VERSION_STRING}")
-  list(APPEND MYPROJECT_BOOST_LIBS "system")
-  if (${PYTHON_VERSION_MAJOR} EQUAL 3 AND WITHIN_SUBBUILD)
-    list(APPEND MYPROJECT_BOOST_LIBS "python3")
-  else()
-    list(APPEND MYPROJECT_BOOST_LIBS "python")
-  endif()
-  list(REMOVE_DUPLICATES MYPROJECT_BOOST_LIBS)
 endif()
 
 
@@ -519,6 +506,7 @@ include(mpIncludegflags)
 include(mpIncludeglog)
 include(mpIncludeEigen)
 include(mpIncludeBoost)
+include(mpIncludePythonBindings)
 include(mpIncludeOpenCV)
 
 if(BUILD_VTK)
@@ -570,12 +558,6 @@ if(BUILD_PCL)
   list(APPEND ADDITIONAL_SEARCH_PATHS "${FLANN_DIR}/${_library_sub_dir}")
   configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/PCL.txt ${CMAKE_BINARY_DIR}/LICENSE_PCL.txt)
   install(FILES ${CMAKE_BINARY_DIR}/LICENSE_PCL.txt DESTINATION . COMPONENT CONFIG)
-endif()
-
-if(BUILD_PYTHON_BINDINGS)
-  include_directories(${PYTHON_INCLUDE_DIRS})
-  link_libraries(${PYTHON_LIBRARIES})
-  link_libraries(${Boost_LIBRARIES})
 endif()
 
 
