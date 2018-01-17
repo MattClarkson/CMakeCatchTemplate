@@ -14,7 +14,6 @@
 
 option(BUILD_Boost "Build Boost." OFF)
 
-set(MYPROJECT_BOOST_LIBS)
 if(BUILD_Boost)
   list(APPEND MYPROJECT_BOOST_LIBS "filesystem")
   list(APPEND MYPROJECT_BOOST_LIBS "system")

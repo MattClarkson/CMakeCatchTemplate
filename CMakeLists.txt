@@ -82,6 +82,15 @@ include(mpSetupTesting)
 
 
 ######################################################################
+# Define variables that we carry through to sub-directories.
+######################################################################
+set(_known_apps "")             # Temp variable.
+set(BUILDING_GUIS OFF)          # Whether or not any GUI projects are on.
+set(ADDITIONAL_SEARCH_PATHS "") # List of all folders to search for .dlls when packaging, and setting up Visual Studio paths.
+set(MYPROJECT_BOOST_LIBS "")    # List of Boost libraries
+
+
+######################################################################
 # Add some third party packages. Note: Ordering is very important.
 # If you don't want one, you can just search for the package name
 # (e.g. VTK) in this file, and remove all those lines you don't want.
@@ -93,16 +102,8 @@ include(mpAddFLANN)
 include(mpAddVTK)
 include(mpAddOpenCV)
 include(mpAddBoost)
-include(mpAddPCL)
 include(mpAddPythonBindings)
-
-
-######################################################################
-# Define variables that we carry through to sub-directories.
-######################################################################
-set(_known_apps "")             # Temp variable.
-set(BUILDING_GUIS OFF)          # Whether or not any GUI projects are on.
-set(ADDITIONAL_SEARCH_PATHS "") # List of all folders to search for .dlls when packaging, and setting up Visual Studio paths.
+include(mpAddPCL)
 
 
 ######################################################################
