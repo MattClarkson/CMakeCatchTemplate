@@ -230,15 +230,6 @@ endif()
 
 
 ######################################################################
-# Make sure Git is available.
-######################################################################
-find_package(Git REQUIRED)
-if (WIN32)
-  set(GITCOMMAND ${GIT_EXECUTABLE})
-endif()
-
-
-######################################################################
 # PCL requires OpenGL.
 ######################################################################
 if(BUILD_PCL)
@@ -416,6 +407,15 @@ if(BUILD_TESTING)
   configure_file(CMake/CTestContinuous.cmake.in ${CMAKE_BINARY_DIR}/CTestContinuous.cmake @ONLY)
 
 endif(BUILD_TESTING)
+
+
+######################################################################
+# Make sure Git is available, as SuperBuild may need to do updates.
+######################################################################
+find_package(Git REQUIRED)
+if (WIN32)
+  set(GITCOMMAND ${GIT_EXECUTABLE})
+endif()
 
 
 ######################################################################
