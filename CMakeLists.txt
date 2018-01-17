@@ -129,11 +129,7 @@ if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
   set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
 endif()
 
-if("${VTK_VERSION}" STREQUAL "${FALLBACK_VTK_VERSION}" AND "${VTK_BACKEND}" STREQUAL "${DEFAULT_VTK_BACKEND}")
-  set(VTK_BACKEND "OpenGL")
-  message("Forcing VTK_BACKEND to OpenGL instead of OpenGL2, due to VTK_VERSION=${VTK_VERSION}")
-endif()
-
+include(mpSetupVTKBackend)
 
 ######################################################################
 # This is a list of all known GUI apps. Used for things like
