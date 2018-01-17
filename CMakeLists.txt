@@ -44,6 +44,17 @@ endif()
 
 
 ######################################################################
+# Setup the path to load CMake macros, and extra CMake files.
+######################################################################
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake)
+include(mitkMacroEmptyExternalProject)
+include(mitkFunctionCheckCompilerFlags)
+include(mpMacroInstallCommandLineApp)
+include(mpMacroInstallHeaders)
+include(mpMacroInstallLibrary)
+include(mpCreateGuiApplication)
+
+######################################################################
 # Set main build options.
 ######################################################################
 option(BUILD_TESTING "Build Unit tests." ON)
@@ -52,7 +63,7 @@ if(WIN32 AND NOT BUILD_SHARED_LIBS)
   add_definitions(-DMYPROJECT_STATIC)
 endif()
 option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via SuperBuild.cmake." ON)
-option(BUILD_gflags "Build gflags." OFF)
+include(mpAddgflags)
 option(BUILD_glog "Build glog." OFF)
 option(BUILD_Boost "Build Boost." OFF)
 option(BUILD_Eigen "Build Eigen." OFF)
@@ -113,7 +124,7 @@ endif()
 
 if(BUILD_PCL_VIS AND NOT BUILD_PCL)
   set(BUILD_PCL_VIS ON CACHE BOOL "Build PCL Visualisation tools." FORCE)
-  message("Forcing BUILD_PCL_VIS to OFF due to BUILD_PCL being OFF.") 
+  message("Forcing BUILD_PCL_VIS to OFF due to BUILD_PCL being OFF.")
 endif()
 
 if(BUILD_QTVTKGUI AND NOT MYPROJECT_USE_QT)
@@ -335,21 +346,6 @@ if(BUILD_VTK)
 endif()
 
 
-######################################################################
-# Setup the path to load CMake macros, and extra CMake files.
-######################################################################
-set(CMAKE_MODULE_PATH
-    ${CMAKE_BINARY_DIR}
-    ${CMAKE_SOURCE_DIR}/CMake
-    ${CMAKE_MODULE_PATH}
-   )
-include(mitkMacroEmptyExternalProject)
-include(mitkFunctionCheckCompilerFlags)
-include(mpMacroInstallCommandLineApp)
-include(mpMacroInstallHeaders)
-include(mpMacroInstallLibrary)
-include(mpCreateGuiApplication)
-
 
 ######################################################################
 # Choose C++ standard
@@ -481,6 +477,12 @@ message("CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
 
 
 ######################################################################
+# Additionally add the build folder, now we are building main project.
+######################################################################
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+
+
+######################################################################
 # Copy some reference files to output.
 ######################################################################
 configure_file(${CMAKE_SOURCE_DIR}/Documentation/License.dox ${CMAKE_BINARY_DIR}/Doxygen/License.dox)
@@ -491,7 +493,6 @@ configure_file(${CMAKE_SOURCE_DIR}/README.txt ${CMAKE_BINARY_DIR}/README.txt @ON
 install(FILES ${CMAKE_BINARY_DIR}/README.txt DESTINATION . COMPONENT CONFIG)
 configure_file(${CMAKE_SOURCE_DIR}/INSTALLATION.txt ${CMAKE_BINARY_DIR}/INSTALLATION.txt @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/CMake/Findglog.cmake.in ${CMAKE_BINARY_DIR}/Findglog.cmake @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/CMake/Findgflags.cmake.in ${CMAKE_BINARY_DIR}/Findgflags.cmake @ONLY)
 
 
 ######################################################################
@@ -523,27 +524,6 @@ else()
   set(_library_sub_dir "lib")
 endif()
 
-if(BUILD_gflags)
-  # Example of: Small library where Findgflags.cmake is
-  #             generated into the build folder to always pick up our one.
-  find_package(gflags REQUIRED)
-  find_package(Threads REQUIRED)
-  include_directories(${gflags_INCLUDE_DIR})
-  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${gflags_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
-  add_definitions(-DBUILD_gflags)
-  if(WIN32)
-    add_definitions(-DGOOGLE_GLOG_DLL_DECL=)
-    list(APPEND ALL_THIRD_PARTY_LIBRARIES Shlwapi)
-  endif()
-  if(WIN32)
-    list(APPEND ADDITIONAL_SEARCH_PATHS "${gflags_DIR}/Lib")
-  else()
-    list(APPEND ADDITIONAL_SEARCH_PATHS "${gflags_DIR}/${_library_sub_dir}")
-  endif()
-  configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/gflags.txt ${CMAKE_BINARY_DIR}/LICENSE_gflags.txt)
-  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_gflags.txt DESTINATION . COMPONENT CONFIG)
-endif()
-
 if(BUILD_glog)
   # Example of: Small library where Findglog.cmake is
   #             generated into the build folder to always pick up our one.
@@ -557,7 +537,10 @@ if(BUILD_glog)
 endif()
 
 if(BUILD_Eigen)
-  # Example of: Header only library
+  # Example of: Header only library, where FindEigen.cmake is
+  #             in ${CMAKE_SOURCE_DIR}/CMake, which itself
+  #             works because Eigen_ROOT and Eigen_INCLUDE_DIR
+  #             are passed in from SuperBuild level.
   find_package(Eigen REQUIRED)
   include_directories(${Eigen_INCLUDE_DIR})
   add_definitions(-DBUILD_Eigen)
@@ -571,19 +554,20 @@ if(BUILD_Boost OR BUILD_PYTHON_BINDINGS)
   #   (2) Mostly header library, some compiled libraries
   #   (3) Your CMake probably has a standard FindBoost.cmake in its distribution,
   #       so Boost is probably found by CMake's own FindBoost.cmake.
+  #       which is an example of the 'module' mode.
   set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib)
   set(Boost_LIBRARY_DIR_DEBUG ${BOOST_ROOT}/lib)
-  set(Boost_LIBRARY_DIR_RELEASE ${BOOST_ROOT}/lib) 
+  set(Boost_LIBRARY_DIR_RELEASE ${BOOST_ROOT}/lib)
   set(BOOST_INCLUDEDIR ${BOOST_ROOT}/include)
   #set(Boost_DEBUG ON)
-  set(Boost_NO_SYSTEM_PATHS ON)
-  set(Boost_NO_BOOST_CMAKE ON)
+  set(Boost_NO_SYSTEM_PATHS ON)  # Notice: How we can turn off System Paths
+  set(Boost_NO_BOOST_CMAKE ON)   # Notice: We can CMake not to assume this is the CMake-ified version of the boost project.
   if(BUILD_SHARED_LIBS)
     set(Boost_USE_STATIC_LIBS OFF)
     set(Boost_USE_STATIC_RUNTIME OFF)
   else()
     set(Boost_USE_STATIC_LIBS ON)
-    set(Boost_USE_STATIC_RUNTIME ON) 
+    set(Boost_USE_STATIC_RUNTIME ON)
   endif()
   find_package(Boost 1.64 EXACT COMPONENTS ${MYPROJECT_BOOST_LIBS} REQUIRED)
   include_directories(${Boost_INCLUDE_DIRS})
@@ -606,10 +590,10 @@ endif()
 
 if(BUILD_OpenCV)
   # Example of:
-  #   (1) CMake doesn't include an OpenCV FindModule.cmake,
-  #       but the installed package contains a OpenCVConfig.cmake
-  #       which is found via the CMAKE_PREFIX_PATH. So, this is an
-  #       example of 'config' mode.
+  #   (1) When SuperBuild builds OpenCV it adds OpenCV_DIR to CMAKE_PREFIX_PATH
+  #       So, OpenCV is found using OpenCV's provided OpenCVConfig.cmake.
+  #       Its called 'config mode' when running find_package
+  #       Its the preferred approach because OpenCV can then control what is exposed.
   find_package(OpenCV REQUIRED)
   include_directories(${OpenCV_INCLUDE_DIRS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${OpenCV_LIBS})
