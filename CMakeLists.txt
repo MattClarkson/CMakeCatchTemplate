@@ -19,10 +19,10 @@ set(MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION 3.5)
 cmake_minimum_required(VERSION ${MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION})
 
 
-##################################################################################
+###################################################################################
 # Set some CMake Policies.
-# See http://cmake.org/cmake/help/cmake-2-8-docs.html#section_Policies for details
-##################################################################################
+# See http://cmake.org/cmake/help/cmake-2-8-docs.html#section_Policies for details.
+###################################################################################
 set(project_policies )
 foreach(policy ${project_policies})
   if(POLICY ${policy})
@@ -76,7 +76,7 @@ option(MYPROJECT_USE_MPI "Use MPI." OFF)
 
 
 ######################################################################
-# Setup Testing (dashboards etc.)
+# Setup Testing (dashboards etc.).
 ######################################################################
 include(mpSetupTesting)
 
@@ -87,14 +87,15 @@ include(mpSetupTesting)
 set(_known_apps "")             # Temp variable.
 set(BUILDING_GUIS OFF)          # Whether or not any GUI projects are on.
 set(ADDITIONAL_SEARCH_PATHS "") # List of all folders to search for .dlls when packaging, and setting up Visual Studio paths.
-set(MYPROJECT_BOOST_LIBS "")    # List of Boost libraries
+set(MYPROJECT_BOOST_LIBS "")    # List of Boost libraries.
+set(QT5_LINK_LIBRARIES)         # List of all Qt libraries.
 
 
-######################################################################
+#######################################################################
 # Add some third party packages. Note: Ordering is very important.
-# If you don't want one, you can just search for the package name
+# Also, if you don't want one, you can just search for the package name
 # (e.g. VTK) in this file, and remove all those lines you don't want.
-######################################################################
+#######################################################################
 include(mpAddgflags)
 include(mpAddglog)
 include(mpAddEigen)
@@ -126,13 +127,13 @@ set(NIFTK_EP_TARBALL_LOCATION "http://cmic.cs.ucl.ac.uk/platform/dependencies")
 
 
 ######################################################################
-# MYPROJECT uses KWStyle for checking the coding style
+# MYPROJECT uses KWStyle for checking the coding style.
 ######################################################################
 include(${CMAKE_SOURCE_DIR}/Utilities/KWStyle/MYPROJECTKWStyle.cmake)
 
 
 ######################################################################
-# MYPROJECT uses CppCheck for static analysis
+# MYPROJECT uses CppCheck for static analysis.
 ######################################################################
 include(${CMAKE_SOURCE_DIR}/Utilities/CppCheck/MYPROJECTCppCheck.cmake)
 
@@ -161,7 +162,6 @@ endif()
 ######################################################################
 # Check for Qt early, as VTK may need it in SuperBuild.
 ######################################################################
-set(QT5_LINK_LIBRARIES)
 include(mpIncludeQt)
 
 
@@ -346,7 +346,7 @@ endif()
 
 
 ###############################################################################################
-# The next section generates CMake code to enable external projects to correctly use MYPROJECT.
+# The next call generates CMake code to enable external projects to correctly use MYPROJECT.
 ###############################################################################################
 include(mpSetupExternalConfig)
 
