@@ -70,11 +70,11 @@ include(mpAddgflags)
 include(mpAddglog)
 include(mpAddEigen)
 include(mpAddFLANN)
+include(mpAddVTK)
 include(mpAddOpenCV)
 include(mpAddBoost)
 include(mpAddPythonBindings)
 
-option(BUILD_VTK "Build VTK." OFF)
 option(BUILD_PCL "Build PCL." OFF)
 if(BUILD_PCL)
   option(BUILD_PCL_VIS "Build PCL Visualisation tools." OFF)
@@ -146,24 +146,10 @@ if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
   set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
 endif()
 
-
-######################################################################
-# Setup VTK version and backend for SuperBuild.
-######################################################################
-set(DEFAULT_VTK_VERSION "8.0.1")
-set(FALLBACK_VTK_VERSION "6.1.0") # Should only be needed on Mac, if PCL visualization tools are on.
-set(DEFAULT_VTK_BACKEND "OpenGL2")
-set(VTK_VERSION "${DEFAULT_VTK_VERSION}")
-set(VTK_BACKEND "${DEFAULT_VTK_BACKEND}")
-
 # due to https://github.com/PointCloudLibrary/pcl/issues/712
 if(APPLE AND BUILD_PCL AND BUILD_PCL_VIS AND "${VTK_VERSION}" STREQUAL "${DEFAULT_VTK_VERSION}")
   set(VTK_VERSION "${FALLBACK_VTK_VERSION}")
   message("Forcing VTK_VERSION to ${VTK_VERSION} as you are on Mac OSX and both BUILD_PCL and BUILD_PCL_VIS are on.")
-endif()
-if(APPLE AND BUILD_OpenCV AND "${VTK_VERSION}" STREQUAL "${DEFAULT_VTK_VERSION}")
-  set(VTK_VERSION "${FALLBACK_VTK_VERSION}")
-  message("Forcing VTK_VERSION to ${VTK_VERSION} as you are on Mac OSX and BUILD_OpenCV is on.")
 endif()
 if("${VTK_VERSION}" STREQUAL "${FALLBACK_VTK_VERSION}" AND "${VTK_BACKEND}" STREQUAL "${DEFAULT_VTK_BACKEND}")
   set(VTK_BACKEND "OpenGL")
@@ -500,26 +486,7 @@ include(mpIncludeEigen)
 include(mpIncludeBoost)
 include(mpIncludePythonBindings)
 include(mpIncludeOpenCV)
-
-if(BUILD_VTK)
-  # Example of:
-  #   (1) Large Rendering library - oooooh, pretty pictures etc.
-  #   (2) When SuperBuild builds VTK it adds VTK_DIR to CMAKE_PREFIX_PATH
-  #       So, VTK is found using VTK's provided VTKConfig.cmake.
-  #       Its called 'config mode' when running find_package
-  #       Its the preferred approach because VTK can then control what is exposed.
-  find_package(VTK REQUIRED)
-  include(${VTK_USE_FILE})
-  list(APPEND ALL_THIRD_PARTY_LIBRARIES ${VTK_LIBRARIES})
-  add_definitions(-DBUILD_VTK)
-  add_definitions(-DBUILD_VTK_${VTK_BACKEND})
-  list(APPEND ADDITIONAL_SEARCH_PATHS "${VTK_INSTALL_PREFIX}/${_library_sub_dir}")
-  if(UNIX AND NOT APPLE)
-    list(APPEND ADDITIONAL_SEARCH_PATHS "${VTK_INSTALL_PREFIX}/lib64")
-  endif()
-  configure_file(${CMAKE_SOURCE_DIR}/Documentation/Licenses/VTK.txt ${CMAKE_BINARY_DIR}/LICENSE_VTK.txt)
-  install(FILES ${CMAKE_BINARY_DIR}/LICENSE_VTK.txt DESTINATION . COMPONENT CONFIG)
-endif()
+include(mpIncludeVTK)
 
 if(BUILD_PCL)
   # Example of:
