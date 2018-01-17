@@ -316,11 +316,6 @@ if(MYPROJECT_USE_QT AND NOT Qt5_DIR)
   message(FATAL_ERROR "Qt was required but not found")
 endif()
 
-if(BUILD_VTK)
-  message("Configuring VTK with VTK_VERSION=${VTK_VERSION} and VTK_BACKEND=${VTK_BACKEND}")
-endif()
-
-
 
 ######################################################################
 # Choose C++ standard
