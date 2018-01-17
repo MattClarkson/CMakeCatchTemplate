@@ -70,7 +70,13 @@ option(MYPROJECT_USE_MPI "Use MPI." OFF)
 
 
 ######################################################################
-# Add some third party options. Note: Ordering is important.
+# Setup Testing (dashboards etc.)
+######################################################################
+include(mpSetupTesting)
+
+
+######################################################################
+# Add some third party packages. Note: Ordering is important.
 ######################################################################
 include(mpAddgflags)
 include(mpAddglog)
@@ -261,27 +267,6 @@ include(mpSetupMSVCRuntime)
 # are more likely to be set consistently throughought all dependencies.
 ######################################################################
 include(mpIncludeCUDA)
-
-
-######################################################################
-# Configure Dart testing support.  This should be done before any
-# message(FATAL_ERROR ...) commands are invoked.
-######################################################################
-include(${CMAKE_ROOT}/Modules/Dart.cmake)
-mark_as_advanced(TCL_TCLSH DART_ROOT)
-enable_testing()
-
-if(BUILD_TESTING)
-  set(BUILDNAME "MYPROJECT" CACHE STRING "Name of build on the dashboard")
-  mark_as_advanced(BUILDNAME)
-
-  # Setup file for setting custom ctest vars
-  configure_file(CMake/CTestCustom.cmake.in ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
-
-  # Setup continuous test script
-  configure_file(CMake/CTestContinuous.cmake.in ${CMAKE_BINARY_DIR}/CTestContinuous.cmake @ONLY)
-
-endif(BUILD_TESTING)
 
 
 ######################################################################
