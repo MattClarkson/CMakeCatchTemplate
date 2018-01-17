@@ -101,11 +101,6 @@ if(BUILD_PYTHON_BINDINGS AND BUILD_QMLDEMO)
   message("Forcing BUILD_QMLDEMO to OFF as you want a python module.")
 endif()
 
-if(BUILD_PYTHON_BINDINGS AND BUILD_SHARED_LIBS)
-  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Shared Libraries" FORCE)
-  message("Forcing BUILD_SHARED_LIBS to OFF as you want a python module.")
-endif()
-
 option(MYPROJECT_USE_QT "Use Qt." OFF)
 mark_as_advanced(MYPROJECT_USE_QT) # Qt gets baked into VTK, so really developers should not fiddle with this.
 

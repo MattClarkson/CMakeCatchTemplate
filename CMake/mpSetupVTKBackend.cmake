@@ -12,13 +12,7 @@
 #
 #============================================================================*/
 
-if(BUILD_PYTHON_BINDINGS)
-  include_directories(${PYTHON_INCLUDE_DIRS})
-  link_libraries(${PYTHON_LIBRARIES})
-  link_libraries(${Boost_LIBRARIES})
-endif()
-
-if(BUILD_PYTHON_BINDINGS AND BUILD_SHARED_LIBS)
-  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Shared Libraries" FORCE)
-  message("Forcing BUILD_SHARED_LIBS to OFF as you want a python module.")
+if("${VTK_VERSION}" STREQUAL "${FALLBACK_VTK_VERSION}" AND "${VTK_BACKEND}" STREQUAL "${DEFAULT_VTK_BACKEND}")
+  set(VTK_BACKEND "OpenGL")
+  message("Forcing VTK_BACKEND to OpenGL instead of OpenGL2, due to VTK_VERSION=${VTK_VERSION}")
 endif()
