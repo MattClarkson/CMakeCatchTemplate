@@ -31,9 +31,9 @@ foreach(policy ${project_policies})
 endforeach()
 
 
-##############################################################################
-# Setup project name, and version.
-##############################################################################
+###############################################################################
+# Setup project name, and version. Version number gets baked into package name.
+###############################################################################
 if (BUILD_SUPERBUILD)
   project(MYPROJECT-superbuild)
   set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
@@ -47,6 +47,11 @@ endif()
 # Setup the path to load CMake macros, and extra CMake files.
 ######################################################################
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake)
+
+
+######################################################################
+# Include extra CMake stuff for configuring this project.
+######################################################################
 include(mitkMacroEmptyExternalProject)
 include(mitkFunctionCheckCompilerFlags)
 include(mpMacroInstallCommandLineApp)
@@ -76,7 +81,7 @@ include(mpSetupTesting)
 
 
 ######################################################################
-# Add some third party packages. Note: Ordering is important.
+# Add some third party packages. Note: Ordering is very important.
 ######################################################################
 include(mpAddgflags)
 include(mpAddglog)
@@ -88,60 +93,25 @@ include(mpAddBoost)
 include(mpAddPCL)
 include(mpAddPythonBindings)
 
-option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
-option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
 
-if(BUILD_PYTHON_BINDINGS AND BUILD_QTVTKGUI)
-  set(BUILD_QTVTKGUI OFF CACHE BOOL "Build QtVTK Gui." FORCE)
-  message("Forcing BUILD_QTVTKGUI to OFF as you want a python module.")
-endif()
+######################################################################
+# Define variables that we carry through sub-directories.
+######################################################################
+set(_known_apps "")             # Temp variable.
+set(BUILDING_GUIS OFF)          # Whether or not any GUI projects are on.
+set(ADDITIONAL_SEARCH_PATHS "") # List of all folders to search for .dlls.
 
-if(BUILD_PYTHON_BINDINGS AND BUILD_QMLDEMO)
-  set(BUILD_QMLDEMO OFF CACHE BOOL "Build QMLDemo Gui." FORCE)
-  message("Forcing BUILD_QMLDEMO to OFF as you want a python module.")
-endif()
 
-option(MYPROJECT_USE_QT "Use Qt." OFF)
-mark_as_advanced(MYPROJECT_USE_QT) # Qt gets baked into VTK, so really developers should not fiddle with this.
+######################################################################
+# Add our Gui projects.
+######################################################################
+include(mpAddGuiProjects)
 
-if(BUILD_QTVTKGUI AND NOT MYPROJECT_USE_QT)
-  set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt." FORCE)
-  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QTVTKGUI being ON.")
-endif()
 
-if(BUILD_QTVTKGUI AND NOT BUILD_VTK)
-  set(BUILD_VTK ON CACHE BOOL "Build VTK." FORCE)
-  message("Forcing BUILD_VTK to ON due to BUILD_QTVTKGUI being ON.")
-endif()
-
-if(BUILD_QMLDEMO AND NOT MYPROJECT_USE_QT)
-  set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt." FORCE)
-  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QMLDEMO being ON.")
-endif()
-
-if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
-  message("Forcing BUILD_SHARED_LIBS to ON due to BUILD_QMLDEMO being ON.")
-  set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
-endif()
-
+######################################################################
+# Double check VTK versions.
+######################################################################
 include(mpSetupVTKBackend)
-
-######################################################################
-# This is a list of all known GUI apps. Used for things like
-# creating Mac OSX bundles, and each command line app gets copied
-# into each OSX bundle.
-######################################################################
-set(_known_apps "")
-set(BUILDING_GUIS OFF)
-if (BUILD_QTVTKGUI)
-  list(APPEND _known_apps QtVTKApp)
-  set(BUILDING_GUIS ON)
-endif()
-if (BUILD_QMLDEMO)
-  list(APPEND _known_apps QMLDemo)
-  set(BUILDING_GUIS ON)
-endif()
-set_property(GLOBAL PROPERTY MYPROJECT_GUI_APPS ${_known_apps})
 
 
 ##############################################################################
@@ -184,12 +154,6 @@ if(WIN32)
 endif()
 
 
-#########################################################################
-# This is used to build up a list of all directories to search for .dlls.
-#########################################################################
-set(ADDITIONAL_SEARCH_PATHS "")
-
-
 ######################################################################
 # Check for Qt early, as VTK may need it in SuperBuild.
 ######################################################################
@@ -198,7 +162,7 @@ include(mpIncludeQt)
 
 
 ######################################################################
-# Choose C++ standard
+# Choose C++ standard. Currently 11, as we try to support VS2013.
 ######################################################################
 set(MYPROJECT_CXX_STANDARD 11)
 set(CMAKE_CXX_EXTENSIONS 0)
