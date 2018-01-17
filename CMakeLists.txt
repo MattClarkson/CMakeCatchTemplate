@@ -45,6 +45,7 @@ endif()
 
 ######################################################################
 # Setup the path to load CMake macros, and extra CMake files.
+# This means cmake can 'see' or 'use' files in the CMake folder.
 ######################################################################
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake)
 
@@ -68,9 +69,9 @@ option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via SuperBuild.cmake." ON)
 option(MYPROJECT_USE_OPENMP "Use OpenMP." OFF)
 option(MYPROJECT_USE_CUDA "Use CUDA." OFF)
-option(MYPROJECT_DELAYLOAD_CUDA "(Windows only) If enabled the CUDA DLLs will be a soft delay-load dependency and NifTK can run without them." OFF)
+option(MYPROJECT_DELAYLOAD_CUDA "(Windows only) If enabled the CUDA DLLs will be a soft delay-load dependency and MYPROJECT can run without them." OFF)
 mark_as_advanced(MYPROJECT_DELAYLOAD_CUDA)
-set(MYPROJECT_CUDA_ARCH_BIN "" CACHE STRING "CUDA compute capability to build for.") # See: https://en.wikipedia.org/wiki/CUDA
+set(MYPROJECT_CUDA_ARCH_BIN "" CACHE STRING "CUDA compute capability to build for - user should specify it.") # See: https://en.wikipedia.org/wiki/CUDA
 option(MYPROJECT_USE_MPI "Use MPI." OFF)
 
 
@@ -82,6 +83,8 @@ include(mpSetupTesting)
 
 ######################################################################
 # Add some third party packages. Note: Ordering is very important.
+# If you don't want one, you can just search for the package name
+# (e.g. VTK) in this file, and remove all those lines you don't want.
 ######################################################################
 include(mpAddgflags)
 include(mpAddglog)
@@ -95,21 +98,21 @@ include(mpAddPythonBindings)
 
 
 ######################################################################
-# Define variables that we carry through sub-directories.
+# Define variables that we carry through to sub-directories.
 ######################################################################
 set(_known_apps "")             # Temp variable.
 set(BUILDING_GUIS OFF)          # Whether or not any GUI projects are on.
-set(ADDITIONAL_SEARCH_PATHS "") # List of all folders to search for .dlls.
+set(ADDITIONAL_SEARCH_PATHS "") # List of all folders to search for .dlls when packaging, and setting up Visual Studio paths.
 
 
 ######################################################################
-# Add our Gui projects.
+# Add our Gui projects. If you don't want Gui stuff, remove this line.
 ######################################################################
 include(mpAddGuiProjects)
 
 
 ######################################################################
-# Double check VTK versions.
+# Make sure at this point in this file, VTK is the correct version.
 ######################################################################
 include(mpSetupVTKBackend)
 
@@ -206,7 +209,7 @@ endif()
 ######################################################################
 # Now, if required, do the SuperBuild
 # If we are doing SuperBuild
-#   We configure up to this point (see the return() statement)
+#   We configure up to this point (see the return() statement below)
 #   and then we call SuperBuild.cmake, which builds all the
 #   dependencies as CMake ExternalProjects, and then also builds
 #   MYPROJECT as an ExternalProject. However instead of downloading
@@ -263,7 +266,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 
 ######################################################################
-# Add Mandatory Requirements
+# Create a list of all libraries to link to, and all dirs to search.
 ######################################################################
 set(ALL_THIRD_PARTY_LIBRARIES)
 list(APPEND ADDITIONAL_SEARCH_PATHS "${CMAKE_BINARY_DIR}/bin/${VS_BUILD_TYPE}")
