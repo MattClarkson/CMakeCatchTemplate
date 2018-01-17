@@ -251,7 +251,7 @@ endif()
 
 
 ######################################################################
-# Force MSVC runtime. Depends on BUILD_SHARED_LIBS
+# Force MSVC runtime. Depends on BUILD_SHARED_LIBS.
 ######################################################################
 if(MSVC)
   set(variables
@@ -291,23 +291,7 @@ endif()
 # Try finding CUDA before SuperBuild, so that hopefully these vars
 # are more likely to be set consistently throughought all dependencies.
 ######################################################################
-if(MYPROJECT_USE_CUDA)
-  if( "${MYPROJECT_CUDA_ARCH_BIN}" STREQUAL "")
-    message(FATAL_ERROR "If you turn MYPROJECT_USE_CUDA, you must specify a target architecture in MYPROJECT_CUDA_ARCH_BIN.")
-  endif()
-  find_package(CUDA)
-  if(CUDA_FOUND)
-    include_directories(${CUDA_TOOLKIT_INCLUDE})
-    add_definitions(-DMYPROJECT_USE_CUDA)
-    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS};-DMYPROJECT_USE_CUDA")
-    message("Found CUDA, version ${CUDA_VERSION_STRING}")
-    if(APPLE)
-      set(CMAKE_SHARED_LINKER_FLAGS "-F/Library/Frameworks ${CMAKE_SHARED_LINKER_FLAGS}")
-    endif()
-  else()
-    message(FATAL_ERROR "You requested CUDA, but it was not found. Please set CUDA_TOOLKIT_ROOT_DIR or turn MYPROJECT_USE_CUDA off.")
-  endif()
-endif()
+include(mpIncludeCUDA)
 
 
 ######################################################################
