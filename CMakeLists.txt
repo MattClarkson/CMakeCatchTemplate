@@ -332,17 +332,6 @@ endforeach()
 include_directories(${CMAKE_SOURCE_DIR}/Code/Lib)
 
 
-###############################################################################################
-# The next section generates CMake code to enable external projects to correctly use MYPROJECT.
-###############################################################################################
-configure_file(${CMAKE_SOURCE_DIR}/UseMyProject.cmake.in ${CMAKE_BINARY_DIR}/UseMyProject.cmake @ONLY IMMEDIATE)
-configure_file(${CMAKE_SOURCE_DIR}/MyProjectConfig.cmake.in ${CMAKE_BINARY_DIR}/MyProjectConfig.cmake @ONLY IMMEDIATE)
-if(NOT BUILDING_GUIS)
-  install(FILES ${CMAKE_BINARY_DIR}/UseMyProject.cmake DESTINATION . COMPONENT CONFIG)
-  install(FILES ${CMAKE_BINARY_DIR}/MyProjectConfig.cmake DESTINATION . COMPONENT CONFIG)
-endif()
-
-
 ######################################################################
 # Add our main code folders. This is where all our functionality is.
 ######################################################################
@@ -355,8 +344,14 @@ if(BUILD_TESTING)
 endif()
 
 
+###############################################################################################
+# The next section generates CMake code to enable external projects to correctly use MYPROJECT.
+###############################################################################################
+include(mpSetupExternalConfig.cmake)
+
+
 ######################################################################
-# Packaging code.
+# Packaging code. Read the README.md.
 ######################################################################
 include(mpSetupPackaging)
 
