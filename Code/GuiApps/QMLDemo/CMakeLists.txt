@@ -48,4 +48,4 @@ set(APP_LIBS)
 target_link_libraries(${APP_NAME} ${APP_LIBS} ${QT5_LINK_LIBRARIES})
 
 # This sorts out the fixup_bundle.
-mpCreateGuiApplication(${APP_NAME} "${ADDITIONAL_SEARCH_PATHS}")
+mpMacroCreateGuiApplication(${APP_NAME} "${ADDITIONAL_SEARCH_PATHS}")

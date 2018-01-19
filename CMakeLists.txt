@@ -58,7 +58,7 @@ include(mitkFunctionCheckCompilerFlags)
 include(mpMacroInstallCommandLineApp)
 include(mpMacroInstallHeaders)
 include(mpMacroInstallLibrary)
-include(mpCreateGuiApplication)
+include(mpMacroCreateGuiApplication)
 
 
 ######################################################################

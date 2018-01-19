@@ -12,7 +12,7 @@
 #
 #============================================================================*/
 
-macro(mpCreateGuiApplication APP_NAME ADDITIONAL_SEARCH_PATHS)
+macro(mpMacroCreateGuiApplication APP_NAME ADDITIONAL_SEARCH_PATHS)
 
   # Installs the main application.
 
