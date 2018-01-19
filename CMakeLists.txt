@@ -71,7 +71,7 @@ option(MYPROJECT_USE_OPENMP "Use OpenMP." OFF)
 option(MYPROJECT_USE_CUDA "Use CUDA." OFF)
 option(MYPROJECT_DELAYLOAD_CUDA "(Windows only) If enabled the CUDA DLLs will be a soft delay-load dependency and MYPROJECT can run without them." OFF)
 mark_as_advanced(MYPROJECT_DELAYLOAD_CUDA)
-set(MYPROJECT_CUDA_ARCH_BIN "" CACHE STRING "CUDA compute capability to build for - user should specify it.") # See: https://en.wikipedia.org/wiki/CUDA
+set(MYPROJECT_CUDA_ARCH_BIN "" CACHE STRING "CUDA compute capability to build for - user must specify it.") # See: https://en.wikipedia.org/wiki/CUDA
 option(MYPROJECT_USE_MPI "Use MPI." OFF)
 
 
