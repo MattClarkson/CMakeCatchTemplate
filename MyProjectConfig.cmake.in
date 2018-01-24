@@ -32,3 +32,8 @@ set(MYPROJECT_README_FILE  "${MYPROJECT_INSTALL_PREFIX}/README.md")
 set(MYPROJECT_LICENSE_FILE "${MYPROJECT_INSTALL_PREFIX}/LICENSE.txt")
 
 set(MYPROJECT_USE_FILE "${MYPROJECT_INSTALL_PREFIX}/UseMyProject.cmake")
+
+# See: https://www.stack.nl/~dimitri/doxygen/manual/external.html
+# And: I'm assuming this would only be used in Build folder.
+set(MYPROJECT_DOXYGEN_TAG_PREFIX "Doxygen/MYPROJECT.tag")
+set(MYPROJECT_DOXYGEN_TAG_FILE "@CMAKE_CURRENT_BINARY_DIR@/Doxygen/MYPROJECT.tag")

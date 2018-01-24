@@ -254,10 +254,9 @@ configure_file(${CMAKE_SOURCE_DIR}/INSTALLATION.txt ${CMAKE_BINARY_DIR}/INSTALLA
 
 
 ######################################################################
-# Provide support for manually running Doxygen in build folder.
+# Provide support for running Doxygen in build folder.
 ######################################################################
-configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/myprojectdoxygen.pl.in ${CMAKE_BINARY_DIR}/myprojectdoxygen.pl)
-configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/doxygen.config.in ${CMAKE_BINARY_DIR}/doxygen.config)
+include(mpSetupDoxygen)
 
 
 ######################################################################
