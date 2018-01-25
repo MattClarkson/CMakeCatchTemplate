@@ -141,7 +141,7 @@ include(${CMAKE_SOURCE_DIR}/Utilities/CppCheck/MYPROJECTCppCheck.cmake)
 ######################################################################
 # MYPROJECT uses Doxygen for documentation generation.
 ######################################################################
-include(mpSetupDocs)
+include(mpAddDocs)
 
 
 ######################################################################
@@ -290,6 +290,13 @@ include(mpIncludePythonBindings)
 include(mpIncludeOpenCV)
 include(mpIncludeVTK)
 include(mpIncludePCL)
+
+
+######################################################################
+# This must come after all the external packages that need
+# their documentation bundling in with this packages documentation.
+######################################################################
+include(mpIncludeDocs)
 
 
 ######################################################################

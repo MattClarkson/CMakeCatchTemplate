@@ -13,13 +13,9 @@
 #============================================================================*/
 
 option(BUILD_Docs "Build Docs using Doxygen." OFF)
-if(BUILD_Docs)
-  find_package(Doxygen REQUIRED)
-  configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/myprojectdoxygen.pl.in ${CMAKE_BINARY_DIR}/myprojectdoxygen.pl)
-  configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/doxygen.config.in ${CMAKE_BINARY_DIR}/doxygen.config)
-  add_custom_target(docs ALL
-    ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/doxygen.config
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMENT "Generating API documentation with Doxygen" VERBATIM
-  )
-endif()
+
+# See: https://www.stack.nl/~dimitri/doxygen/manual/external.html
+# When you do find_package on an external project, you should also append
+# ext1/ext1.tag=../../ext1/html i.e. name=path
+# to this variable:
+set(MYPROJECT_EXTERNAL_DOXYGEN_TAGFILES)
