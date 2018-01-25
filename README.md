@@ -52,13 +52,14 @@ The main way to use this project is:
  5. Check it all builds.
  6. Check the unit tests pass.
  7. Fix anything that doesn't pass.
- 8. Optionally strip out or turn off the bits you dont need.
+ 8. Optionally strip out or turn off the bits you don't need. This is easier than adding things if you don't know much CMake.
  9. Check it all builds and the tests pass again.
 10. Commit it to your own local git repository.
 11. Set the remote URL correctly.
 12. Push to remote.
 
-So, right from your first commit, you will have a lot of functionality inherited from this project, along with the full commit log.
+So, right from your first commit, you will have a lot of functionality inherited from this project. If you started from a git repo, you will also have the full commit log. If
+you started from an exported source tree, you won't have the full commit log.
 
 
 A Note on Packaging
@@ -169,7 +170,7 @@ To switch between Debug and Release mode, use CMake to set:
 
   * CMAKE_BUILD_TYPE:STRING=Debug|Release
 
-Note: Only Debug and Release are supported. 
+Note: Only Debug and Release are supported.
 
 As mentioned in lectures, CMake will find 3rd party libraries using either
   1. a FindModule.cmake included within CMake's distribution, e.g. Boost
