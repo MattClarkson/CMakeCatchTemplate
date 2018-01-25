@@ -62,11 +62,11 @@ find_and_replace_string(){
 }
 
 find_and_replace_filename(){
-
     find . -name "*$1*" > $HOME/tmp.$$.files.txt
     wc=`cat $HOME/tmp.$$.files.txt | wc -l`
     if [ $wc -gt 0 ]; then
-      cat $HOME/tmp.$$.files.txt | sed -e "p;s/$1/$2/" | xargs -n2 git mv --force
+      change_name_command="cat $HOME/tmp.$$.files.txt | sed -e \"p;s/$1/$2/\" | xargs -n2 ${move_command}"
+      eval ${change_name_command}
     fi
 }
 
