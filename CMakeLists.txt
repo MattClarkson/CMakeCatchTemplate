@@ -139,6 +139,12 @@ include(${CMAKE_SOURCE_DIR}/Utilities/CppCheck/MYPROJECTCppCheck.cmake)
 
 
 ######################################################################
+# MYPROJECT uses Doxygen for documentation generation.
+######################################################################
+include(mpSetupDocs)
+
+
+######################################################################
 # Setting supported build types. Should ONLY be Release or Debug.
 ######################################################################
 if(NOT CMAKE_BUILD_TYPE)
@@ -251,12 +257,6 @@ configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY
 configure_file(${CMAKE_SOURCE_DIR}/README.txt ${CMAKE_BINARY_DIR}/README.txt @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/README.txt DESTINATION . COMPONENT CONFIG)
 configure_file(${CMAKE_SOURCE_DIR}/INSTALLATION.txt ${CMAKE_BINARY_DIR}/INSTALLATION.txt @ONLY)
-
-
-######################################################################
-# Provide support for running Doxygen in build folder.
-######################################################################
-include(mpSetupDocs)
 
 
 ######################################################################
