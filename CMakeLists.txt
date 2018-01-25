@@ -139,6 +139,12 @@ include(${CMAKE_SOURCE_DIR}/Utilities/CppCheck/MYPROJECTCppCheck.cmake)
 
 
 ######################################################################
+# MYPROJECT uses Doxygen for documentation generation.
+######################################################################
+include(mpAddDocs)
+
+
+######################################################################
 # Setting supported build types. Should ONLY be Release or Debug.
 ######################################################################
 if(NOT CMAKE_BUILD_TYPE)
@@ -254,13 +260,6 @@ configure_file(${CMAKE_SOURCE_DIR}/INSTALLATION.txt ${CMAKE_BINARY_DIR}/INSTALLA
 
 
 ######################################################################
-# Provide support for manually running Doxygen in build folder.
-######################################################################
-configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/myprojectdoxygen.pl.in ${CMAKE_BINARY_DIR}/myprojectdoxygen.pl)
-configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/doxygen.config.in ${CMAKE_BINARY_DIR}/doxygen.config)
-
-
-######################################################################
 # Organise module/plugin/etc projects better within the IDE.
 ######################################################################
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -291,6 +290,13 @@ include(mpIncludePythonBindings)
 include(mpIncludeOpenCV)
 include(mpIncludeVTK)
 include(mpIncludePCL)
+
+
+######################################################################
+# This must come after all the external packages that need
+# their documentation bundling in with this packages documentation.
+######################################################################
+include(mpIncludeDocs)
 
 
 ######################################################################
