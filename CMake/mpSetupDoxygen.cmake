@@ -12,8 +12,8 @@
 #
 #============================================================================*/
 
-option(BUILD_Doxygen "Build Docs using Doxygen." OFF)
-if(BUILD_Doxygen)
+option(BUILD_Docs "Build Docs using Doxygen." OFF)
+if(BUILD_Docs)
   find_package(Doxygen REQUIRED)
   configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/myprojectdoxygen.pl.in ${CMAKE_BINARY_DIR}/myprojectdoxygen.pl)
   configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/doxygen.config.in ${CMAKE_BINARY_DIR}/doxygen.config)
