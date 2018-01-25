@@ -40,6 +40,12 @@ OLD_SHORT_DESCRIPTION='A software package for whatever.'
 OLD_NAMESPACE='mp'
 
 #### Replacements ###
+move_command="mv"
+is_git_repo=`find . -type d -name "[.]git" | wc -l`
+if [ ${is_git_repo} -gt 0 ]; then
+  echo "Running on a git repository."
+  move_command="git mv --force"
+fi
 
 find_and_replace_string(){
     find . -type f | grep -v "[.]git" > $HOME/tmp.$$.files.txt
@@ -56,6 +62,7 @@ find_and_replace_string(){
 }
 
 find_and_replace_filename(){
+
     find . -name "*$1*" > $HOME/tmp.$$.files.txt
     wc=`cat $HOME/tmp.$$.files.txt | wc -l`
     if [ $wc -gt 0 ]; then
@@ -90,7 +97,7 @@ find_and_replace_filename "$OLD_PROJECT_NAME_CAPS" "$NEW_PROJECT_NAME_CAPS"
 
 # mp prefixes
 nc=`echo ${OLD_NAMESPACE} | wc -c | tr -d '[:space:]'`
-for g in .h .cpp .ui
+for g in .h .cpp .ui .cmake
 do
   find . -name "${OLD_NAMESPACE}*${g}" > $HOME/tmp.$$.${OLD_NAMESPACE}.${g}.txt
   for f in `cat $HOME/tmp.$$.${OLD_NAMESPACE}.${g}.txt`
@@ -117,5 +124,3 @@ done
 rm $HOME/tmp.$$.prefixes.txt
 rm $HOME/tmp.$$.prefixes.sorted.txt
 rm $HOME/tmp.$$.prefixes.all.txt
-
-
