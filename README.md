@@ -52,7 +52,7 @@ The main way to use this project is:
  5. Check it all builds.
  6. Check the unit tests pass.
  7. Fix anything that doesn't pass.
- 8. Optionally strip out or turn off the bits you don't need. This is easier than adding things if you don't know much CMake.
+ 8. Optionally strip out or turn off the bits you don't need.
  9. Check it all builds and the tests pass again.
 10. Commit it to your own local git repository.
 11. Set the remote URL correctly.
@@ -69,8 +69,8 @@ There are many different issues and combinations to test when packaging an appli
 
  * System: Windows / Linux / Mac.
  * Linkage: Shared libraries / Static libraries.
- * Executable style: Command line applications / GUI applications / Command line applications bundled with GUI applications.
- * With or without python.
+ * Executable style: Command line applications / GUI applications / Command line applications bundled with GUI applications bundled together.
+ * With or without python modules.
  * The developer runs ```make install``` to install it in a specific directory, linked against known libraries, in known locations.
  * The developer runs ```make package``` to make a relocatable and distributable bundle so that another user can install it anywhere.
 
@@ -83,14 +83,14 @@ Assumptions:
  2. This project does not currently support dynamically discovered plugins that have no link-time dependency. This would require more CMake coding. This isn't too difficult, if its a pure Qt plugin. Follow Qt documentation to compile it, but then you'd have to write packaging code yourself, as most Qt documentation assumes you are using ```qmake``` not ```cmake```.
  3. You have built your own Qt.
 
+Note that Assumption 2 refers to dynamically loaded (i.e. discovered at run-time, with no link-time dependency) plugins which are not supported.
+This project does support shared libraries (i.e. required at link time and run time, but shared between other libraries).
+
 Lots of people would like to take a shortcut and use Qt that comes with a package manager on Linux,
 or with Homebrew or Macports on MacOSX, or pre-compiled on Windows. I believe its quicker to
 learn how to build it, than it is to cope with the wrong version, or a version that does not have the features you want.
 It really doesn't take long to learn, and is quicker than debugging all the numerous packaging and deployment problems that
 come from using a Qt that you did not compile yourself.
-
-Note that Assumption 2 refers to dynamically loaded (i.e. discovered at run-time, with no link-time dependency) plugins which are not supported.
-This project does support shared libraries (i.e. required at link time and run time, but shared between other libraries).
 
 Therefore, this project is intended for the following 2 Use-Cases:
 
