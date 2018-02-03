@@ -20,3 +20,5 @@ if(BUILD_QMLDEMO AND Qt5_DIR)
   add_subdirectory(QMLDemo)
 endif()
 
+add_subdirectory(QOpenGLDemo)
+
