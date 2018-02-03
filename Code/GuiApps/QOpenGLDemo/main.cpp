@@ -32,8 +32,8 @@ int main(int argc, char *argv[])
   QSurfaceFormat::setDefaultFormat(fmt);
 
   mp::OpenGLMainWindow mainWindow;
-  mp::OpenGLWidget::SetTransparent(true);
-  if (mp::OpenGLWidget::IsTransparent())
+  mp::OpenGLWidget::setTransparent(true);
+  if (mp::OpenGLWidget::isTransparent())
   {
     mainWindow.setAttribute(Qt::WA_TranslucentBackground);
     mainWindow.setAttribute(Qt::WA_NoSystemBackground, false);

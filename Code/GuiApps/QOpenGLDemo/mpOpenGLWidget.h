@@ -39,8 +39,8 @@ public:
   OpenGLWidget(QWidget *parent = 0);
   ~OpenGLWidget();
 
-  static bool IsTransparent() { return m_Transparent; }
-  static void SetTransparent(bool t) { m_Transparent = t; }
+  static bool isTransparent() { return m_Transparent; }
+  static void setTransparent(bool t) { m_Transparent = t; }
 
   QSize minimumSizeHint() const override;
   QSize sizeHint() const override;
