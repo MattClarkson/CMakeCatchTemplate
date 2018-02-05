@@ -24,7 +24,7 @@ class OpenGLWidget;
 
 /**
  * \class OpenGLMainWindow
- * \brief Placeholder main window just to hold our OpenGLWidget for demo purposes.
+ * \brief Placeholder QMainWindow subclass just to hold our OpenGLWidget for demo purposes.
  */
 class OpenGLMainWindow : public QMainWindow
 {

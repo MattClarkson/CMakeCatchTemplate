@@ -19,6 +19,7 @@
 
 namespace mp
 {
+
 bool OpenGLWidget::m_Transparent = false;
 
 //-----------------------------------------------------------------------------
@@ -27,7 +28,6 @@ OpenGLWidget::OpenGLWidget(QWidget *parent)
 , m_Program(nullptr)
 {
   m_Core = QSurfaceFormat::defaultFormat().profile() == QSurfaceFormat::CoreProfile;
-  // On systems that support it, the widget will become transparent apart from rendering.
   if (m_Transparent)
   {
     QSurfaceFormat fmt = format();
@@ -68,7 +68,7 @@ void OpenGLWidget::cleanup()
   this->makeCurrent();
   delete m_Program;
   m_Program = nullptr;
-  doneCurrent();
+  this->doneCurrent();
 }
 
 
@@ -83,16 +83,25 @@ void OpenGLWidget::initializeGL()
   // the signal will be followed by an invocation of initializeGL() where we
   // can recreate all resources.
   connect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &OpenGLWidget::cleanup);
-
   initializeOpenGLFunctions();
-  glClearColor(0, 0, 0, m_Transparent ? 0 : 1);
+
+  float vertices[] =
+  {
+    0.0f, 0.5f, // Vertex 1 (X, Y)
+    0.5f, -0.5f, // Vertex 2 (X, Y)
+    -0.5f, -0.5f // Vertex 3 (X, Y)
+  };
+  GLuint vbo;
+  glGenBuffers(1, &vbo); // Generate 1 buffer
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 }
 
 
 //-----------------------------------------------------------------------------
 void OpenGLWidget::paintGL()
 {
-
+  glClearColor(0, 0, 0, m_Transparent ? 0 : 1);
 }
 
 
