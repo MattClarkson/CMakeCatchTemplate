@@ -20,15 +20,16 @@
 namespace mp
 {
 
-bool OpenGLWidget::m_Transparent = false;
+bool OpenGLWidget::m_IsTransparent = false;
 
 //-----------------------------------------------------------------------------
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 : QOpenGLWidget(parent)
+, m_IsCore(false)
 , m_Program(nullptr)
 {
-  m_Core = QSurfaceFormat::defaultFormat().profile() == QSurfaceFormat::CoreProfile;
-  if (m_Transparent)
+  m_IsCore = QSurfaceFormat::defaultFormat().profile() == QSurfaceFormat::CoreProfile;
+  if (m_IsTransparent)
   {
     QSurfaceFormat fmt = format();
     fmt.setAlphaBufferSize(8);
@@ -101,7 +102,7 @@ void OpenGLWidget::initializeGL()
 //-----------------------------------------------------------------------------
 void OpenGLWidget::paintGL()
 {
-  glClearColor(0, 0, 0, m_Transparent ? 0 : 1);
+  glClearColor(0, 0, 0, m_IsTransparent ? 0 : 1);
 }
 
 

@@ -39,8 +39,8 @@ public:
   OpenGLWidget(QWidget *parent = 0);
   ~OpenGLWidget();
 
-  static bool isTransparent() { return m_Transparent; }
-  static void setTransparent(bool t) { m_Transparent = t; }
+  static bool isTransparent() { return m_IsTransparent; }
+  static void setTransparent(bool t) { m_IsTransparent = t; }
 
   QSize minimumSizeHint() const override;
   QSize sizeHint() const override;
@@ -57,11 +57,11 @@ protected:
 
 private:
 
-  static bool m_Transparent;
-  bool m_Core;
-  QOpenGLVertexArrayObject m_VAO;
-  QOpenGLBuffer m_VBO;
-  QOpenGLShaderProgram *m_Program;
+  static bool               m_IsTransparent;
+  bool                      m_IsCore;
+  QOpenGLVertexArrayObject  m_VAO;
+  QOpenGLBuffer             m_VBO;
+  QOpenGLShaderProgram     *m_Program;
 };
 
 } // end namespace
