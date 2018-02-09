@@ -62,6 +62,7 @@ private:
   GLuint                    m_FragmentShader;
   GLuint                    m_ShaderProgram;
   GLuint                    m_PositionAttribute;
+  GLuint                    m_ColourAttribute;
 };
 
 } // end namespace
