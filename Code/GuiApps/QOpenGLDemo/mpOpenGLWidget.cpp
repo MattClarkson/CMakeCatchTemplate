@@ -13,20 +13,34 @@
 =============================================================================*/
 
 #include "mpOpenGLWidget.h"
-#include <QMouseEvent>
-#include <QOpenGLShaderProgram>
 #include <QCoreApplication>
+#include <QDebug>
 
 namespace mp
 {
 
 bool OpenGLWidget::m_IsTransparent = false;
 
+static const char *vertexShaderSource =
+    "#version 150 core\n"
+    "in vec2 position;\n"
+    "void main()\n"
+    "{\n"
+    "  gl_Position = vec4(position, 0.0, 1.0);\n"
+    "}\n";
+
+static const char *fragmentShaderSource =
+    "#version 150 core\n"
+    "out vec4 outColor;\n"
+    "void main()\n"
+    "{\n"
+    "  outColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
+    "}\n";
+
 //-----------------------------------------------------------------------------
 OpenGLWidget::OpenGLWidget(QWidget *parent)
 : QOpenGLWidget(parent)
 , m_IsCore(false)
-, m_Program(nullptr)
 {
   m_IsCore = QSurfaceFormat::defaultFormat().profile() == QSurfaceFormat::CoreProfile;
   if (m_IsTransparent)
@@ -62,13 +76,14 @@ QSize OpenGLWidget::sizeHint() const
 //-----------------------------------------------------------------------------
 void OpenGLWidget::cleanup()
 {
-  if (m_Program == nullptr)
-  {
-    return;
-  }
   this->makeCurrent();
-  delete m_Program;
-  m_Program = nullptr;
+
+  glDeleteProgram(m_ShaderProgram);
+  glDeleteShader(m_FragmentShader);
+  glDeleteShader(m_VertexShader);
+  glDeleteBuffers(1, &m_VBO);
+  glDeleteVertexArrays(1, &m_VAO);
+
   this->doneCurrent();
 }
 
@@ -84,25 +99,53 @@ void OpenGLWidget::initializeGL()
   // the signal will be followed by an invocation of initializeGL() where we
   // can recreate all resources.
   connect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &OpenGLWidget::cleanup);
+
   initializeOpenGLFunctions();
 
-  float vertices[] =
-  {
-    0.0f, 0.5f, // Vertex 1 (X, Y)
-    0.5f, -0.5f, // Vertex 2 (X, Y)
-    -0.5f, -0.5f // Vertex 3 (X, Y)
+  glGenVertexArrays(1, &m_VAO);
+  glBindVertexArray(m_VAO);
+  glGenBuffers(1, &m_VBO);
+
+  GLfloat vertices[] = {
+     0.0f,  0.5f,
+     0.5f, -0.5f,
+    -0.5f, -0.5f
   };
-  GLuint vbo;
-  glGenBuffers(1, &vbo); // Generate 1 buffer
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+  glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  m_VertexShader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(m_VertexShader, 1, &vertexShaderSource, NULL);
+  glCompileShader(m_VertexShader);
+
+  m_FragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(m_FragmentShader, 1, &fragmentShaderSource, NULL);
+  glCompileShader(m_FragmentShader);
+
+  m_ShaderProgram = glCreateProgram();
+  glAttachShader(m_ShaderProgram, m_VertexShader);
+  glAttachShader(m_ShaderProgram, m_FragmentShader);
+  glBindFragDataLocation(m_ShaderProgram, 0, "outColor");
+  glLinkProgram(m_ShaderProgram);
+  glUseProgram(m_ShaderProgram);
+
+  m_PositionAttribute = glGetAttribLocation(m_ShaderProgram, "position");
+  glEnableVertexAttribArray(m_PositionAttribute);
+  glVertexAttribPointer(m_PositionAttribute, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 
 //-----------------------------------------------------------------------------
 void OpenGLWidget::paintGL()
 {
-  glClearColor(0, 0, 0, m_IsTransparent ? 0 : 1);
+  const qreal retinaScale = this->devicePixelRatio();
+  glViewport(0, 0, width() * retinaScale, height() * retinaScale);
+
+  glClearColor(0.0f, 0.0f, 0.0f, m_IsTransparent ? 0 : 1);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 

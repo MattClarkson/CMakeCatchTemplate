@@ -23,7 +23,6 @@ int main(int argc, char *argv[])
   QApplication app(argc, argv);
   QCoreApplication::setApplicationName("QOpenGLDemo");
   QCoreApplication::setOrganizationName("MYPROJECT");
-  QCoreApplication::setApplicationVersion(QT_VERSION_STR);
 
   QSurfaceFormat fmt;
   fmt.setDepthBufferSize(24);
@@ -32,7 +31,7 @@ int main(int argc, char *argv[])
   QSurfaceFormat::setDefaultFormat(fmt);
 
   mp::OpenGLMainWindow mainWindow;
-  mp::OpenGLWidget::setTransparent(true);
+  mp::OpenGLWidget::setTransparent(false);
   if (mp::OpenGLWidget::isTransparent())
   {
     mainWindow.setAttribute(Qt::WA_TranslucentBackground);

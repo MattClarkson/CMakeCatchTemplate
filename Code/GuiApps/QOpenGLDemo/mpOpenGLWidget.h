@@ -17,10 +17,6 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
-#include <QOpenGLVertexArrayObject>
-#include <QOpenGLBuffer>
-
-QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
 
 namespace mp
 {
@@ -59,9 +55,13 @@ private:
 
   static bool               m_IsTransparent;
   bool                      m_IsCore;
-  QOpenGLVertexArrayObject  m_VAO;
-  QOpenGLBuffer             m_VBO;
-  QOpenGLShaderProgram     *m_Program;
+
+  GLuint                    m_VAO;
+  GLuint                    m_VBO;
+  GLuint                    m_VertexShader;
+  GLuint                    m_FragmentShader;
+  GLuint                    m_ShaderProgram;
+  GLuint                    m_PositionAttribute;
 };
 
 } // end namespace
