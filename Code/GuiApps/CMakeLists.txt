@@ -12,13 +12,14 @@
 #
 #============================================================================*/
 
-if(BUILD_QTVTKGUI AND VTK_FOUND AND Qt5_DIR)
-  add_subdirectory(QtVTK)
+if(BUILD_QtVTKDemo AND VTK_FOUND AND Qt5_DIR)
+  add_subdirectory(QtVTKDemo)
 endif()
 
-if(BUILD_QMLDEMO AND Qt5_DIR)
+if(BUILD_QMLDemo AND Qt5_DIR)
   add_subdirectory(QMLDemo)
 endif()
 
-add_subdirectory(QOpenGLDemo)
-
+if(BUILD_QOpenGLDemo AND Qt5_DIR)
+  add_subdirectory(QOpenGLDemo)
+endif()
