@@ -33,7 +33,7 @@ The main features provided are:
  6. CppCheck config, so you can check for some performance, style and correctness issues, when you have CppCheck installed on your system.
  7. Doxygen config, so you can generate documentation via a ```make docs``` or DOCS task in Visual Studio.
  8. If your code is open-source, you can register with a Continuous Integration service, so this project provides Travis and Appveyor examples.
- 9. CPack setup to produce installers for GUI apps QtVTKApp and QMLDemo along with installation code for command line apps.
+ 9. CPack setup to produce installers for GUI apps QtVTKDemo and QMLDemo along with installation code for command line apps.
 10. An example of the CMake required to build python interfaces to your C++ code, using ```boost::python```.
 11. Support for OpenMP, which is passed through to FLANN, OpenCV and PCL.
 12. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.

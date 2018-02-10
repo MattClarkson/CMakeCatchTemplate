@@ -67,7 +67,7 @@ endif()
 # into each OSX bundle.
 ######################################################################
 if (BUILD_QtVTKDemo)
-  list(APPEND _known_apps QtVTKApp)
+  list(APPEND _known_apps QtVTKDemo)
   set(BUILDING_GUIS ON)
 endif()
 if (BUILD_QMLDemo)

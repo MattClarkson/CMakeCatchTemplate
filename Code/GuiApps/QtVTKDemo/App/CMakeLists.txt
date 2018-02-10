@@ -12,7 +12,7 @@
 #
 #============================================================================*/
 
-set(APP_NAME QtVTKApp)
+set(APP_NAME QtVTKDemo)
 
 set(APP_UIS
   mpMainWindow.ui
