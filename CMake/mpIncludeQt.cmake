@@ -14,10 +14,10 @@
 
 if(MYPROJECT_USE_QT)
   set(_qt_components Core Concurrent PrintSupport Script Sql Svg Xml XmlPatterns)
-  if(BUILD_QTVTKGUI)
+  if(BUILD_QtVTKDemo OR BUILD_QOpenGLDemo)
     list(APPEND _qt_components OpenGL Gui Widgets UiTools Help)
   endif()
-  if(BUILD_QMLDEMO)
+  if(BUILD_QMLDemo)
     list(APPEND _qt_components OpenGL Quick Qml)
   endif()
   if(UNIX AND NOT APPLE)
