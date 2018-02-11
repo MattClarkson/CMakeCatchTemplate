@@ -12,41 +12,53 @@
 #
 #============================================================================*/
 
+# Todo: Make macro to simplify this config.
 
-option(BUILD_QTVTKGUI "Build QtVTK Gui." OFF)
-option(BUILD_QMLDEMO "Build QMLDemo Gui" OFF)
+option(BUILD_QtVTKDemo "Build QtVTKDemo Gui." OFF)
+option(BUILD_QMLDemo "Build QMLDemo Gui." OFF)
+option(BUILD_QOpenGLDemo "Build QOpenGLDemo Gui." OFF)
 
-if(BUILD_PYTHON_BINDINGS AND BUILD_QTVTKGUI)
-  set(BUILD_QTVTKGUI OFF CACHE BOOL "Build QtVTK Gui." FORCE)
-  message("Forcing BUILD_QTVTKGUI to OFF as you want a python module.")
+if(BUILD_PYTHON_BINDINGS AND BUILD_QtVTKDemo)
+  set(BUILD_QtVTKDemo OFF CACHE BOOL "Build QtVTKDemo Gui." FORCE)
+  message("Forcing BUILD_QtVTKDemo to OFF as you want a python module.")
 endif()
 
-if(BUILD_PYTHON_BINDINGS AND BUILD_QMLDEMO)
-  set(BUILD_QMLDEMO OFF CACHE BOOL "Build QMLDemo Gui." FORCE)
-  message("Forcing BUILD_QMLDEMO to OFF as you want a python module.")
+if(BUILD_PYTHON_BINDINGS AND BUILD_QMLDemo)
+  set(BUILD_QMLDemo OFF CACHE BOOL "Build QMLDemo Gui." FORCE)
+  message("Forcing BUILD_QMLDemo to OFF as you want a python module.")
+endif()
+
+if(BUILD_PYTHON_BINDINGS AND BUILD_QOpenGLDemo)
+  set(BUILD_QOpenGLDemo OFF CACHE BOOL "Build QOpenGLDemo Gui." FORCE)
+  message("Forcing BUILD_QOpenGLDemo to OFF as you want a python module.")
 endif()
 
 option(MYPROJECT_USE_QT "Use Qt." OFF)
 mark_as_advanced(MYPROJECT_USE_QT) # Qt gets baked into VTK, so really developers should not fiddle with this.
 
-if(BUILD_QTVTKGUI AND NOT MYPROJECT_USE_QT)
+if(BUILD_QtVTKDemo AND NOT MYPROJECT_USE_QT)
   set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt." FORCE)
-  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QTVTKGUI being ON.")
+  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QtVTKDemo being ON.")
 endif()
 
-if(BUILD_QTVTKGUI AND NOT BUILD_VTK)
+if(BUILD_QtVTKDemo AND NOT BUILD_VTK)
   set(BUILD_VTK ON CACHE BOOL "Build VTK." FORCE)
-  message("Forcing BUILD_VTK to ON due to BUILD_QTVTKGUI being ON.")
+  message("Forcing BUILD_VTK to ON due to BUILD_QtVTKDemo being ON.")
 endif()
 
-if(BUILD_QMLDEMO AND NOT MYPROJECT_USE_QT)
+if(BUILD_QMLDemo AND NOT MYPROJECT_USE_QT)
   set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt." FORCE)
-  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QMLDEMO being ON.")
+  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QMLDemo being ON.")
 endif()
 
-if(BUILD_QMLDEMO AND NOT BUILD_SHARED_LIBS)
+if(BUILD_QMLDemo AND NOT BUILD_SHARED_LIBS)
   message("Forcing BUILD_SHARED_LIBS to ON due to BUILD_QMLDEMO being ON.")
   set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
+endif()
+
+if(BUILD_QOpenGLDemo AND NOT MYPROJECT_USE_QT)
+  set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt." FORCE)
+  message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QOpenGLDemo being ON.")
 endif()
 
 ######################################################################
@@ -54,12 +66,16 @@ endif()
 # creating Mac OSX bundles, and each command line app gets copied
 # into each OSX bundle.
 ######################################################################
-if (BUILD_QTVTKGUI)
-  list(APPEND _known_apps QtVTKApp)
+if (BUILD_QtVTKDemo)
+  list(APPEND _known_apps QtVTKDemo)
   set(BUILDING_GUIS ON)
 endif()
-if (BUILD_QMLDEMO)
+if (BUILD_QMLDemo)
   list(APPEND _known_apps QMLDemo)
+  set(BUILDING_GUIS ON)
+endif()
+if (BUILD_QOpenGLDemo)
+  list(APPEND _known_apps QOpenGLDemo)
   set(BUILDING_GUIS ON)
 endif()
 set_property(GLOBAL PROPERTY MYPROJECT_GUI_APPS ${_known_apps})

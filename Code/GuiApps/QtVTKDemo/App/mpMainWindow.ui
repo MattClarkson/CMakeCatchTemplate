@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>QtVTKApp</string>
+   <string>QtVTKDemo</string>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
    <bool>false</bool>

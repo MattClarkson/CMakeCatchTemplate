@@ -1,6 +1,6 @@
-#/*================================================================================
+#/*============================================================================
 #
-#  NiftyLink:  A software library to facilitate communication over OpenIGTLink.
+#  MYPROJECT: A software package for whatever.
 #
 #  Copyright (c) University College London (UCL). All rights reserved.
 #
@@ -10,9 +10,9 @@
 #
 #  See LICENSE.txt in the top level directory for details.
 #
-#=================================================================================*/
+#============================================================================*/
 
-set(APP_NAME QtVTKApp)
+set(APP_NAME QtVTKDemo)
 
 set(APP_UIS
   mpMainWindow.ui

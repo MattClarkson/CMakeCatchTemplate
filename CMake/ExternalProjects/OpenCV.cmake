@@ -92,6 +92,7 @@ if(NOT DEFINED OpenCV_DIR)
       -DWITH_QT:BOOL=OFF
       -DWITH_GTK:BOOL=OFF
       -DWITH_EIGEN:BOOL=OFF
+      -DWITH_WEBP:BOOL=OFF  # On Mac, with Homebrew, this is read-only which breaks packaging.
       -DWITH_FFMPEG:BOOL=${OPENCV_WITH_FFMPEG}
       -DWITH_OPENMP:BOOL=${MYPROJECT_USE_OPENMP}
       ${_vtk_options}
