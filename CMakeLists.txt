@@ -257,6 +257,7 @@ configure_file(${CMAKE_SOURCE_DIR}/README.md ${CMAKE_BINARY_DIR}/README.md @ONLY
 configure_file(${CMAKE_SOURCE_DIR}/README.txt ${CMAKE_BINARY_DIR}/README.txt @ONLY)
 install(FILES ${CMAKE_BINARY_DIR}/README.txt DESTINATION . COMPONENT CONFIG)
 configure_file(${CMAKE_SOURCE_DIR}/INSTALLATION.txt ${CMAKE_BINARY_DIR}/INSTALLATION.txt @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/MyProjectConfigure.h.in ${CMAKE_BINARY_DIR}/MyProjectConfigure.h @ONLY)
 
 
 ######################################################################
@@ -337,6 +338,7 @@ foreach(type LIBRARY RUNTIME ARCHIVE)
 endforeach()
 
 include_directories(${CMAKE_SOURCE_DIR}/Code/Lib)
+include_directories(${CMAKE_BINARY_DIR})
 
 
 ######################################################################

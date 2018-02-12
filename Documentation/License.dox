@@ -5,6 +5,10 @@
 \li \ref LicenseEigen
 \li \ref LicenseBoost
 \li \ref LicenseOpenCV
+\li \ref LicensePCL
+\li \ref LicenseVTK
+\li \ref Licensegflags
+\li \ref Licenseglog
 
 \section LicenseMYPROJECT The MYPROJECT License
 
@@ -21,5 +25,21 @@
 \section LicenseOpenCV The OpenCV License
 
 \include LICENSE_OpenCV.txt
+
+\section LicensePCL The PCL License
+
+\include LICENSE_PCL.txt
+
+\section LicenseVTK The VTK License
+
+\include LICENSE_VTK.txt
+
+\section Licensegflags The gflags License
+
+\include LICENSE_gflags.txt
+
+\section Licenseglog The glog License
+
+\include LICENSE_glog.txt
 
 */

@@ -15,14 +15,16 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QSurfaceFormat>
+#include "MyProjectConfigure.h"
 #include "mpOpenGLWidget.h"
 #include "mpOpenGLMainWindow.h"
 
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
-  QCoreApplication::setApplicationName("QOpenGLDemo");
-  QCoreApplication::setOrganizationName("MYPROJECT");
+  app.setOrganizationName("UCL");
+  app.setApplicationName("QOpenGLDemo");
+  app.setApplicationVersion(QString(MYPROJECT_VERSION_STRING));
 
   QSurfaceFormat fmt;
   fmt.setDepthBufferSize(24);

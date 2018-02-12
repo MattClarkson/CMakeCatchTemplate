@@ -13,10 +13,15 @@
 =============================================================================*/
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include "MyProjectConfigure.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+    app.setOrganizationName("UCL");
+    app.setApplicationName("QMLDemo");
+    app.setApplicationVersion(QString(MYPROJECT_VERSION_STRING));
+
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 	    
