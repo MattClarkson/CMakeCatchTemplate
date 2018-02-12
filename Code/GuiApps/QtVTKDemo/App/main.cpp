@@ -13,6 +13,7 @@
 =============================================================================*/
 
 #include <QVTKApplication.h>
+#include "MyProjectConfigure.h"
 #include "mpMainWindow.h"
 #include <mpVolumeRenderingModel.h>
 #include <QScopedPointer>
@@ -34,7 +35,8 @@ int main(int argc, char** argv)
 
   QVTKApplication app(argc, argv);
   app.setOrganizationName("UCL");
-  app.setApplicationName("Example QtVTK app.");
+  app.setApplicationName("QtVTKDemo");
+  app.setApplicationVersion(QString(MYPROJECT_VERSION_STRING));
 
   QScopedPointer<mp::VolumeRenderingModel> mb(new mp::VolumeRenderingModel());
 
