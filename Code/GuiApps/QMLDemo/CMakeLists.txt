@@ -14,6 +14,33 @@
 
 set(APP_NAME QMLDemo)
 
+set(APP_UIS
+)
+
+set(APP_SRCS
+  App/mpTriangleModel.cpp
+  App/mpTriangleRenderer.cpp
+)
+
+set(APP_MOC_HDRS
+  App/mpTriangleModel.h
+  App/mpTriangleRenderer.h
+)
+
+set(APP_HDRS
+)
+
+set(APP_RES
+  Resources/QMLDemo.rc
+)
+
+qt5_wrap_ui(QT5_UIS ${APP_UIS})
+qt5_wrap_cpp(QT5_MOCS ${APP_MOC_HDRS})
+qt5_add_resources(QT5_RES ${APP_RES})
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 # Install all Qt qml infrastructure.
 # Note: Im trying to install everything under the bin/qml folder EXCEPT QtTest.
 #       Im sure there's a nicer way of doing it using the QtQuickCompiler or something.
@@ -32,16 +59,18 @@ foreach( c ${children})
     endif()
   endif()
 endforeach()
-
-# Add any additional icons/resources, that are nothing to do with QML.
-set(APP_RES
-  Resources/QMLDemo.rc
-)
-qt5_add_resources(QT5_RES ${APP_RES})
-
-# Now compile in our QML files into the resource filesystem.
 qt5_add_resources(QT5_QML View/qml.qrc)
-add_executable(${APP_NAME} MACOSX_BUNDLE ${QT5_RES} ${QT5_QML} App/main.cpp)
+
+
+add_executable(${APP_NAME} MACOSX_BUNDLE
+  ${APP_SRCS}
+  ${APP_HDRS}
+  ${QT5_UIS}
+  ${QT5_MOCS}
+  ${QT5_RES}
+  ${QT5_QML}
+  App/main.cpp
+)
 
 # Add libraries here if necessary.
 set(APP_LIBS)
