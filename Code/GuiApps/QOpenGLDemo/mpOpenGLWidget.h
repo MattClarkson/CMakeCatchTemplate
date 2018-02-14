@@ -22,7 +22,7 @@ namespace mp
 {
 
 /**
- * \class QOpenGLWidget
+ * \class OpenGLWidget
  * \brief Intended as an example or base class to demo how to setup
  * an OpenGL window, derived from Qt's QOpenGLWidget.
  */
@@ -53,16 +53,16 @@ protected:
 
 private:
 
-  static bool               m_IsTransparent;
-  bool                      m_IsCore;
+  static bool m_IsTransparent;
+  bool        m_IsCore;
 
-  GLuint                    m_VAO;
-  GLuint                    m_VBO;
-  GLuint                    m_VertexShader;
-  GLuint                    m_FragmentShader;
-  GLuint                    m_ShaderProgram;
-  GLuint                    m_PositionAttribute;
-  GLuint                    m_ColourAttribute;
+  GLuint      m_VAO;
+  GLuint      m_VBO;
+  GLuint      m_VertexShader;
+  GLuint      m_FragmentShader;
+  GLuint      m_ShaderProgram;
+  GLuint      m_PositionAttribute;
+  GLuint      m_ColourAttribute;
 };
 
 } // end namespace
