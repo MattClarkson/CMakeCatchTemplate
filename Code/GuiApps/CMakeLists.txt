@@ -23,3 +23,7 @@ endif()
 if(BUILD_QOpenGLDemo AND Qt5_DIR)
   add_subdirectory(QOpenGLDemo)
 endif()
+
+if(BUILD_VL AND Qt5_DIR)
+  add_subdirectory(QMLVLDemo)
+endif()
