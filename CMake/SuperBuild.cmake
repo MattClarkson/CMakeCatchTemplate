@@ -165,7 +165,7 @@ include(mpExternalProjectHelperMacros)
 ######################################################################
 # External projects
 ######################################################################
-foreach(p gflags glog Eigen Boost VTK OpenCV FLANN PCL)
+foreach(p gflags glog Eigen Boost VTK OpenCV FLANN PCL VL)
   include("CMake/ExternalProjects/${p}.cmake")
 endforeach()
 
@@ -184,7 +184,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
   endif()
 
   set(proj MYPROJECT)
-  set(proj_DEPENDENCIES ${OpenCV_DEPENDS} ${Eigen_DEPENDS} ${Boost_DEPENDS} ${gflags_DEPENDS} ${glog_DEPENDS} ${VTK_DEPENDS} ${FLANN_DEPENDS} ${PCL_DEPENDS})
+  set(proj_DEPENDENCIES ${OpenCV_DEPENDS} ${Eigen_DEPENDS} ${Boost_DEPENDS} ${gflags_DEPENDS} ${glog_DEPENDS} ${VTK_DEPENDS} ${FLANN_DEPENDS} ${PCL_DEPENDS} ${VL_DEPENDS})
 
   ExternalProject_Add(${proj}
     LIST_SEPARATOR ^^
@@ -228,6 +228,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DBUILD_Boost:BOOL=${BUILD_Boost}
       -DBUILD_OpenCV:BOOL=${BUILD_OpenCV}
       -DBUILD_VTK:BOOL=${BUILD_VTK}
+      -DBUILD_VL:BOOL=${BUILD_VL}
       -DBUILD_PCL:BOOL=${BUILD_PCL}
       -DBUILD_PCL_VIS:BOOL=${BUILD_PCL_VIS}
       -DBUILD_Docs:BOOL=${BUILD_Docs}
@@ -241,6 +242,7 @@ if(NOT DEFINED SUPERBUILD_EXCLUDE_MYPROJECTBUILD_TARGET OR NOT SUPERBUILD_EXCLUD
       -DOpenCV_DIR:PATH=${OpenCV_DIR}
       -DOPENCV_WITH_FFMPEG:BOOL=${OPENCV_WITH_FFMPEG}
       -DOPENCV_WITH_NONFREE:BOOL=${OPENCV_WITH_NONFREE}
+      -DVL_ROOT:PATH=${VL_ROOT}
     DEPENDS ${proj_DEPENDENCIES}
   )
 

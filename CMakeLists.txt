@@ -105,6 +105,7 @@ include(mpAddOpenCV)
 include(mpAddBoost)
 include(mpAddPythonBindings)
 include(mpAddPCL)
+include(mpAddVL)
 
 
 ######################################################################
@@ -291,6 +292,7 @@ include(mpIncludePythonBindings)
 include(mpIncludeOpenCV)
 include(mpIncludeVTK)
 include(mpIncludePCL)
+include(mpIncludeVL)
 
 
 ######################################################################
