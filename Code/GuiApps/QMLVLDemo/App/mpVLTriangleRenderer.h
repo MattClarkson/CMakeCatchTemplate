@@ -12,14 +12,10 @@
 
 =============================================================================*/
 
-#ifndef mpTriangleRenderer_h
-#define mpTriangleRenderer_h
+#ifndef mpVLTriangleRenderer_h
+#define mpVLTriangleRenderer_h
 
 #include <QObject>
-#include <QtGui/QOpenGLFunctions>
-#include <QtGui/QOpenGLShaderProgram>
-#include <QtGui/QOpenGLVertexArrayObject>
-#include <QtGui/QOpenGLBuffer>
 #include <QtQuick/QQuickWindow>
 
 namespace mp
@@ -27,16 +23,16 @@ namespace mp
 
 /**
  * \class TriangleRenderer
- * \brief Demo View class to render a TriangleModel into a QQuickWindow using OpenGL.
+ * \brief Demo View class to render a TriangleModel into a QQuickWindow using VL.
  */
-class TriangleRenderer : public QObject, protected QOpenGLFunctions
+class VLTriangleRenderer : public QObject
 {
   Q_OBJECT
 
 public:
 
-  TriangleRenderer();
-  ~TriangleRenderer();
+  VLTriangleRenderer();
+  ~VLTriangleRenderer();
 
   void setDegrees(qreal d) { m_Degrees = d; }
   void setViewportSize(const QSize &size);
@@ -52,16 +48,8 @@ private:
   qreal                     m_Degrees;
   QSize                     m_ViewportSize;
   QQuickWindow             *m_Window;
-  QOpenGLShaderProgram     *m_Program;
-  QOpenGLVertexArrayObject  m_VAO;
-  QOpenGLBuffer             m_VBO;
   QVector<float>           *m_TriangleData;
   bool                      m_TriangleDataDirty;
-  int                       m_ProjMatrixLoc;
-  int                       m_ModelViewMatrixLoc;
-  QMatrix4x4                m_ProjMatrix;
-  QMatrix4x4                m_ModelViewMatrix;
-  QMatrix4x4                m_CameraMatrix;
 };
 
 } // end namespace

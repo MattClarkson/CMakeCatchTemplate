@@ -12,8 +12,8 @@
 
 =============================================================================*/
 
-#ifndef mpTriangleRenderer_h
-#define mpTriangleRenderer_h
+#ifndef mpQOpenGLTriangleRenderer_h
+#define mpQOpenGLTriangleRenderer_h
 
 #include <QObject>
 #include <QtGui/QOpenGLFunctions>
@@ -29,14 +29,14 @@ namespace mp
  * \class TriangleRenderer
  * \brief Demo View class to render a TriangleModel into a QQuickWindow using OpenGL.
  */
-class TriangleRenderer : public QObject, protected QOpenGLFunctions
+class QOpenGLTriangleRenderer : public QObject, protected QOpenGLFunctions
 {
   Q_OBJECT
 
 public:
 
-  TriangleRenderer();
-  ~TriangleRenderer();
+  QOpenGLTriangleRenderer();
+  ~QOpenGLTriangleRenderer();
 
   void setDegrees(qreal d) { m_Degrees = d; }
   void setViewportSize(const QSize &size);

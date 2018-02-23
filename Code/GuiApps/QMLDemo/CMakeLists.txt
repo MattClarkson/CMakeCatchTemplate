@@ -19,12 +19,12 @@ set(APP_UIS
 
 set(APP_SRCS
   App/mpTriangleModel.cpp
-  App/mpTriangleRenderer.cpp
+  App/mpQOpenGLTriangleRenderer.cpp
 )
 
 set(APP_MOC_HDRS
   App/mpTriangleModel.h
-  App/mpTriangleRenderer.h
+  App/mpQOpenGLTriangleRenderer.h
 )
 
 set(APP_HDRS
