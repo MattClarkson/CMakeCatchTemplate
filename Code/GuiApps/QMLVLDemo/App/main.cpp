@@ -11,6 +11,7 @@
   See LICENSE.txt in the top level directory for details.
 
 =============================================================================*/
+#include <vlCore/VisualizationLibrary.hpp>
 #include <QGuiApplication>
 #include <QtQuick/QQuickView>
 #include "MyProjectConfigure.h"
@@ -25,18 +26,17 @@ int main(int argc, char *argv[])
 
   qmlRegisterType<mp::TriangleModel>("VLUnderQML", 1, 0, "TriangleModel");
 
-  QSurfaceFormat fmt;
-  fmt.setDepthBufferSize(24);
-  fmt.setVersion(3, 2);
-  fmt.setProfile(QSurfaceFormat::CoreProfile);
-  QSurfaceFormat::setDefaultFormat(fmt);
+  /* init Visualization Library */
+  vl::VisualizationLibrary::init();
 
   QQuickView view;
   view.setResizeMode(QQuickView::SizeRootObjectToView);
   view.setSource(QUrl("qrc:/main.qml"));
   view.show();
 
-  return app.exec();
+  /* shutdown Visualization Library */
+  vl::VisualizationLibrary::shutdown();
 
+  return app.exec();
 }
 
