@@ -13,7 +13,7 @@
 #============================================================================*/
 
 if(BUILD_VL)
-  set(_vl_components VLCore VLGraphics VLVolume)
+  set(_vl_components VLMain VLCore VLGraphics VLVolume)
   if(MYPROJECT_USE_QT)
     list(APPEND _vl_components VLQt5)
   endif()
