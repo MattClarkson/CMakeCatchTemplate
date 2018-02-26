@@ -17,6 +17,11 @@
 
 #include <QObject>
 #include <QtQuick/QQuickWindow>
+#include <vlCore/VisualizationLibrary.hpp>
+#include <vlGraphics/OpenGL.hpp>
+#include <vlGraphics/OpenGLContext.hpp>
+#include <vlGraphics/Rendering.hpp>
+#include <vlGraphics/GLSL.hpp>
 
 namespace mp
 {
@@ -45,11 +50,12 @@ public slots:
 
 private:
 
-  qreal                     m_Degrees;
-  QSize                     m_ViewportSize;
-  QQuickWindow             *m_Window;
-  QVector<float>           *m_TriangleData;
-  bool                      m_TriangleDataDirty;
+  qreal                                    m_Degrees;
+  QSize                                    m_ViewportSize;
+  QQuickWindow                            *m_Window;
+  QVector<float>                          *m_TriangleData;
+  bool                                     m_TriangleDataDirty;
+  std::vector< vl::ref<vl::GLSLProgram> >  mGLSL;
 };
 
 } // end namespace
