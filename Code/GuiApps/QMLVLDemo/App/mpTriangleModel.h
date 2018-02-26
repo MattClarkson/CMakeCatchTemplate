@@ -26,7 +26,7 @@ namespace mp
  * \class TriangleModel
  * \brief Demo Model class containing data for a single, scaleable, triangle.
  *
- * The scale factor is just to call something that has a visible side-effect.
+ * The degrees member variable is just to call something that has a visible side-effect.
  * This class does not contain much data. If you were doing a larger scale
  * example, you would pay carefull attention to optimising how often data
  * is pushed to the Renderer, and consequently, how often you need OpenGL
