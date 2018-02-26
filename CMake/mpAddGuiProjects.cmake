@@ -72,6 +72,11 @@ if(BUILD_QMLVLDemo AND NOT BUILD_SHARED_LIBS)
   set(BUILD_SHARED_LIBS ON CACHE BOOL "Build Shared Libraries" FORCE)
 endif()
 
+if(BUILD_QMLVLDemo AND NOT BUILD_VL)
+  message("Forcing BUILD_VL to ON due to BUILD_VL being ON.")
+  set(BUILD_VL ON CACHE BOOL "Build VL" FORCE)
+endif()
+
 if(BUILD_QOpenGLDemo AND NOT MYPROJECT_USE_QT)
   set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt." FORCE)
   message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QOpenGLDemo being ON.")
