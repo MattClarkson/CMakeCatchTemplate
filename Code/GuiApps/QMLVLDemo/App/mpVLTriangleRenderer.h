@@ -18,10 +18,7 @@
 #include <QObject>
 #include <QtQuick/QQuickWindow>
 #include <vlCore/VisualizationLibrary.hpp>
-#include <vlGraphics/OpenGL.hpp>
 #include <vlGraphics/OpenGLContext.hpp>
-#include <vlGraphics/Rendering.hpp>
-#include <vlGraphics/GLSL.hpp>
 
 namespace mp
 {
@@ -55,7 +52,7 @@ private:
   QQuickWindow                            *m_Window;
   QVector<float>                          *m_TriangleData;
   bool                                     m_TriangleDataDirty;
-  std::vector< vl::ref<vl::GLSLProgram> >  mGLSL;
+  std::vector< vl::ref<vl::GLSLProgram> >  m_GLSL;
 };
 
 } // end namespace

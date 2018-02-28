@@ -13,6 +13,8 @@
 #============================================================================*/
 
 if(BUILD_VL)
+  find_package(OpenGL REQUIRED)
+  message("Found OpenGL:${OPENGL_INCLUDE_DIR}")
   set(_vl_components VLMain VLCore VLGraphics VLVolume)
   if(MYPROJECT_USE_QT)
     list(APPEND _vl_components VLQt5)
