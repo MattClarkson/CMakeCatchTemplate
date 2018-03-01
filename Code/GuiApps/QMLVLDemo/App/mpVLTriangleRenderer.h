@@ -15,10 +15,13 @@
 #ifndef mpVLTriangleRenderer_h
 #define mpVLTriangleRenderer_h
 
+// Must come before Qt, due to #ifndef __glext_h_ guard conflicts
+#include <vlCore/VisualizationLibrary.hpp>
+#include <vlGraphics/GLSL.hpp>
+
+// Must come after VL
 #include <QObject>
 #include <QtQuick/QQuickWindow>
-#include <vlCore/VisualizationLibrary.hpp>
-#include <vlGraphics/OpenGLContext.hpp>
 
 namespace mp
 {

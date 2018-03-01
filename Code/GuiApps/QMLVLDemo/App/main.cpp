@@ -12,10 +12,11 @@
 
 =============================================================================*/
 #include <vlCore/VisualizationLibrary.hpp>
+#include "mpTriangleModel.h"
+#include "MyProjectConfigure.h"
+
 #include <QGuiApplication>
 #include <QtQuick/QQuickView>
-#include "MyProjectConfigure.h"
-#include "mpTriangleModel.h"
 
 int main(int argc, char *argv[])
 {
