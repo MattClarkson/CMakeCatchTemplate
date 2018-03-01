@@ -14,6 +14,7 @@
 
 if(BUILD_VL)
   find_package(OpenGL REQUIRED)
+  include_directories(${OPENGL_INCLUDE_DIR})
   message("Found OpenGL:${OPENGL_INCLUDE_DIR}")
   set(_vl_components VLMain VLCore VLGraphics VLVolume)
   if(MYPROJECT_USE_QT)
