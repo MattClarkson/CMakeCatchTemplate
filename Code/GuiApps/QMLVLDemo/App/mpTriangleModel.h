@@ -24,7 +24,7 @@ namespace mp
 
 /**
  * \class TriangleModel
- * \brief Demo Model class containing data for a single, scaleable, triangle.
+ * \brief Demo Model class containing data for a single, rotateable, triangle.
  *
  * The degrees member variable is just to call something that has a visible side-effect.
  * This class does not contain much data. If you were doing a larger scale

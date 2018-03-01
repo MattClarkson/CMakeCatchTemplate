@@ -27,7 +27,7 @@ namespace mp
 {
 
 /**
- * \class TriangleRenderer
+ * \class VLTriangleRenderer
  * \brief Demo View class to render a TriangleModel into a QQuickWindow using VL.
  */
 class VLTriangleRenderer : public QObject

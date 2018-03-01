@@ -26,7 +26,7 @@ namespace mp
 {
 
 /**
- * \class TriangleRenderer
+ * \class QOpenGLTriangleRenderer
  * \brief Demo View class to render a TriangleModel into a QQuickWindow using OpenGL.
  */
 class QOpenGLTriangleRenderer : public QObject, protected QOpenGLFunctions
