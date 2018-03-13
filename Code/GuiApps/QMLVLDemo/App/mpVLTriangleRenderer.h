@@ -17,7 +17,9 @@
 
 // Must come before Qt, due to #ifndef __glext_h_ guard conflicts
 #include <vlCore/VisualizationLibrary.hpp>
-#include <vlGraphics/GLSL.hpp>
+#include <vlGraphics/Rendering.hpp>
+#include <vlGraphics/SceneManager.hpp>
+#include <vlGraphics/OpenGLContext.hpp>
 
 // Must come after VL
 #include <QObject>
@@ -55,7 +57,12 @@ private:
   QQuickWindow                            *m_Window;
   QVector<float>                          *m_TriangleData;
   bool                                     m_TriangleDataDirty;
-  std::vector< vl::ref<vl::GLSLProgram> >  m_GLSL;
+
+  bool                                     m_OpenGLInitialised;
+  vl::OpenGLContextFormat                  m_OpenGLContextFormat;
+  vl::ref<vl::OpenGLContext>               m_OpenGLContext;
+  vl::ref<vl::Rendering>                   m_Rendering;
+  vl::ref<vl::SceneManager>                m_SceneManager;
 };
 
 } // end namespace

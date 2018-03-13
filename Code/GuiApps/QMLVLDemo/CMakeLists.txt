@@ -18,6 +18,7 @@ set(APP_UIS
 )
 
 set(APP_SRCS
+  App/mpQMLVLOpenGLContext.cpp
   App/mpTriangleModel.cpp
   App/mpVLTriangleRenderer.cpp
 )
@@ -28,6 +29,7 @@ set(APP_MOC_HDRS
 )
 
 set(APP_HDRS
+  App/mpQMLVLOpenGLContext.h
 )
 
 set(APP_RES
