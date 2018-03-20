@@ -25,7 +25,7 @@ Features
 
 The main features provided are:
 
- 1. A Meta-Build, also known as a SuperBuild, to optionally download and build Boost, Eigen, FLANN, OpenCV, glog, gflags, VTK, VL and PCL.
+ 1. A Meta-Build, also known as a SuperBuild, to optionally download and build Boost, Eigen, FLANN, OpenCV, glog, gflags, VTK and PCL.
  2. A single library into which you can provide your main algorithms.
  3. Unit tests, using Catch, and run with CTest, so you can ensure correctness and enable regression testing of your functionality.
  4. A single command line application, to give the end user a minimalist runnable program.

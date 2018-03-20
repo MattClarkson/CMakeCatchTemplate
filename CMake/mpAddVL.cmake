@@ -12,5 +12,6 @@
 #
 #============================================================================*/
 
-option(BUILD_VL "Build visualizationlibrary.org" OFF)
+option(BUILD_VL "(not finished). Build visualizationlibrary.org" OFF)
+mark_as_advanced(BUILD_VL)
 
