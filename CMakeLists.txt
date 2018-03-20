@@ -85,10 +85,14 @@ include(mpSetupTesting)
 # Define variables that we carry through to sub-directories.
 ######################################################################
 set(_known_apps "")             # Temp variable.
+set(MYPROJECT_BOOST_LIBS "")    # List of required Boost libraries.
+set(QT5_LINK_LIBRARIES)         # List of required Qt libraries.
 set(BUILDING_GUIS OFF)          # Whether or not any GUI projects are on.
+set(ALL_THIRD_PARTY_LIBRARIES)  # List of all 3rd party libraries to link to.
 set(ADDITIONAL_SEARCH_PATHS "") # List of all folders to search for .dlls when packaging, and setting up Visual Studio paths.
-set(MYPROJECT_BOOST_LIBS "")    # List of Boost libraries.
-set(QT5_LINK_LIBRARIES)         # List of all Qt libraries.
+if(WIN32)
+  list(APPEND ADDITIONAL_SEARCH_PATHS "${CMAKE_BINARY_DIR}/bin/${VS_BUILD_TYPE}")
+endif()
 
 
 #######################################################################
@@ -265,13 +269,6 @@ configure_file(${CMAKE_SOURCE_DIR}/MyProjectConfigure.h.in ${CMAKE_BINARY_DIR}/M
 # Organise module/plugin/etc projects better within the IDE.
 ######################################################################
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-
-######################################################################
-# Create a list of all libraries to link to, and all dirs to search.
-######################################################################
-set(ALL_THIRD_PARTY_LIBRARIES)
-list(APPEND ADDITIONAL_SEARCH_PATHS "${CMAKE_BINARY_DIR}/bin/${VS_BUILD_TYPE}")
 
 
 ######################################################################
