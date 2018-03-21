@@ -12,26 +12,28 @@
 #
 #============================================================================*/
 
-set(APP_NAME QMLDemo)
+set(APP_NAME QMLVLDemo)
 
 set(APP_UIS
 )
 
 set(APP_SRCS
+  App/mpQMLVLOpenGLContext.cpp
   App/mpTriangleModel.cpp
-  App/mpQOpenGLTriangleRenderer.cpp
+  App/mpVLTriangleRenderer.cpp
 )
 
 set(APP_MOC_HDRS
   App/mpTriangleModel.h
-  App/mpQOpenGLTriangleRenderer.h
+  App/mpVLTriangleRenderer.h
 )
 
 set(APP_HDRS
+  App/mpQMLVLOpenGLContext.h
 )
 
 set(APP_RES
-  Resources/QMLDemo.rc
+  Resources/QMLVLDemo.rc
 )
 
 qt5_wrap_ui(QT5_UIS ${APP_UIS})
@@ -61,7 +63,6 @@ foreach( c ${children})
 endforeach()
 qt5_add_resources(QT5_QML View/qml.qrc)
 
-
 add_executable(${APP_NAME} MACOSX_BUNDLE
   ${APP_SRCS}
   ${APP_HDRS}
@@ -74,7 +75,7 @@ add_executable(${APP_NAME} MACOSX_BUNDLE
 
 # Add libraries here if necessary.
 set(APP_LIBS)
-target_link_libraries(${APP_NAME} ${APP_LIBS} ${QT5_LINK_LIBRARIES})
+target_link_libraries(${APP_NAME} ${APP_LIBS} ${ALL_THIRD_PARTY_LIBRARIES} ${QT5_LINK_LIBRARIES})
 
 # This sorts out the fixup_bundle.
 mpMacroCreateGuiApplication(${APP_NAME} "${ADDITIONAL_SEARCH_PATHS}")

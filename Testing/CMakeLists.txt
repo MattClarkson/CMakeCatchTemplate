@@ -25,6 +25,16 @@ foreach(_test_case ${TEST_CASES})
   target_link_libraries(${_test_case} ${ALL_LIBRARIES})
 endforeach()
 
+if (MYPROJECT_USE_CUDA)
+  set(CUDA_TEST_CASES
+    mpCudaTest
+  )
+  foreach(_test_case ${CUDA_TEST_CASES})
+    cuda_add_executable(${_test_case} ${_test_case}.cu mpCatchMain.cpp)
+    target_link_libraries(${_test_case} ${ALL_LIBRARIES})
+  endforeach()
+endif()
+
 # Adding tests is done outside the above loop,
 # as each test will need different arguments.
 
@@ -34,3 +44,6 @@ endforeach()
 
 add_test(NoArgs ${EXECUTABLE_OUTPUT_PATH}/mpBasicTest)
 add_test(1File ${EXECUTABLE_OUTPUT_PATH}/mpCommandLineArgsTest ${DATA_DIR}/input.txt)
+if (MYPROJECT_USE_CUDA)
+  add_test(Cuda ${EXECUTABLE_OUTPUT_PATH}/mpCudaTest)
+endif()

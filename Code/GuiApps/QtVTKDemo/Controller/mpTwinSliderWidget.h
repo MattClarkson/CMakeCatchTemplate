@@ -25,7 +25,7 @@ namespace mp
 
 /**
 * \class TwinSliderWidget
-* \brief Demo widget provides 2 coordinated slides with spin boxes.
+* \brief Demo Widget provides 2 coordinated slides with spin boxes.
 *
 * Intended to demonstrate that a widget should JUST contain widget logic
 * and communicate entirely via signals and slots. Ideally, it should

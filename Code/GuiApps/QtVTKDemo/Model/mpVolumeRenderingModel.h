@@ -32,7 +32,7 @@ namespace mp
 
 /**
 * \class VolumeRenderingModel
-* \brief Demo backend, to contain VTK pipelines.
+* \brief Demo Model, to contain VTK pipelines.
 *
 * Intended to demonstrate that this class knows nothing about the View.
 * To further illustrate this point, this class is not a QWidget,

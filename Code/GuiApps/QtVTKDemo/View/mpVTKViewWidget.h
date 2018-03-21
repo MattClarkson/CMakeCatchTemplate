@@ -30,7 +30,7 @@ namespace mp
 
 /**
 * \class VTKViewWidget
-* \brief Demo widget to provide a standard VTK window within a Qt widget,
+* \brief Demo Widget to provide a standard VTK window within a Qt widget.
 *
 * Note, as of issue #16, we show how to use either VTKs OpenGL backend
 * or VTKs OpenGL2 backend, which are fundamentally different, and their

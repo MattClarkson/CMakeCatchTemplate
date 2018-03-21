@@ -27,7 +27,7 @@ class VTKViewWidget;
 
 /**
 * \class MainWindow
-* \brief Demo widget provides main window, and connects it to Model.
+* \brief Demo Widget provides main window, and connects it to Model.
 */
 class MainWindow : public QMainWindow, public Ui_MainWindow
 {

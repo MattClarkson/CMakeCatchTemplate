@@ -13,7 +13,7 @@
 =============================================================================*/
 
 #include "mpTriangleModel.h"
-#include "mpQOpenGLTriangleRenderer.h"
+#include "mpVLTriangleRenderer.h"
 
 namespace mp
 {
@@ -84,9 +84,9 @@ void TriangleModel::sync()
 {
   if (!m_Renderer)
   {
-    m_Renderer = new QOpenGLTriangleRenderer();
+    m_Renderer = new VLTriangleRenderer();
     m_Renderer->setTriangleData(&m_TriangleData);
-    connect(window(), &QQuickWindow::beforeRendering, m_Renderer, &QOpenGLTriangleRenderer::paint, Qt::DirectConnection);
+    connect(window(), &QQuickWindow::beforeRendering, m_Renderer, &VLTriangleRenderer::paint, Qt::DirectConnection);
   }
   m_Renderer->setDegrees(m_Degrees);
   m_Renderer->setViewportSize(window()->size() * window()->devicePixelRatio());

@@ -12,32 +12,14 @@
 
 =============================================================================*/
 
-#ifndef mpOpenGLMainWindow_h
-#define mpOpenGLMainWindow_h
-
-#include <QMainWindow>
+#include "mpQMLVLOpenGLContext.h"
 
 namespace mp
 {
 
-class OpenGLWidget;
-
-/**
- * \class OpenGLMainWindow
- * \brief Demo QMainWindow subclass just to hold our OpenGLWidget.
- */
-class OpenGLMainWindow : public QMainWindow
+//-----------------------------------------------------------------------------
+QMLVLOpenGLContext::QMLVLOpenGLContext()
 {
-
-public:
-
-  OpenGLMainWindow();
-
-private:
-
-  OpenGLWidget *m_Widget;
-};
+}
 
 } // end namespace
-
-#endif

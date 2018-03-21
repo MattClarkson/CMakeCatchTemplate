@@ -17,7 +17,7 @@
 
 #include <QtQuick/QQuickItem>
 #include <QVector>
-#include "mpQOpenGLTriangleRenderer.h"
+#include "mpVLTriangleRenderer.h"
 
 namespace mp
 {
@@ -83,9 +83,9 @@ private slots:
 
 private:
 
-  qreal                    m_Degrees;
-  QOpenGLTriangleRenderer *m_Renderer;
-  QVector<float>           m_TriangleData;
+  qreal               m_Degrees;
+  VLTriangleRenderer *m_Renderer;
+  QVector<float>      m_TriangleData;
 
 };
 

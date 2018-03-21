@@ -12,18 +12,6 @@
 #
 #============================================================================*/
 
-if(BUILD_QtVTKDemo AND VTK_FOUND AND Qt5_DIR)
-  add_subdirectory(QtVTKDemo)
-endif()
+option(BUILD_VL "(not finished). Build visualizationlibrary.org" OFF)
+mark_as_advanced(BUILD_VL)
 
-if(BUILD_QMLDemo AND Qt5_DIR)
-  add_subdirectory(QMLDemo)
-endif()
-
-if(BUILD_QOpenGLDemo AND Qt5_DIR)
-  add_subdirectory(QOpenGLDemo)
-endif()
-
-if(BUILD_VL AND Qt5_DIR)
-  add_subdirectory(QMLVLDemo)
-endif()

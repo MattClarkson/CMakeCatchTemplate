@@ -12,7 +12,7 @@
 
 =============================================================================*/
 
-#include "mpTriangleRenderer.h"
+#include "mpQOpenGLTriangleRenderer.h"
 #include <QtMath>
 
 namespace mp
@@ -41,7 +41,7 @@ static const char *fragmentShaderSource =
     "}\n";
 
 //-----------------------------------------------------------------------------
-TriangleRenderer::TriangleRenderer()
+QOpenGLTriangleRenderer::QOpenGLTriangleRenderer()
 : m_Degrees(0)
 , m_Window(nullptr)
 , m_Program(nullptr)
@@ -52,7 +52,7 @@ TriangleRenderer::TriangleRenderer()
 
 
 //-----------------------------------------------------------------------------
-TriangleRenderer::~TriangleRenderer()
+QOpenGLTriangleRenderer::~QOpenGLTriangleRenderer()
 {
   if (m_Program != nullptr)
   {
@@ -66,7 +66,7 @@ TriangleRenderer::~TriangleRenderer()
 
 
 //-----------------------------------------------------------------------------
-void TriangleRenderer::setTriangleData(QVector<float>* data)
+void QOpenGLTriangleRenderer::setTriangleData(QVector<float>* data)
 {
   m_TriangleData = data;
   m_TriangleDataDirty = true;
@@ -74,21 +74,21 @@ void TriangleRenderer::setTriangleData(QVector<float>* data)
 
 
 //-----------------------------------------------------------------------------
-void TriangleRenderer::setViewportSize(const QSize &size)
+void QOpenGLTriangleRenderer::setViewportSize(const QSize &size)
 {
   m_ViewportSize = size;
 }
 
 
 //-----------------------------------------------------------------------------
-void TriangleRenderer::setWindow(QQuickWindow *window)
+void QOpenGLTriangleRenderer::setWindow(QQuickWindow *window)
 {
   m_Window = window;
 }
 
 
 //-----------------------------------------------------------------------------
-void TriangleRenderer::paint()
+void QOpenGLTriangleRenderer::paint()
 {
   initializeOpenGLFunctions();
 

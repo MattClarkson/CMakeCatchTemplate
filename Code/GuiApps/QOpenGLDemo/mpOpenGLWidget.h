@@ -23,8 +23,7 @@ namespace mp
 
 /**
  * \class OpenGLWidget
- * \brief Intended as an example or base class to demo how to setup
- * an OpenGL window, derived from Qt's QOpenGLWidget.
+ * \brief Demo Widget to show how to setup an OpenGL window, derived from Qt's QOpenGLWidget.
  */
 class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
