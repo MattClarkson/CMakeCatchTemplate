@@ -40,3 +40,7 @@ MYPROJECT_INSTALL_LIBRARY(${MYPROJECT_LIBRARY_NAME})
 if(BUILD_PYTHON_BINDINGS)
   add_subdirectory(PythonBinding)
 endif()
+
+if(BUILD_UNITY_WRAPPER)
+  add_subdirectory(UnityWrapper)
+endif()

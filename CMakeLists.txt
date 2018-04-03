@@ -111,6 +111,7 @@ include(mpAddBoost)
 include(mpAddPythonBindings)
 include(mpAddPCL)
 include(mpAddVL)
+include(mpAddUnityWrapper)
 
 
 ######################################################################
