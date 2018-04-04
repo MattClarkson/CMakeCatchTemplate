@@ -12,12 +12,16 @@
 #
 #============================================================================*/
 
-if(BUILD_Python_Boost OR BUILD_Python_PyBind)
-  include_directories(${PYTHON_INCLUDE_DIRS})
-  link_libraries(${PYTHON_LIBRARIES})
-endif()
+if(NOT BUILDING_GUIS)
 
-if(BUILD_Python_PyBind)
-  include_directories(${PYTHON_INCLUDE_DIRS})
-endif()
+  set(MYPROJECT_PYTHON_LIBRARY_NAME ${MYPROJECT_LIBRARY_NAME}python)
 
+  set(MYPROJECT_PYTHON_SRCS
+    mpLibPython.cpp
+  )
+  add_subdirectory(pybind11)
+  link_libraries(${MYPROJECT_LIBRARY_NAME})
+  pybind11_add_module(${MYPROJECT_PYTHON_LIBRARY_NAME} ${MYPROJECT_PYTHON_SRCS})
+  install(TARGETS ${MYPROJECT_PYTHON_LIBRARY_NAME} DESTINATION ${MYPROJECT_INSTALL_LIB_DIR})
+
+endif()

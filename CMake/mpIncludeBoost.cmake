@@ -12,7 +12,7 @@
 #
 #============================================================================*/
 
-if(BUILD_Boost OR BUILD_PYTHON_BINDINGS)
+if(BUILD_Boost OR BUILD_Python_Boost)
   # Example of:
   #   (1) Standard, widely used library
   #   (2) Mostly header library, some compiled libraries
