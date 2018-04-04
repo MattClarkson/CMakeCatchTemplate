@@ -47,7 +47,7 @@ Usage
 
 The main way to use this project is:
 
- 1. Clone this project.
+ 1. Clone this project. If you intend to use [pybind11](https://github.com/pybind/pybind11), you must use ```git clone --recursive``` as pybind is included as a git submodule.
  2. Rename the top-level project folder to the folder name of your choice.
  3. Rename all instances of ```MYPROJECT``` (all uppercase), ```myproject``` (all lowercase), ```MyProject``` (camelcase) and the namespace ```mp``` with names of your choice, by running the `rename.sh` script in a ```bash``` environment. Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`. Running `rename.sh` should be performed before running CMake for the first time if you plan on doing an "in source" build.
  4. Set your KWStyle and CppCheck settings in ```Utilities/KWStyle``` and ```Utilities/CppCheck```.
