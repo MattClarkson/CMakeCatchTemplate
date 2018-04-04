@@ -35,10 +35,11 @@ The main features provided are:
  8. If your code is open-source, you can register with a Continuous Integration service, so this project provides Travis and Appveyor examples.
  9. CPack setup to produce installers for GUI apps QtVTKDemo and QMLDemo along with installation code for command line apps.
 10. An example of the CMake required to build python interfaces to your C++ code, using ```boost::python```.
-11. An example of the CMake required to export a C-style module into [Unity](https://unity3d.com/).
-11. Support for OpenMP, which is passed through to FLANN, OpenCV and PCL.
-12. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.
-13. Support for MPI, which by default sets up the C++ libraries.
+11. An example of the CMake required to build python interfaces to your C++ code, using [pybind11](https://github.com/pybind/pybind11), with credit to [this example](https://github.com/pybind/cmake_example).
+12. An example of the CMake required to export a C-style module into [Unity](https://unity3d.com/).
+13. Support for OpenMP, which is passed through to FLANN, OpenCV and PCL.
+14. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.
+15. Support for MPI, which by default sets up the C++ libraries.
 
 
 Usage
@@ -204,6 +205,11 @@ You may find that you do not need all of the code in this repository. We could h
 made a different repository for each of the above Use-Cases, but then there would be a lot of code
 duplication and overlap. So, for now, its all one repository. Take a look in the ```Code``` folder.
 Remove the directories you do not need, and change ```Code/CMakeLists.txt``` accordingly.
+You can also search the top level CMakeLists.txt for code that looks like
+```mpAddSomething``` and ```mpIncludeSomething``` and easily chop out 3rd party libraries
+you do not need. We believe its easier to remove code you don't need than it is to
+build up a lot of CMake code, based on hours of searching the internet. At least the CMake
+code here has been tested... to some degree.
 
 
 Preferred Branching Workflow
