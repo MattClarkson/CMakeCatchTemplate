@@ -52,11 +52,7 @@ if(NOT DEFINED gflags_DIR)
   )
 
   set(gflags_DIR ${proj_INSTALL})
-  if(WIN32)
-    set(gflags_LIBRARY_DIR ${gflags_DIR}/Lib)     # gflags-config.cmake doesn't export this.
-  else()
-    set(gflags_LIBRARY_DIR ${gflags_DIR}/lib)     # gflags-config.cmake doesn't export this.
-  endif()
+  set(gflags_LIBRARY_DIR ${gflags_DIR}/lib)     # gflags-config.cmake doesn't export this.
   set(gflags_INCLUDE_DIR ${gflags_DIR}/include)
 
   mitkFunctionInstallExternalCMakeProject(${proj})

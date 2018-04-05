@@ -25,16 +25,24 @@ find_path(gflags_INC
 set(gflags_LIBRARY_DIR ${gflags_DIR}/lib)
 set(gflags_LIBRARY )
 
+set(_libname gflags)
+if(NOT BUILD_SHARED_LIBS AND WIN32)
+  set(_libname ${_libname}_static)
+endif()
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+  set(_libname ${_libname}${MYPROJECT_SUPERBUILD_DEBUG_POSTFIX})
+endif()
+
 if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
 
-  find_library(gflags_LIBRARY NAMES gflags
+  find_library(gflags_LIBRARY NAMES ${_libname}
                PATHS ${gflags_LIBRARY_DIR}
                PATH_SUFFIXES Release
                NO_DEFAULT_PATH)
 
 elseif(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 
-  find_library(gflags_LIBRARY NAMES gflags${MYPROJECT_SUPERBUILD_DEBUG_POSTFIX}
+  find_library(gflags_LIBRARY NAMES ${_libname}
                PATHS ${gflags_LIBRARY_DIR}
                PATH_SUFFIXES Debug
                NO_DEFAULT_PATH)
