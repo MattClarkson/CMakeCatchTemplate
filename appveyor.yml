@@ -43,6 +43,7 @@ before_build:
   - cmake -version
   - pwd
   - git submodule update -q --init --recursive
+  - dir C:\
   - rem --------------------------------------------------------------------------------
 
 build_script:
