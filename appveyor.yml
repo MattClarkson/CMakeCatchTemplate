@@ -25,7 +25,7 @@ shallow_clone: false
 
 environment:
   matrix:
-    - COMPILER: "Visual Studio 12 Win64"
+    - COMPILER: "Visual Studio 14 Win64"
 
 platform:
   - x64
