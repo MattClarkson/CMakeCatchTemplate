@@ -43,7 +43,7 @@ before_build:
   - cmake -version
   - pwd
   - git submodule update -q --init --recursive
-  - dir C:\
+  - set PATH=C:\Python36-x64;%PATH%
   - rem --------------------------------------------------------------------------------
 
 build_script:
