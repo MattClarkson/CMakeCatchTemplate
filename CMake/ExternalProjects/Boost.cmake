@@ -18,7 +18,7 @@ set(MYPROJECT_USE_Boost_LIBRARIES ${MYPROJECT_BOOST_LIBS})
 #-----------------------------------------------------------------------------
 # Boost
 #-----------------------------------------------------------------------------
-if(NOT BUILD_Boost AND NOT BUILD_PYTHON_BINDINGS)
+if(NOT BUILD_Boost AND NOT BUILD_Python_Boost)
   return()
 endif()
 

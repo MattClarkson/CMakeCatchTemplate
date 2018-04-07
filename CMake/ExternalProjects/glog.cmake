@@ -24,8 +24,8 @@ if(DEFINED glog_DIR AND NOT EXISTS ${glog_DIR})
   message(FATAL_ERROR "glog_DIR variable is defined but corresponds to non-existing directory \"${glog_ROOT}\".")
 endif()
 
-set(glog_VERSION "e8ddd96")
-set(location "${NIFTK_EP_TARBALL_LOCATION}/glog-${glog_VERSION}.tar.gz")
+set(glog_VERSION "a6a166db06")
+set(location "https://github.com/google/glog.git")
 mpMacroDefineExternalProjectVariables(glog ${glog_VERSION} ${location})
 set(proj_DEPENDENCIES gflags)
 
@@ -37,8 +37,9 @@ if(NOT DEFINED glog_DIR)
     SOURCE_DIR ${proj_SOURCE}
     BINARY_DIR ${proj_BUILD}
     INSTALL_DIR ${proj_INSTALL}
-    URL ${proj_LOCATION}
-    URL_MD5 ${proj_CHECKSUM}
+    GIT_REPOSITORY ${proj_LOCATION}
+    GIT_TAG ${proj_VERSION}
+    UPDATE_COMMAND ${GIT_EXECUTABLE} checkout ${proj_VERSION}
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
       ${EP_COMMON_ARGS}

@@ -24,8 +24,8 @@ if(DEFINED gflags_DIR AND NOT EXISTS ${gflags_DIR})
   message(FATAL_ERROR "gflags_DIR variable is defined but corresponds to non-existing directory \"${gflags_ROOT}\".")
 endif()
 
-set(gflags_VERSION "3476433")
-set(location "${NIFTK_EP_TARBALL_LOCATION}/gflags-${gflags_VERSION}.tar.gz")
+set(gflags_VERSION "46f73f88b1")
+set(location "https://github.com/gflags/gflags.git")
 mpMacroDefineExternalProjectVariables(gflags ${gflags_VERSION} ${location})
 set(proj_DEPENDENCIES )
 
@@ -37,8 +37,9 @@ if(NOT DEFINED gflags_DIR)
     SOURCE_DIR ${proj_SOURCE}
     BINARY_DIR ${proj_BUILD}
     INSTALL_DIR ${proj_INSTALL}
-    URL ${proj_LOCATION}
-    URL_MD5 ${proj_CHECKSUM}
+    GIT_REPOSITORY ${proj_LOCATION}
+    GIT_TAG ${proj_VERSION}
+    UPDATE_COMMAND ${GIT_EXECUTABLE} checkout ${proj_VERSION}
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
       ${EP_COMMON_ARGS}
