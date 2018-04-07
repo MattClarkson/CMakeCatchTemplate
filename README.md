@@ -25,7 +25,7 @@ Features
 
 The main features provided are:
 
- 1. A Meta-Build, also known as a SuperBuild, to optionally download and build Boost, Eigen, FLANN, OpenCV, glog, gflags, VTK and PCL. All of these can be left OFF and skipped.
+ 1. A Meta-Build, also known as a SuperBuild, to optionally download and build Boost, Eigen, FLANN, OpenCV, glog, gflags, VTK and PCL. All of these can be left OFF and skipped. This results in a top-level build folder containing the compiled dependencies, and then a sub-folder containing the compiled code of this project.
  2. A single library into which you can provide your main algorithms.
  3. Unit tests, using Catch, and run with CTest, so you can ensure correctness and enable regression testing of your functionality.
  4. A single command line application, to give the end user a minimalist runnable program.
@@ -54,7 +54,7 @@ The main way to use this project is:
  5. Check it all builds.
  6. Check the unit tests pass.
  7. Fix anything that doesn't pass.
- 8. Optionally strip out or turn off the bits you don't need.
+ 8. Optionally strip out or turn off the bits you don't need (see below).
  9. Check it all builds and the tests pass again.
 10. Commit it to your own local git repository.
 11. Set the remote URL correctly.
@@ -135,9 +135,11 @@ Tested On
  * Windows - Windows 8, VS2013, CMake 3.6.3, Qt 5.4.2
  * Linux - Centos 7, g++ 4.8.5, CMake 3.5.1, Qt 5.6.2
  * Mac - OSX 10.10.5, clang 6.0, CMake 3.9.4, Qt 5.6.2
+ * Also refer to .travis.yml and appveyor.yml for other combinations
 
 Minimum CMake version is 3.5. Minimum Qt is version 5. Qt4 is not supported and not planned to be supported.
 If you are using VTK you should try a Qt version >= 5.5.0 to take advantage of the new OpenGL2 backend.
+If you need pybind, you need at least C++11, so on Windows you should have at least VS2015.
 
 
 Build Instructions
@@ -162,7 +164,7 @@ where ```ON``` is the default. Then to build any of Eigen, Boost or OpenCV etc.,
   * BUILD_Boost:BOOL=ON|OFF
   * BUILD_OpenCV:BOOL=ON|OFF
 
-and so on. If BUILD_SUPERBUILD=OFF, and these variables are on, then CMake will just try finding
+and so on. If you set BUILD_SUPERBUILD=OFF, and these BUILD_whatever variables are on, then CMake will just try finding
 locally installed versions rather then downloading them.
 
 To switch between static/dynamic linking, use CMake to set:
@@ -175,16 +177,30 @@ To switch between Debug and Release mode, use CMake to set:
 
 Note: Only Debug and Release are supported.
 
-As mentioned in lectures, CMake will find 3rd party libraries using either
-  1. a FindModule.cmake included within CMake's distribution, e.g. Boost
-  2. a custom made FindModule.cmake, e.g. Eigen
-  3. using CMAKE_PREFIX_PATH and 'config mode' e.g. OpenCV
-
-(where Module is the name of your module, e.g. OpenCV, Boost).
-
 Note: your host system is very likely to have a version of Boost that
-is different to the one provided here. So if you want to turn Boost on,
+is different to the one provided here. So if you want to use Boost,
 you should probably try and use the one provided by this SuperBuild.
+
+
+Python Build
+------------
+
+If you ultimately want a python module that is pip-installable, you first get all
+your C++ working, with unit tests and so on. Then rebuild using ```BUILD_Python_Boost```
+or ```BUILD_Python_PyBind``` and follow the examples in ```Code/Lib/PythonBoost``` or ```Code/Lib/PythonPybind```
+to define your python interface. Once the python module is compiling, then setup all your
+CMake options so that the default settings are correct.
+Then in principal, the project will build with:
+
+```
+git clone [--recursive (if using PyBind)] https://github.com/MattClarkson/CMakeCatchTemplate.git
+pip install [--user] ./CMakeCatchTemplate
+```
+see setup.py for an example.
+
+Note: If you use this project as a template and rename the top-level folder, and rename
+everything to your project, then you would substitute your values in the above lines
+and in setup.py
 
 
 Windows Users

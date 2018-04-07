@@ -12,7 +12,7 @@
 #
 #============================================================================*/
 
-option(BUILD_Python_Boost "Build boost::python bindings." OFF)
+option(BUILD_Python_Boost "Build boost::python bindings." ON)
 option(BUILD_Python_PyBind "Build PyBind11 bindings." OFF)
 
 if(BUILD_Python_Boost AND BUILD_Python_PyBind)

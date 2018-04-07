@@ -14,14 +14,18 @@
 
 if(NOT BUILDING_GUIS)
 
-  set(MYPROJECT_PYTHON_LIBRARY_NAME ${MYPROJECT_LIBRARY_NAME}python)
+  # if running pip install, MYPROJECT_PYTHON_MODULE_NAME is passed in from setup.py
+  # So, if its not specified, we just name it after the current library with a 'python' suffix.
+  if (NOT MYPROJECT_PYTHON_MODULE_NAME OR MYPROJECT_PYTHON_MODULE_NAME STREQUAL "")
+    set(MYPROJECT_PYTHON_MODULE_NAME "${MYPROJECT_LIBRARY_NAME}python")
+  endif()
 
   set(MYPROJECT_PYTHON_SRCS
     mpLibPython.cpp
   )
   add_subdirectory(pybind11)
   link_libraries(${MYPROJECT_LIBRARY_NAME})
-  pybind11_add_module(${MYPROJECT_PYTHON_LIBRARY_NAME} ${MYPROJECT_PYTHON_SRCS})
-  install(TARGETS ${MYPROJECT_PYTHON_LIBRARY_NAME} DESTINATION ${MYPROJECT_INSTALL_LIB_DIR})
+  pybind11_add_module(${MYPROJECT_PYTHON_MODULE_NAME} ${MYPROJECT_PYTHON_SRCS})
+  install(TARGETS ${MYPROJECT_PYTHON_MODULE_NAME} DESTINATION ${MYPROJECT_INSTALL_LIB_DIR})
 
 endif()
