@@ -185,22 +185,30 @@ you should probably try and use the one provided by this SuperBuild.
 Python Build
 ------------
 
-If you ultimately want a python module that is pip-installable, you first get all
-your C++ working, with unit tests and so on. Then rebuild using ```BUILD_Python_Boost```
-or ```BUILD_Python_PyBind``` and follow the examples in ```Code/Lib/PythonBoost``` or ```Code/Lib/PythonPybind```
-to define your python interface. Once the python module is compiling, then setup all your
-CMake options so that the default settings are correct.
-Then in principal, the project will build with:
+This project can be built with python setuptools. First try:
 
 ```
-git clone [--recursive (if using PyBind)] https://github.com/MattClarkson/CMakeCatchTemplate.git
+git clone https://github.com/MattClarkson/CMakeCatchTemplate.git
 pip install [--user] ./CMakeCatchTemplate
 ```
-see setup.py for an example.
 
-Note: If you use this project as a template and rename the top-level folder, and rename
-everything to your project, then you would substitute your values in the above lines
-and in setup.py
+Then
+```
+import myprojectpython as mp
+mp.my_first_add_function(1,6)
+```
+Then you can see a working example of how things string together. Look in
+setup.py as setuptools is calling CMake. Thanks go to [this example](https://github.com/pybind/cmake_example).
+
+So, if you ultimately want a python module that is pip-installable, and you followed
+the instructions above to form your own project, with its own name, own variables and so on, then try:
+
+ 1. First get all your C++ working, with unit tests and so on.
+ 2. Then rebuild using ```BUILD_Python_Boost```or ```BUILD_Python_PyBind``` and follow the examples in ```Code/Lib/PythonBoost``` or ```Code/Lib/PythonPybind``` to define your python interface.
+ 3. Once the python module is compiling, then setup all your CMake options so that the default settings are correct.
+ 4. Set values in setup.py according to the comments therein.
+
+Note: Don't forget to clone with ```--recursive``` if you are using PyBind instead of Boost.
 
 
 Windows Users
