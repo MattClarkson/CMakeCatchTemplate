@@ -17,7 +17,8 @@
 option(BUILD_QtVTKDemo "Build QtVTKDemo Gui." OFF)
 option(BUILD_QMLDemo "Build QMLDemo Gui." OFF)
 option(BUILD_QOpenGLDemo "Build QOpenGLDemo Gui." OFF)
-option(BUILD_QMLVLDemo "Build QML with VL Demo Gui." OFF)
+option(BUILD_QMLVLDemo "(not finished) Build QML with VL Demo Gui." OFF)
+mark_as_advanced(BUILD_QMLVLDemo)
 
 if(BUILD_PYTHON_BINDINGS AND BUILD_QtVTKDemo)
   set(BUILD_QtVTKDemo OFF CACHE BOOL "Build QtVTKDemo Gui." FORCE)
