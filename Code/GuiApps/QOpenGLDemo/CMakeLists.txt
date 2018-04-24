@@ -14,6 +14,9 @@
 
 set(APP_NAME QOpenGLDemo)
 
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIR})
+
 set(APP_UIS
 )
 
@@ -50,6 +53,7 @@ add_executable(${APP_NAME} MACOSX_BUNDLE
 )
 
 set(APP_LIBS
+  ${OPENGL_LIBRARIES}
 )
 
 target_link_libraries(${APP_NAME} ${APP_LIBS} ${ALL_THIRD_PARTY_LIBRARIES} ${QT5_LINK_LIBRARIES})
