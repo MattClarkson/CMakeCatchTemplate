@@ -86,11 +86,11 @@ void TriangleModel::sync()
   {
     m_Renderer = new QOpenGLTriangleRenderer();
     m_Renderer->setTriangleData(&m_TriangleData);
+    m_Renderer->setWindow(window());
     connect(window(), &QQuickWindow::beforeRendering, m_Renderer, &QOpenGLTriangleRenderer::paint, Qt::DirectConnection);
   }
   m_Renderer->setDegrees(m_Degrees);
   m_Renderer->setViewportSize(window()->size() * window()->devicePixelRatio());
-  m_Renderer->setWindow(window());
 }
 
 } // end namespace

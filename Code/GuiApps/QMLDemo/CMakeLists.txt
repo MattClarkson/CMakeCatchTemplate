@@ -73,8 +73,8 @@ add_executable(${APP_NAME} MACOSX_BUNDLE
 )
 
 # Add libraries here if necessary.
-set(APP_LIBS)
-target_link_libraries(${APP_NAME} ${APP_LIBS} ${QT5_LINK_LIBRARIES})
+set(APP_LIBS )
+target_link_libraries(${APP_NAME} ${APP_LIBS} ${ALL_THIRD_PARTY_LIBRARIES} ${QT5_LINK_LIBRARIES})
 
 # This sorts out the fixup_bundle.
 mpMacroCreateGuiApplication(${APP_NAME} "${ADDITIONAL_SEARCH_PATHS}")

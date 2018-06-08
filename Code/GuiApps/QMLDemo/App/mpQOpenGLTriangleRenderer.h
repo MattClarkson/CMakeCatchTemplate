@@ -22,8 +22,58 @@
 #include <QtGui/QOpenGLBuffer>
 #include <QtQuick/QQuickWindow>
 
+#ifdef BUILD_VTK
+#include <vtkSmartPointer.h>
+#include <vtkCubeSource.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkActor.h>
+#include <vtkExternalOpenGLRenderer.h>
+#include <vtkExternalOpenGLRenderWindow.h>
+#include <vtkCommand.h>
+#endif
+
 namespace mp
 {
+
+
+class vtkMakeCurrentCallback : public vtkCommand
+{
+public:
+  QQuickWindow *window;
+  static vtkMakeCurrentCallback *New() { return new vtkMakeCurrentCallback; }
+  void Execute(vtkObject *caller,
+               unsigned long eventId,
+               void *callData)
+  {
+    window->openglContext()->makeCurrent(window->openglContext()->surface());
+  }
+};
+
+class vtkIsCurrentCallback : public vtkCommand
+{
+public:
+  QQuickWindow *window;
+  static vtkIsCurrentCallback *New() { return new vtkIsCurrentCallback; }
+  void Execute(vtkObject *caller,
+               unsigned long eventId,
+               void *callData)
+  {
+    bool *tmp = reinterpret_cast<bool*>(callData);
+    *tmp = window->openglContext()->isValid();
+  }
+};
+
+class vtkFrameCallback : public vtkCommand
+{
+public:
+  QQuickWindow *window;
+  static vtkFrameCallback *New() { return new vtkFrameCallback; }
+  void Execute(vtkObject *caller,
+               unsigned long eventId,
+               void *callData)
+  {
+  }
+};
 
 /**
  * \class QOpenGLTriangleRenderer
@@ -62,6 +112,18 @@ private:
   QMatrix4x4                m_ProjMatrix;
   QMatrix4x4                m_ModelViewMatrix;
   QMatrix4x4                m_CameraMatrix;
+
+#ifdef BUILD_VTK
+  vtkSmartPointer<vtkCubeSource>                 m_CubeSource;
+  vtkSmartPointer<vtkPolyDataMapper>             m_CubeMapper;
+  vtkSmartPointer<vtkActor>                      m_CubeActor;
+  vtkSmartPointer<vtkRenderer>                   m_VTKRenderer;
+  vtkSmartPointer<vtkExternalOpenGLRenderWindow> m_VTKRenderWindow;
+  vtkSmartPointer<vtkMakeCurrentCallback>        m_VTKMakeCurrentCallback;
+  vtkSmartPointer<vtkIsCurrentCallback>          m_VTKIsCurrentCallback;
+  vtkSmartPointer<vtkFrameCallback>              m_VTKFrameCallback;
+#endif
+
 };
 
 } // end namespace
