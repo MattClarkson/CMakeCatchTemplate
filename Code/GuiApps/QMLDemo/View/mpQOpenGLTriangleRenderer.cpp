@@ -14,11 +14,6 @@
 
 #include "mpQOpenGLTriangleRenderer.h"
 #include <QtMath>
-
-#include <vtkCamera.h>
-#include <vtkProp3D.h>
-#include <vtkProperty.h>
-
 #include <iostream>
 
 namespace mp
@@ -48,23 +43,13 @@ static const char *fragmentShaderSource =
 
 //-----------------------------------------------------------------------------
 QOpenGLTriangleRenderer::QOpenGLTriangleRenderer()
-: m_Degrees(0)
+: m_Erase(true)
+, m_Degrees(0)
 , m_Window(nullptr)
 , m_Program(nullptr)
 , m_TriangleData(nullptr)
 , m_TriangleDataDirty(false)
 {
-  m_CubeSource = vtkCubeSource::New();
-  m_CubeSource->SetCenter(0, 0, 0);
-  m_CubeSource->SetXLength(0.5);
-  m_CubeSource->SetYLength(0.5);
-  m_CubeSource->SetZLength(0.5);
-  m_CubeMapper = vtkPolyDataMapper::New();
-  m_CubeMapper->SetInputConnection(m_CubeSource->GetOutputPort());
-  m_CubeActor = vtkActor::New();
-  m_CubeActor->GetProperty()->SetColor(1, 0, 0);
-  m_CubeActor->GetProperty()->SetOpacity(0.5);
-  m_CubeActor->SetMapper(m_CubeMapper);
 }
 
 
@@ -79,6 +64,13 @@ QOpenGLTriangleRenderer::~QOpenGLTriangleRenderer()
     delete m_Program;
     m_Program = nullptr;
   }
+}
+
+
+//-----------------------------------------------------------------------------
+void QOpenGLTriangleRenderer::SetEraseBeforeVTKRendering(bool b)
+{
+  m_Erase = b;
 }
 
 
@@ -111,27 +103,6 @@ void QOpenGLTriangleRenderer::paint()
 
   if (!m_Program)
   {
-    m_VTKRenderer = vtkRenderer::New();
-    m_VTKRenderer->AddActor(m_CubeActor);
-
-    m_VTKRenderWindow = vtkExternalOpenGLRenderWindow::New();
-    m_VTKRenderWindow->InitializeFromCurrentContext();
-    m_VTKRenderWindow->AddRenderer(m_VTKRenderer);
-    m_VTKRenderWindow->SetSwapBuffers(false);
-
-    m_VTKMakeCurrentCallback = vtkMakeCurrentCallback::New();
-    m_VTKMakeCurrentCallback->window = m_Window;
-    m_VTKRenderWindow->AddObserver(vtkCommand::WindowMakeCurrentEvent, m_VTKMakeCurrentCallback);
-
-    m_VTKIsCurrentCallback = vtkIsCurrentCallback::New();
-    m_VTKIsCurrentCallback->window = m_Window;
-    m_VTKRenderWindow->AddObserver(vtkCommand::WindowIsCurrentEvent, m_VTKIsCurrentCallback);
-
-    m_VTKFrameCallback = vtkFrameCallback::New();
-    m_VTKFrameCallback->window = m_Window;
-    m_VTKRenderWindow->AddObserver(vtkCommand::WindowFrameEvent, m_VTKFrameCallback);
-    m_VTKRenderWindow->SetMapped(true);
-
     m_Program = new QOpenGLShaderProgram();
     m_Program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
     m_Program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
@@ -177,14 +148,18 @@ void QOpenGLTriangleRenderer::paint()
   glViewport(0, 0, m_ViewportSize.width(), m_ViewportSize.height());
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
-  glClearColor(0, 0, 0, 1);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  if (m_Erase)
+  {
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  }
 
   m_ModelViewMatrix.setToIdentity();
   m_ModelViewMatrix.rotate(m_Degrees, 0, 0, 1);
 
   m_CameraMatrix.setToIdentity();
-  m_CameraMatrix.translate(0, 0, -1);
+  m_CameraMatrix.translate(0, 0, -3);
 
   m_ProjMatrix.setToIdentity();
   m_ProjMatrix.perspective(80.0f, GLfloat(m_ViewportSize.width()) / m_ViewportSize.height(), 0.01f, 100.0f);
@@ -195,11 +170,6 @@ void QOpenGLTriangleRenderer::paint()
   m_Program->setUniformValue(m_ModelViewMatrixLoc, m_CameraMatrix * m_ModelViewMatrix);
 
   glDrawArrays(GL_TRIANGLES, 0, 3);
-
-  m_VTKRenderWindow->MakeCurrent();
-  m_VTKRenderWindow->SetSize(m_ViewportSize.width(), m_ViewportSize.height());
-  m_VTKRenderWindow->SetErase(false);
-  m_VTKRenderWindow->Render();
 
   m_Program->release();
   m_Window->resetOpenGLState();

@@ -12,9 +12,14 @@
 
 =============================================================================*/
 #include <QGuiApplication>
-#include <QtQuick/QQuickView>
 #include "MyProjectConfigure.h"
-#include "mpTriangleModel.h"
+#include <mpTriangleModel.h>
+#ifdef BUILD_VTK // for demo purposes only. In practice I wouldnt mix VTK with other OpenGL.
+#include <mpQQuickVTKView.h>
+#include <mpCubeModel.h>
+#else
+#include <QQuickView>
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -23,7 +28,11 @@ int main(int argc, char *argv[])
   app.setApplicationName("QMLDemo");
   app.setApplicationVersion(QString(MYPROJECT_VERSION_STRING));
 
-  qmlRegisterType<mp::TriangleModel>("OpenGLUnderQML", 1, 0, "TriangleModel");
+  qmlRegisterType<mp::TriangleModel>("QMLDemo", 1, 0, "TriangleModel");
+
+#ifdef BUILD_VTK // for demo purposes only. In practice I wouldnt mix VTK with other OpenGL.
+  qmlRegisterType<mp::CubeModel>("QMLDemo", 1, 0, "CubeModel");
+#endif
 
   QSurfaceFormat fmt;
   fmt.setDepthBufferSize(24);
@@ -31,7 +40,11 @@ int main(int argc, char *argv[])
   fmt.setProfile(QSurfaceFormat::CoreProfile);
   QSurfaceFormat::setDefaultFormat(fmt);
 
+#ifdef BUILD_VTK // for demo purposes only. In practice I wouldnt mix VTK with other OpenGL.
+  mp::QQuickVTKView view;
+#else
   QQuickView view;
+#endif
   view.setResizeMode(QQuickView::SizeRootObjectToView);
   view.setSource(QUrl("qrc:/main.qml"));
   view.show();

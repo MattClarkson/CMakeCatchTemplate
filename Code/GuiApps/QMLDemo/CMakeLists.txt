@@ -18,14 +18,28 @@ set(APP_UIS
 )
 
 set(APP_SRCS
-  App/mpTriangleModel.cpp
-  App/mpQOpenGLTriangleRenderer.cpp
+  Model/mpBaseModel.cpp
+  Model/mpTriangleModel.cpp
+  View/mpQOpenGLTriangleRenderer.cpp
 )
+if(BUILD_VTK)
+  list(APPEND APP_SRCS
+    Model/mpCubeModel.cpp
+    View/mpQQuickVTKView.cpp
+  )
+endif()
 
 set(APP_MOC_HDRS
-  App/mpTriangleModel.h
-  App/mpQOpenGLTriangleRenderer.h
+  Model/mpBaseModel.h
+  Model/mpTriangleModel.h
+  View/mpQOpenGLTriangleRenderer.h
 )
+if(BUILD_VTK)
+  list(APPEND APP_MOC_HDRS
+    Model/mpCubeModel.h
+    View/mpQQuickVTKView.h
+  )
+endif()
 
 set(APP_HDRS
 )
@@ -40,6 +54,8 @@ qt5_add_resources(QT5_RES ${APP_RES})
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Model)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/View)
 
 # Install all Qt qml infrastructure.
 # Note: Im trying to install everything under the bin/qml folder EXCEPT QtTest.
