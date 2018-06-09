@@ -13,7 +13,7 @@
 =============================================================================*/
 
 import QtQuick 2.0
-import QMLDemo 1.0
+import QMLVTKDemo 1.0
 
 Item {
 

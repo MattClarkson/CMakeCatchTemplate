@@ -69,13 +69,9 @@ void TriangleModel::InternalSync()
     m_Renderer = new QOpenGLTriangleRenderer();
     m_Renderer->setTriangleData(&m_TriangleData);
     m_Renderer->setWindow(window());
-#ifdef BUILD_VTK // for demo purposes only. In practice I wouldnt mix VTK with other OpenGL.
     m_Renderer->SetEraseBeforeVTKRendering(false);
     connect(dynamic_cast<QQuickVTKView*>(window()), &QQuickVTKView::afterVTKRendering,
             m_Renderer, &QOpenGLTriangleRenderer::paint, Qt::DirectConnection);
-#else
-    connect(window(), &QQuickWindow::beforeRendering, m_Renderer, &QOpenGLTriangleRenderer::paint, Qt::DirectConnection);
-#endif
   }
   m_Renderer->setViewportSize(window()->size() * window()->devicePixelRatio());
   m_Renderer->setDegrees(m_Degrees);

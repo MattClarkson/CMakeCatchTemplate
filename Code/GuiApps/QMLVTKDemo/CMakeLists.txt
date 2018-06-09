@@ -12,7 +12,7 @@
 #
 #============================================================================*/
 
-set(APP_NAME QMLDemo)
+set(APP_NAME QMLVTKDemo)
 
 set(APP_UIS
 )
@@ -20,32 +20,24 @@ set(APP_UIS
 set(APP_SRCS
   Model/mpBaseModel.cpp
   Model/mpTriangleModel.cpp
+  Model/mpCubeModel.cpp
   View/mpQOpenGLTriangleRenderer.cpp
+  View/mpQQuickVTKView.cpp
 )
-if(BUILD_VTK)
-  list(APPEND APP_SRCS
-    Model/mpCubeModel.cpp
-    View/mpQQuickVTKView.cpp
-  )
-endif()
 
 set(APP_MOC_HDRS
   Model/mpBaseModel.h
   Model/mpTriangleModel.h
+  Model/mpCubeModel.h
   View/mpQOpenGLTriangleRenderer.h
+  View/mpQQuickVTKView.h
 )
-if(BUILD_VTK)
-  list(APPEND APP_MOC_HDRS
-    Model/mpCubeModel.h
-    View/mpQQuickVTKView.h
-  )
-endif()
 
 set(APP_HDRS
 )
 
 set(APP_RES
-  Resources/QMLDemo.rc
+  Resources/QMLVTKDemo.rc
 )
 
 qt5_wrap_ui(QT5_UIS ${APP_UIS})
