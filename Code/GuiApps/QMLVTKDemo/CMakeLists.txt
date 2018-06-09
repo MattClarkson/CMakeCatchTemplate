@@ -12,26 +12,32 @@
 #
 #============================================================================*/
 
-set(APP_NAME QMLDemo)
+set(APP_NAME QMLVTKDemo)
 
 set(APP_UIS
 )
 
 set(APP_SRCS
-  App/mpTriangleModel.cpp
-  App/mpQOpenGLTriangleRenderer.cpp
+  Model/mpBaseModel.cpp
+  Model/mpTriangleModel.cpp
+  Model/mpCubeModel.cpp
+  View/mpQOpenGLTriangleRenderer.cpp
+  View/mpQQuickVTKView.cpp
 )
 
 set(APP_MOC_HDRS
-  App/mpTriangleModel.h
-  App/mpQOpenGLTriangleRenderer.h
+  Model/mpBaseModel.h
+  Model/mpTriangleModel.h
+  Model/mpCubeModel.h
+  View/mpQOpenGLTriangleRenderer.h
+  View/mpQQuickVTKView.h
 )
 
 set(APP_HDRS
 )
 
 set(APP_RES
-  Resources/QMLDemo.rc
+  Resources/QMLVTKDemo.rc
 )
 
 qt5_wrap_ui(QT5_UIS ${APP_UIS})
@@ -40,6 +46,8 @@ qt5_add_resources(QT5_RES ${APP_RES})
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Model)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/View)
 
 # Install all Qt qml infrastructure.
 # Note: Im trying to install everything under the bin/qml folder EXCEPT QtTest.
@@ -73,8 +81,8 @@ add_executable(${APP_NAME} MACOSX_BUNDLE
 )
 
 # Add libraries here if necessary.
-set(APP_LIBS)
-target_link_libraries(${APP_NAME} ${APP_LIBS} ${QT5_LINK_LIBRARIES})
+set(APP_LIBS )
+target_link_libraries(${APP_NAME} ${APP_LIBS} ${ALL_THIRD_PARTY_LIBRARIES} ${QT5_LINK_LIBRARIES})
 
 # This sorts out the fixup_bundle.
 mpMacroCreateGuiApplication(${APP_NAME} "${ADDITIONAL_SEARCH_PATHS}")

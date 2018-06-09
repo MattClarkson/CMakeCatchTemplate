@@ -14,6 +14,7 @@
 
 #include "mpQOpenGLTriangleRenderer.h"
 #include <QtMath>
+#include <iostream>
 
 namespace mp
 {
@@ -42,7 +43,8 @@ static const char *fragmentShaderSource =
 
 //-----------------------------------------------------------------------------
 QOpenGLTriangleRenderer::QOpenGLTriangleRenderer()
-: m_Degrees(0)
+: m_Erase(true)
+, m_Degrees(0)
 , m_Window(nullptr)
 , m_Program(nullptr)
 , m_TriangleData(nullptr)
@@ -62,6 +64,13 @@ QOpenGLTriangleRenderer::~QOpenGLTriangleRenderer()
     delete m_Program;
     m_Program = nullptr;
   }
+}
+
+
+//-----------------------------------------------------------------------------
+void QOpenGLTriangleRenderer::SetEraseBeforeVTKRendering(bool b)
+{
+  m_Erase = b;
 }
 
 
@@ -137,15 +146,20 @@ void QOpenGLTriangleRenderer::paint()
   }
 
   glViewport(0, 0, m_ViewportSize.width(), m_ViewportSize.height());
-  glDisable(GL_DEPTH_TEST);
-  glClearColor(0, 0, 0, 1);
-  glClear(GL_COLOR_BUFFER_BIT);
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+
+  if (m_Erase)
+  {
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  }
 
   m_ModelViewMatrix.setToIdentity();
   m_ModelViewMatrix.rotate(m_Degrees, 0, 0, 1);
 
   m_CameraMatrix.setToIdentity();
-  m_CameraMatrix.translate(0, 0, -1);
+  m_CameraMatrix.translate(0, 0, -3);
 
   m_ProjMatrix.setToIdentity();
   m_ProjMatrix.perspective(80.0f, GLfloat(m_ViewportSize.width()) / m_ViewportSize.height(), 0.01f, 100.0f);

@@ -33,7 +33,7 @@ The main features provided are:
  6. CppCheck config, so you can check for some performance, style and correctness issues, when you have CppCheck installed on your system.
  7. Doxygen config, so you can generate documentation via a ```make docs``` or DOCS task in Visual Studio.
  8. If your code is open-source, you can register with a Continuous Integration service, so this project provides Travis and Appveyor examples.
- 9. CPack setup to produce installers for GUI apps QtVTKDemo and QMLDemo along with installation code for command line apps.
+ 9. CPack setup to produce installers for GUI apps QtVTKDemo and QMLVTKDemo along with installation code for command line apps.
 10. An example of the CMake required to build python interfaces to your C++ code, using ```boost::python```.
 11. An example of the CMake required to build python interfaces to your C++ code, using [pybind11](https://github.com/pybind/pybind11), with credit to [this example](https://github.com/pybind/cmake_example).
 12. An example of the CMake required to export a C-style module into [Unity](https://unity3d.com/).
@@ -71,7 +71,7 @@ There are many different issues and combinations to test when packaging an appli
 
  * System: Windows / Linux / Mac.
  * Linkage: Shared libraries / Static libraries.
- * Executable style: Command line applications / GUI applications / Command line applications bundled with GUI applications bundled together.
+ * Executable style: Command line applications / GUI applications / Command line applications bundled together with GUI applications.
  * With or without python modules.
  * With or without Unity modules.
  * The developer runs ```make install``` to install it in a specific directory, linked against known libraries, in known locations.

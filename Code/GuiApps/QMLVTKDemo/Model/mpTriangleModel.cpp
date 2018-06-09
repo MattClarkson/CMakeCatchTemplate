@@ -13,7 +13,11 @@
 =============================================================================*/
 
 #include "mpTriangleModel.h"
-#include "mpQOpenGLTriangleRenderer.h"
+
+#include <mpQOpenGLTriangleRenderer.h>
+#ifdef BUILD_VTK // for demo purposes only. In practice I wouldnt mix VTK with other OpenGL.
+#include <mpQQuickVTKView.h>
+#endif
 
 namespace mp
 {
@@ -23,32 +27,11 @@ TriangleModel::TriangleModel()
 : m_Degrees(0)
 , m_Renderer(nullptr)
 , m_TriangleData({
-                 0.0f,  0.5f, 1.0f, 0.0f, 0.0f, // Vertex 1: Red
-                 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Vertex 2: Green
-                -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // Vertex 3: Blue
+                 0.0f,  0.5f, 1.0f, 0.0f, 0.0f, // Vertex 1: position, red
+                 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Vertex 2: position, green
+                -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // Vertex 3: position, blue
                  })
 {
-  connect(this, &QQuickItem::windowChanged, this, &TriangleModel::handleWindowChanged);
-}
-
-
-//-----------------------------------------------------------------------------
-void TriangleModel::handleWindowChanged(QQuickWindow *win)
-{
-  if(window())
-  {
-    disconnect(window(), 0, this, 0);
-  }
-
-  if (win)
-  {
-    connect(win, &QQuickWindow::beforeSynchronizing, this, &TriangleModel::sync, Qt::DirectConnection);
-    connect(win, &QQuickWindow::sceneGraphInvalidated, this, &TriangleModel::cleanup, Qt::DirectConnection);
-
-    // If we allow QML to do the clearing, they would
-    // clear what we paint and nothing would show.
-    win->setClearBeforeRendering(false);
-  }
 }
 
 
@@ -60,16 +43,15 @@ void TriangleModel::setDegrees(qreal d)
     return;
   }
   m_Degrees = d;
-  emit degreesChanged();
   if (window())
   {
-    window()->update(); // presumably queues a request until the next rendering pass.
+    window()->update();
   }
 }
 
 
 //-----------------------------------------------------------------------------
-void TriangleModel::cleanup()
+void TriangleModel::InternalCleanup()
 {
   if (m_Renderer)
   {
@@ -80,17 +62,19 @@ void TriangleModel::cleanup()
 
 
 //-----------------------------------------------------------------------------
-void TriangleModel::sync()
+void TriangleModel::InternalSync()
 {
   if (!m_Renderer)
   {
     m_Renderer = new QOpenGLTriangleRenderer();
     m_Renderer->setTriangleData(&m_TriangleData);
-    connect(window(), &QQuickWindow::beforeRendering, m_Renderer, &QOpenGLTriangleRenderer::paint, Qt::DirectConnection);
+    m_Renderer->setWindow(window());
+    m_Renderer->SetEraseBeforeVTKRendering(false);
+    connect(dynamic_cast<QQuickVTKView*>(window()), &QQuickVTKView::afterVTKRendering,
+            m_Renderer, &QOpenGLTriangleRenderer::paint, Qt::DirectConnection);
   }
-  m_Renderer->setDegrees(m_Degrees);
   m_Renderer->setViewportSize(window()->size() * window()->devicePixelRatio());
-  m_Renderer->setWindow(window());
+  m_Renderer->setDegrees(m_Degrees);
 }
 
 } // end namespace

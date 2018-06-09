@@ -72,6 +72,12 @@ if(NOT DEFINED VTK_DIR)
      )
   endif()
 
+  if(VTK_VERSION VERSION_GREATER "7.0")
+    list(APPEND additional_cmake_args
+         -DModule_vtkRenderingExternal:BOOL=ON
+        )
+  endif()
+
   if(CTEST_USE_LAUNCHERS)
     list(APPEND additional_cmake_args
       "-DCMAKE_PROJECT_${proj}_INCLUDE:FILEPATH=${CMAKE_ROOT}/Modules/CTestUseLaunchers.cmake"

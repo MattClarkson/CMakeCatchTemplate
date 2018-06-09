@@ -38,6 +38,7 @@ public:
   QOpenGLTriangleRenderer();
   ~QOpenGLTriangleRenderer();
 
+  void SetEraseBeforeVTKRendering(bool b);
   void setDegrees(qreal d) { m_Degrees = d; }
   void setViewportSize(const QSize &size);
   void setWindow(QQuickWindow *window);
@@ -49,6 +50,7 @@ public slots:
 
 private:
 
+  bool                      m_Erase;
   qreal                     m_Degrees;
   QSize                     m_ViewportSize;
   QQuickWindow             *m_Window;

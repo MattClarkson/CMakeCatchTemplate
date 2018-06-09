@@ -16,8 +16,8 @@ if(BUILD_QtVTKDemo AND VTK_FOUND AND Qt5_DIR)
   add_subdirectory(QtVTKDemo)
 endif()
 
-if(BUILD_QMLDemo AND Qt5_DIR)
-  add_subdirectory(QMLDemo)
+if(BUILD_QMLVTKDemo AND VTK_FOUND AND Qt5_DIR)
+  add_subdirectory(QMLVTKDemo)
 endif()
 
 if(BUILD_QOpenGLDemo AND Qt5_DIR)

@@ -13,7 +13,7 @@
 =============================================================================*/
 
 import QtQuick 2.0
-import OpenGLUnderQML 1.0
+import QMLVTKDemo 1.0
 
 Item {
 
@@ -21,6 +21,15 @@ Item {
     height: 480
 
     TriangleModel {
+        SequentialAnimation on degrees {
+            NumberAnimation { to: 360; duration: 2500; easing.type: Easing.InQuad }
+            NumberAnimation { to: 0; duration: 2500; easing.type: Easing.OutQuad }
+            loops: Animation.Infinite
+            running: true
+        }
+    }
+
+    CubeModel {
         SequentialAnimation on degrees {
             NumberAnimation { to: 360; duration: 2500; easing.type: Easing.InQuad }
             NumberAnimation { to: 0; duration: 2500; easing.type: Easing.OutQuad }
