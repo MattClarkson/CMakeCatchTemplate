@@ -22,6 +22,8 @@ QQuickVTKView::~QQuickVTKView()
 {
   if (m_VTKRenderWindow)
   {
+    m_VTKRenderWindowInteractor->Disable();
+    m_VTKRenderWindow->SetInteractor(nullptr);
     m_VTKRenderWindow->RemoveAllObservers();
     vtkRendererCollection *c = m_VTKRenderWindow->GetRenderers();
     vtkRenderer *v = nullptr;
@@ -37,6 +39,8 @@ QQuickVTKView::~QQuickVTKView()
 QQuickVTKView::QQuickVTKView(QWindow * parent)
 : QQuickView(parent)
 , m_VTKRenderWindow(nullptr)
+, m_VTKRenderWindowInteractor(nullptr)
+, m_VTKInteractorStyleMultiTouchCamera(nullptr)
 , m_EraseBeforeVTKRendering(true)
 {
   this->Init();
@@ -47,6 +51,8 @@ QQuickVTKView::QQuickVTKView(QWindow * parent)
 QQuickVTKView::QQuickVTKView(QQmlEngine * engine, QWindow * parent)
 : QQuickView(engine, parent)
 , m_VTKRenderWindow(nullptr)
+, m_VTKRenderWindowInteractor(nullptr)
+, m_VTKInteractorStyleMultiTouchCamera(nullptr)
 , m_EraseBeforeVTKRendering(true)
 {
   this->Init();
@@ -57,6 +63,8 @@ QQuickVTKView::QQuickVTKView(QQmlEngine * engine, QWindow * parent)
 QQuickVTKView::QQuickVTKView(const QUrl & source, QWindow * parent)
 : QQuickView(source, parent)
 , m_VTKRenderWindow(nullptr)
+, m_VTKRenderWindowInteractor(nullptr)
+, m_VTKInteractorStyleMultiTouchCamera(nullptr)
 , m_EraseBeforeVTKRendering(true)
 {
   this->Init();
@@ -67,6 +75,13 @@ QQuickVTKView::QQuickVTKView(const QUrl & source, QWindow * parent)
 void QQuickVTKView::Init()
 {
   m_VTKRenderWindow = vtkExternalOpenGLRenderWindow::New();
+
+  m_VTKInteractorStyleMultiTouchCamera = vtkInteractorStyleMultiTouchCamera::New();
+
+  m_VTKRenderWindowInteractor = vtkRenderWindowInteractor::New();
+  m_VTKRenderWindowInteractor->SetRenderWindow(m_VTKRenderWindow);
+  m_VTKRenderWindowInteractor->SetInteractorStyle(m_VTKInteractorStyleMultiTouchCamera);
+
   connect(this, SIGNAL(beforeRendering()), this, SLOT(Render()), Qt::DirectConnection);
 }
 
@@ -99,6 +114,20 @@ void QQuickVTKView::Render()
   m_VTKRenderWindow->SetErase(m_EraseBeforeVTKRendering);
   m_VTKRenderWindow->Render();
   emit afterVTKRendering();
+}
+
+
+//-----------------------------------------------------------------------------
+void QQuickVTKView::SetEnabled(bool isEnabled)
+{
+  if (isEnabled)
+  {
+    m_VTKRenderWindowInteractor->Enable();
+  }
+  else
+  {
+    m_VTKRenderWindowInteractor->Disable();
+  }
 }
 
 } // end namespace

@@ -18,6 +18,8 @@
 #include <QQuickView>
 #include <vtkSmartPointer.h>
 #include <vtkExternalOpenGLRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkInteractorStyleMultiTouchCamera.h>
 
 class vtkRenderer;
 
@@ -42,6 +44,7 @@ public:
   void AddRenderer(vtkRenderer* r);
   void RemoveRenderer(vtkRenderer *r);
   void SetEraseBeforeVTKRendering(bool b);
+  void SetEnabled(bool isEnabled);
 
 signals:
 
@@ -63,9 +66,10 @@ private slots:
 
 private:
 
-  vtkSmartPointer<vtkExternalOpenGLRenderWindow> m_VTKRenderWindow;
-  bool                                           m_EraseBeforeVTKRendering;
-
+  vtkSmartPointer<vtkExternalOpenGLRenderWindow>      m_VTKRenderWindow;
+  vtkSmartPointer<vtkRenderWindowInteractor>          m_VTKRenderWindowInteractor;
+  vtkSmartPointer<vtkInteractorStyleMultiTouchCamera> m_VTKInteractorStyleMultiTouchCamera;
+  bool                                                m_EraseBeforeVTKRendering;
   void Init();
 
 };
