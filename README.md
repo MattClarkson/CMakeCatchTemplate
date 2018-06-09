@@ -71,7 +71,7 @@ There are many different issues and combinations to test when packaging an appli
 
  * System: Windows / Linux / Mac.
  * Linkage: Shared libraries / Static libraries.
- * Executable style: Command line applications / GUI applications / Command line applications bundled with GUI applications bundled together.
+ * Executable style: Command line applications / GUI applications / Command line applications bundled together with GUI applications.
  * With or without python modules.
  * With or without Unity modules.
  * The developer runs ```make install``` to install it in a specific directory, linked against known libraries, in known locations.
