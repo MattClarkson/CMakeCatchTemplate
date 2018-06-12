@@ -16,12 +16,15 @@
 #define mpQQuickVTKView_h
 
 #include <QQuickView>
+#include <QMutex>
 #include <vtkSmartPointer.h>
 #include <vtkExternalOpenGLRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyleMultiTouchCamera.h>
 
 class vtkRenderer;
+class vtkEventQtSlotConnect;
+class QVTKInteractorAdapter;
 
 namespace mp
 {
@@ -46,6 +49,19 @@ public:
   void SetEraseBeforeVTKRendering(bool b);
   void SetEnabled(bool isEnabled);
 
+protected:
+
+  virtual bool event(QEvent* e);
+  virtual void mousePressEvent(QMouseEvent* event);
+  virtual void mouseMoveEvent(QMouseEvent* event);
+  virtual void mouseReleaseEvent(QMouseEvent* event);
+  virtual void mouseDoubleClickEvent(QMouseEvent* event);
+  virtual void keyPressEvent(QKeyEvent* event);
+  virtual void keyReleaseEvent(QKeyEvent* event);
+  virtual void enterEvent(QEvent*);
+  virtual void leaveEvent(QEvent*);
+  virtual void wheelEvent(QWheelEvent*);
+
 signals:
 
   /**
@@ -66,9 +82,14 @@ private slots:
 
 private:
 
+  bool ProcessEvent(QEvent* e);
+
+  QMutex                                              m_Mutex;
   vtkSmartPointer<vtkExternalOpenGLRenderWindow>      m_VTKRenderWindow;
   vtkSmartPointer<vtkRenderWindowInteractor>          m_VTKRenderWindowInteractor;
   vtkSmartPointer<vtkInteractorStyleMultiTouchCamera> m_VTKInteractorStyleMultiTouchCamera;
+  vtkSmartPointer<vtkEventQtSlotConnect>              m_EventSlotConnector;
+  QVTKInteractorAdapter*                              m_VTKInteractorAdapter;
   bool                                                m_EraseBeforeVTKRendering;
   void Init();
 

@@ -30,12 +30,6 @@ Item {
     }
 
     CubeModel {
-        SequentialAnimation on degrees {
-            NumberAnimation { to: 360; duration: 2500; easing.type: Easing.InQuad }
-            NumberAnimation { to: 0; duration: 2500; easing.type: Easing.OutQuad }
-            loops: Animation.Infinite
-            running: true
-        }
     }
 
     Rectangle {
