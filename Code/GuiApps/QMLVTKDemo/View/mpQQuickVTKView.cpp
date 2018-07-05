@@ -152,7 +152,8 @@ bool QQuickVTKView::event(QEvent *e)
 {
   if(e->type() == QEvent::TouchBegin ||
      e->type() == QEvent::TouchUpdate ||
-     e->type() == QEvent::TouchEnd)
+     e->type() == QEvent::TouchEnd
+    )
   {
     QMutexLocker lock(&m_Mutex);
     if(m_VTKRenderWindow && m_VTKRenderWindow->GetReadyForRendering())
