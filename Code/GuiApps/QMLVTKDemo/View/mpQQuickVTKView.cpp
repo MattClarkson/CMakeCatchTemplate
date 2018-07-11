@@ -27,7 +27,9 @@ QQuickVTKView::~QQuickVTKView()
   {
     m_VTKRenderWindowInteractor->Disable();
     m_VTKRenderWindow->SetInteractor(nullptr);
+#ifdef BUILD_VTK_OpenGL2
     m_VTKRenderWindow->SetReadyForRendering(false);
+#endif
     m_VTKRenderWindow->SetMapped(0);
     m_VTKRenderWindow->RemoveAllObservers();
     vtkRendererCollection *c = m_VTKRenderWindow->GetRenderers();
@@ -157,7 +159,7 @@ bool QQuickVTKView::event(QEvent *e)
     )
   {
     QMutexLocker lock(&m_Mutex);
-    if(m_VTKRenderWindow && m_VTKRenderWindow->GetReadyForRendering())
+    if(m_VTKRenderWindow)
     {
       m_VTKInteractorAdapter->ProcessEvent(e, m_VTKRenderWindow->GetInteractor());
       if (e->isAccepted())
@@ -174,7 +176,7 @@ bool QQuickVTKView::event(QEvent *e)
 bool QQuickVTKView::ProcessEvent(QEvent* e)
 {
   QMutexLocker lock(&m_Mutex);
-  if (m_VTKRenderWindow && m_VTKRenderWindow->GetReadyForRendering())
+  if (m_VTKRenderWindow)
   {
     return m_VTKInteractorAdapter->ProcessEvent(e, m_VTKRenderWindowInteractor);
   }
