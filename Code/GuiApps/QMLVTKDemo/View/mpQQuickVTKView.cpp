@@ -89,6 +89,7 @@ void QQuickVTKView::Init()
   m_VTKRenderWindowInteractor = vtkRenderWindowInteractor::New();
   m_VTKRenderWindowInteractor->SetRenderWindow(m_VTKRenderWindow);
   m_VTKRenderWindowInteractor->SetInteractorStyle(m_VTKInteractorStyleMultiTouchCamera);
+  m_VTKRenderWindowInteractor->SetEnableRender(false);
 
   m_VTKInteractorAdapter = new QVTKInteractorAdapter(this);
   m_VTKInteractorAdapter->SetDevicePixelRatio(this->devicePixelRatio());
