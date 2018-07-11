@@ -130,8 +130,14 @@ void QQuickVTKView::Render()
   emit beforeVTKRendering();
 
   QMutexLocker lock(&m_Mutex);
-  m_VTKRenderWindow->Render();
-
+  if (m_VTKRenderWindow->GetMapped() 
+#ifdef BUILD_VTK_OpenGL2
+    && m_VTKRenderWindow->GetReadyForRendering()
+#endif
+     )
+  {
+    m_VTKRenderWindow->Render();
+  }
   emit afterVTKRendering();
 }
 
