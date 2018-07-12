@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
   view.setResizeMode(QQuickView::SizeRootObjectToView);
   view.setSource(QUrl("qrc:/main.qml"));
   view.show();
+  view.SetEnabled(true);
 
   return app.exec();
 
