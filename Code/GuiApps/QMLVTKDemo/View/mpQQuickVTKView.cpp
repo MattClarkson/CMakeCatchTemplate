@@ -30,7 +30,6 @@ QQuickVTKView::~QQuickVTKView()
 #ifdef BUILD_VTK_OpenGL2
     m_VTKRenderWindow->SetReadyForRendering(false);
 #endif
-    m_VTKRenderWindow->SetMapped(0);
     m_VTKRenderWindow->RemoveAllObservers();
     vtkRendererCollection *c = m_VTKRenderWindow->GetRenderers();
     vtkRenderer *v = nullptr;
@@ -91,7 +90,7 @@ void QQuickVTKView::Init()
   m_VTKRenderWindowInteractor = vtkRenderWindowInteractor::New();
   m_VTKRenderWindowInteractor->SetRenderWindow(m_VTKRenderWindow);
   m_VTKRenderWindowInteractor->SetInteractorStyle(m_VTKInteractorStyleMultiTouchCamera);
-  m_VTKRenderWindowInteractor->SetEnableRender(false);
+  m_VTKRenderWindowInteractor->SetEnableRender(false); // this is to stop interactor triggering Render().
 
   m_VTKInteractorAdapter = new QVTKInteractorAdapter(this);
   m_VTKInteractorAdapter->SetDevicePixelRatio(this->devicePixelRatio());
@@ -130,14 +129,8 @@ void QQuickVTKView::Render()
   emit beforeVTKRendering();
 
   QMutexLocker lock(&m_Mutex);
-  if (m_VTKRenderWindow->GetMapped() 
-#ifdef BUILD_VTK_OpenGL2
-    && m_VTKRenderWindow->GetReadyForRendering()
-#endif
-     )
-  {
-    m_VTKRenderWindow->Render();
-  }
+
+  m_VTKRenderWindow->Render();
   emit afterVTKRendering();
 }
 
