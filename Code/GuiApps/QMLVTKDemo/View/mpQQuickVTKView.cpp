@@ -16,6 +16,7 @@
 #include <vtkRendererCollection.h>
 #include <vtkEventQtSlotConnect.h>
 #include <QVTKInteractorAdapter.h>
+#include <QVTKInteractor.h>
 #include <QMutexLocker>
 
 namespace mp {
@@ -87,9 +88,10 @@ void QQuickVTKView::Init()
 
   m_VTKInteractorStyleMultiTouchCamera = vtkInteractorStyleMultiTouchCamera::New();
 
-  m_VTKRenderWindowInteractor = vtkRenderWindowInteractor::New();
+  m_VTKRenderWindowInteractor = QVTKInteractor::New();
   m_VTKRenderWindowInteractor->SetRenderWindow(m_VTKRenderWindow);
   m_VTKRenderWindowInteractor->SetInteractorStyle(m_VTKInteractorStyleMultiTouchCamera);
+  m_VTKRenderWindowInteractor->Initialize();
 
   // This is to stop interactor triggering Render(),
   // as the rendering is done in the scene graph thread,

@@ -19,12 +19,12 @@
 #include <QMutex>
 #include <vtkSmartPointer.h>
 #include <vtkExternalOpenGLRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyleMultiTouchCamera.h>
 
 class vtkRenderer;
 class vtkEventQtSlotConnect;
 class QVTKInteractorAdapter;
+class QVTKInteractor;
 
 namespace mp
 {
@@ -86,7 +86,7 @@ private:
 
   QMutex                                              m_Mutex;
   vtkSmartPointer<vtkExternalOpenGLRenderWindow>      m_VTKRenderWindow;
-  vtkSmartPointer<vtkRenderWindowInteractor>          m_VTKRenderWindowInteractor;
+  vtkSmartPointer<QVTKInteractor>                     m_VTKRenderWindowInteractor;
   vtkSmartPointer<vtkInteractorStyleMultiTouchCamera> m_VTKInteractorStyleMultiTouchCamera;
   vtkSmartPointer<vtkEventQtSlotConnect>              m_EventSlotConnector;
   QVTKInteractorAdapter*                              m_VTKInteractorAdapter;
