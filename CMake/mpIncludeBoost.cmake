@@ -20,12 +20,13 @@ if(BUILD_Boost OR BUILD_Python_Boost)
   #       so Boost is probably found by CMake's own FindBoost.cmake.
   #       which is an example of the 'module' mode.
   set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib)
+  set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib)
   set(Boost_LIBRARY_DIR_DEBUG ${BOOST_ROOT}/lib)
   set(Boost_LIBRARY_DIR_RELEASE ${BOOST_ROOT}/lib)
   set(BOOST_INCLUDEDIR ${BOOST_ROOT}/include)
   #set(Boost_DEBUG ON)
-  set(Boost_NO_SYSTEM_PATHS ON)  # Notice: How we can turn off System Paths
-  set(Boost_NO_BOOST_CMAKE ON)   # Notice: We can CMake not to assume this is the CMake-ified version of the boost project.
+  set(Boost_NO_SYSTEM_PATHS ON)  # Notice: This enables us to turn off System Paths
+  set(Boost_NO_BOOST_CMAKE ON)   # Notice: We can tell CMake not to assume this is the CMake-ified version of the boost project.
   if(BUILD_SHARED_LIBS)
     set(Boost_USE_STATIC_LIBS OFF)
     set(Boost_USE_STATIC_RUNTIME OFF)
