@@ -19,6 +19,11 @@ if(BUILD_Python_Boost AND BUILD_Python_PyBind)
   message(FATAL_ERROR "BUILD_Python_Boost and BUILD_Python_PyBind are mutually exclusive. Please pick one or the other!")
 endif()
 
+if (BUILD_Python_Boost AND WIN32) # Seems ok on Linux/Mac, I don't want to be too restrictive.
+  set(MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION 3.12) # Assuming Boost 1.67
+  cmake_minimum_required(VERSION ${MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION})
+endif()
+
 if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
   find_package(PythonInterp)
@@ -32,21 +37,18 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
     message("Forcing BUILD_Python_Boost and BUILD_Python_PyBind to OFF as no Python libs were found.")
   endif()
 
-  if (PythonLibs_FOUND)
-    if(BUILD_Python_Boost OR BUILD_Python_PyBind)
-      set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build Shared Libraries" FORCE)
-      message("Forcing BUILD_SHARED_LIBS to OFF as you want a python module.")
-    endif()
-  endif()
-
   if(BUILD_Python_Boost)
     list(APPEND MYPROJECT_BOOST_LIBS "system")
-    if (${PYTHON_VERSION_MAJOR} EQUAL 3 AND WITHIN_SUBBUILD)
-      list(APPEND MYPROJECT_BOOST_LIBS "python3")
+    if (WITHIN_SUBBUILD)
+      list(APPEND MYPROJECT_BOOST_LIBS "python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
+	  
+	  # Add this if you want numpy. Depends on your build env.
+	  # I've left it out for now, as cloned projects can decide if they need it.
+	  # It doesn't warrant another top level flag.
+	  # list(APPEND MYPROJECT_BOOST_LIBS "numpy${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
     else()
       list(APPEND MYPROJECT_BOOST_LIBS "python")
     endif()
     list(REMOVE_DUPLICATES MYPROJECT_BOOST_LIBS)
   endif()
-
 endif()
