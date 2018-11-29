@@ -19,6 +19,11 @@ if(BUILD_Python_Boost AND BUILD_Python_PyBind)
   message(FATAL_ERROR "BUILD_Python_Boost and BUILD_Python_PyBind are mutually exclusive. Please pick one or the other!")
 endif()
 
+if (BUILD_Python_Boost AND WIN32) # Seems ok on Linux/Mac, I don't want to be too restrictive.
+  set(MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION 3.12) # Assuming Boost 1.67
+  cmake_minimum_required(VERSION ${MYPROJECT_CMAKE_MINIMUM_REQUIRED_VERSION})
+endif()
+
 if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
   find_package(PythonInterp)
