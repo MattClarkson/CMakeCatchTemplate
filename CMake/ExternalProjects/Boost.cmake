@@ -14,6 +14,7 @@
 
 set(MYPROJECT_USE_Boost 1)
 set(MYPROJECT_USE_Boost_LIBRARIES ${MYPROJECT_BOOST_LIBS})
+set(MYPROJECT_BUILD_PYTHON_BINDINGS OFF)
 
 #-----------------------------------------------------------------------------
 # Boost
@@ -27,7 +28,7 @@ if(DEFINED BOOST_ROOT AND NOT EXISTS ${BOOST_ROOT})
   message(FATAL_ERROR "BOOST_ROOT variable is defined but corresponds to non-existing directory")
 endif()
 
-set(version "1_64_0")
+set(version "1_68_0")
 set(location "${NIFTK_EP_TARBALL_LOCATION}/boost_${version}.tar.gz")
 mpMacroDefineExternalProjectVariables(Boost ${version} ${location})
 set(proj_DEPENDENCIES )
@@ -36,7 +37,7 @@ string(REPLACE "^^" ";" MYPROJECT_USE_Boost_LIBRARIES "${MYPROJECT_USE_Boost_LIB
 
 if(NOT DEFINED BOOST_ROOT AND NOT MYPROJECT_USE_SYSTEM_Boost)
 
-  set(_boost_version 1_64)
+  set(_boost_version 1_68)
   set(_boost_install_include_dir include/boost)
   if(WIN32)
     set(_boost_install_include_dir include/boost-${_boost_version}/boost)
@@ -53,6 +54,9 @@ if(NOT DEFINED BOOST_ROOT AND NOT MYPROJECT_USE_SYSTEM_Boost)
     string(REPLACE ";" "," _boost_libs "${MYPROJECT_USE_Boost_LIBRARIES}")
     foreach(_boost_lib ${MYPROJECT_USE_Boost_LIBRARIES})
       list(APPEND _with_boost_libs --with-${_boost_lib})
+	  if("${_boost_lib}" STREQUAL "python" OR "${_boost_lib}" STREQUAL "python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
+	    set(MYPROJECT_BUILD_PYTHON_BINDINGS ON)
+	  endif()
     endforeach()
   endif()
 
@@ -122,13 +126,11 @@ if(NOT DEFINED BOOST_ROOT AND NOT MYPROJECT_USE_SYSTEM_Boost)
     endif()
   endif()
 
-  if(BUILD_PYTHON_BINDINGS)
-    set(_python_exec "--with-python=${PYTHON_EXECUTABLE}")
+  if(MYPROJECT_BUILD_PYTHON_BINDINGS)
     set(_python_version "--with-python-version=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
-    get_filename_component(_python_lib_dir ${PYTHON_LIBRARY} DIRECTORY)
-    get_filename_component(_python_root_dir ${_python_lib_dir} DIRECTORY)
+    get_filename_component(_python_root_dir "${PYTHON_EXECUTABLE}" DIRECTORY)
     set(_python_root "--with-python-root=${_python_root_dir}")
-    message("Building boost::python with:${_python_exec};${_python_version};${_python_root}")
+    message("Building boost::python with:${_python_version};${_python_root}")
   endif()
 
   set(_boost_variant "$<$<CONFIG:Debug>:debug>$<$<CONFIG:Release>:release>")
@@ -188,9 +190,8 @@ if(NOT DEFINED BOOST_ROOT AND NOT MYPROJECT_USE_SYSTEM_Boost)
     CONFIGURE_COMMAND "<SOURCE_DIR>/bootstrap${_shell_extension}"
       --with-toolset=${_boost_with_toolset}
       --with-libraries=${_boost_libs}
-      ${_python_exec}
       ${_python_version}
-      ${_python_root}
+      "${_python_root}"
       "--prefix=<INSTALL_DIR>"
     ${_boost_build_cmd}
     INSTALL_COMMAND ${_install_cmd}
