@@ -28,7 +28,7 @@ if(DEFINED BOOST_ROOT AND NOT EXISTS ${BOOST_ROOT})
   message(FATAL_ERROR "BOOST_ROOT variable is defined but corresponds to non-existing directory")
 endif()
 
-set(version "1_68_0")
+set(version "1_67_0")
 set(location "${NIFTK_EP_TARBALL_LOCATION}/boost_${version}.tar.gz")
 mpMacroDefineExternalProjectVariables(Boost ${version} ${location})
 set(proj_DEPENDENCIES )
@@ -37,7 +37,7 @@ string(REPLACE "^^" ";" MYPROJECT_USE_Boost_LIBRARIES "${MYPROJECT_USE_Boost_LIB
 
 if(NOT DEFINED BOOST_ROOT AND NOT MYPROJECT_USE_SYSTEM_Boost)
 
-  set(_boost_version 1_68)
+  set(_boost_version 1_67)
   set(_boost_install_include_dir include/boost)
   if(WIN32)
     set(_boost_install_include_dir include/boost-${_boost_version}/boost)
