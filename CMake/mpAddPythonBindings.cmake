@@ -34,7 +34,7 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
   if(BUILD_Python_Boost)
     list(APPEND MYPROJECT_BOOST_LIBS "system")
-    if (${PYTHON_VERSION_MAJOR} EQUAL 3 AND WITHIN_SUBBUILD)
+    if (WITHIN_SUBBUILD)
       list(APPEND MYPROJECT_BOOST_LIBS "python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
     else()
       list(APPEND MYPROJECT_BOOST_LIBS "python")
