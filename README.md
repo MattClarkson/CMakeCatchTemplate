@@ -25,7 +25,7 @@ Features
 
 The main features provided are:
 
- 1. A Meta-Build, also known as a SuperBuild, to optionally download and build Boost, Eigen, FLANN, OpenCV, glog, gflags, VTK and PCL. All of these can be left OFF and skipped. This results in a top-level build folder containing the compiled dependencies, and then a sub-folder containing the compiled code of this project.
+ 1. A Meta-Build, also known as a SuperBuild, to optionally download and build any of the following: Boost, Eigen, FLANN, OpenCV, glog, gflags, VTK and PCL. All of these can be left OFF and skipped. This results in a top-level build folder containing the compiled dependencies, and then a sub-folder containing the compiled code of this project.
  2. A single library into which you can provide your main algorithms.
  3. Unit tests, using Catch, and run with CTest, so you can ensure correctness and enable regression testing of your functionality.
  4. A single command line application, to give the end user a minimalist runnable program.
@@ -40,6 +40,7 @@ The main features provided are:
 13. Support for OpenMP, which is passed through to FLANN, OpenCV and PCL.
 14. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.
 15. Support for MPI, which by default sets up the C++ libraries.
+16. If doing Boost.Python and OpenCV, an example of passing a numpy ndarray to OpenCV, computing something, and returning a cv::Mat as a numpy ndarray, thanks to Gregory Kramida's pyboostcvconverter.
 
 
 Usage
@@ -47,7 +48,7 @@ Usage
 
 The main way to use this project is:
 
- 1. Clone this project. If you intend to use [pybind11](https://github.com/pybind/pybind11), you must use ```git clone --recursive``` as pybind is included as a git submodule.
+ 1. Clone this project. If you intend to use [pybind11](https://github.com/pybind/pybind11), or [Boost.Python](https://www.boost.org/doc/libs/1_69_0/libs/python/doc/html/index.html) and [pyboostcvconverter](https://github.com/Algomorph/pyboostcvconverter), you must use ```git clone --recursive``` as pybind and pyboostcvconverter are included as a git submodules.
  2. Rename the top-level project folder to the folder name of your choice.
  3. Rename all instances of ```MYPROJECT``` (all uppercase), ```myproject``` (all lowercase), ```MyProject``` (camelcase) and the namespace ```mp``` with names of your choice, by running the `rename.sh` script in a ```bash``` environment. Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`. Running `rename.sh` should be performed before running CMake for the first time if you plan on doing an "in source" build.
  4. Set your KWStyle and CppCheck settings in ```Utilities/KWStyle``` and ```Utilities/CppCheck```.
@@ -75,7 +76,7 @@ There are many different issues and combinations to test when packaging an appli
  * With or without python modules.
  * With or without Unity modules.
  * The developer runs ```make install``` to install it in a specific directory, linked against known libraries, in known locations.
- * The developer runs ```make package``` to make a relocatable and distributable bundle so that another user can install it anywhere.
+ * The developer runs ```make package``` to make a relocatable and distributable bundle so that another user can install it anywhere on their system.
 
 It would take too long to document all of them and all of the issues involved. So, this project suggests
 some simple starting points, and recommendations.
@@ -90,8 +91,8 @@ Note that Assumption 2 refers to dynamically loaded (i.e. discovered at run-time
 This project does support shared libraries (i.e. required at link time and run time, but shared between other libraries).
 
 Lots of people would like to take a shortcut and use Qt that comes with a package manager on Linux,
-or with Homebrew or Macports on MacOSX, or pre-compiled on Windows. I believe its quicker to
-learn how to build it, than it is to cope with the wrong version, or a version that does not have the features you want.
+or with Homebrew or Macports on MacOSX, or pre-compiled on Windows. We believe it is quicker to
+learn how to build Qt yourself, than it is to cope with the wrong version, or a version that does not have the features you want.
 It really doesn't take long to learn, and is quicker than debugging all the numerous packaging and deployment problems that
 come from using a Qt that you did not compile yourself.
 
@@ -230,7 +231,8 @@ made a different repository for each of the above Use-Cases, but then there woul
 duplication and overlap. So, for now, its all one repository. Take a look in the ```Code``` folder.
 Remove the directories you do not need, and change ```Code/CMakeLists.txt``` accordingly.
 You can also search the top level CMakeLists.txt for code that looks like
-```mpAddSomething``` and ```mpIncludeSomething``` and easily chop out 3rd party libraries
+```mpAddSomething``` and ```mpIncludeSomething```
+and easily chop out 3rd party libraries
 you do not need. We believe its easier to remove code you don't need than it is to
 build up a lot of CMake code, based on hours of searching the internet. At least the CMake
 code here has been tested... to some degree.
