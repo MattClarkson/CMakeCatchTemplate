@@ -20,12 +20,33 @@ if(NOT BUILDING_GUIS)
     set(MYPROJECT_PYTHON_MODULE_NAME "${MYPROJECT_LIBRARY_NAME}python")
   endif()
 
-  set(MYPROJECT_PYTHON_SRCS
-    mpLibPython.cpp
-  )
+  set(MYPROJECT_PYTHON_SRCS)
+
+  if (BUILD_OpenCV)
+    list(APPEND MYPROJECT_PYTHON_SRCS mpLibPythonWithOpenCV.cpp) #Rename as appropriate.
+    message("Including pyboostcvconverter, thanks to Gregory Kramida.")
+
+    execute_process(
+      COMMAND "${PYTHON_EXECUTABLE}" -c
+              "from __future__ import print_function\ntry: import numpy; print(numpy.get_include(), end='')\nexcept:pass\n"
+              OUTPUT_VARIABLE NumPy_INCLUDE_DIR)
+    execute_process(
+      COMMAND "${PYTHON_EXECUTABLE}" -c
+              "from __future__ import print_function\ntry: import numpy; print(numpy.__version__, end='')\nexcept:pass\n"
+      OUTPUT_VARIABLE NumPy_VERSION)
+    message("Found NumPy_INCLUDE_DIR=${NumPy_INCLUDE_DIR}, NumPy_VERSION=${NumPy_VERSION}")
+    include_directories(${NumPy_INCLUDE_DIR})
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/pyboostcvconverter/include)
+    list(APPEND MYPROJECT_PYTHON_SRCS pyboostcvconverter/src/pyboost_cv3_converter.cpp)
+  else()
+    list(APPEND MYPROJECT_PYTHON_SRCS mpLibPython.cpp) # Rename as appropriate.
+  endif()
 
   link_libraries(${MYPROJECT_LIBRARY_NAME})
   PYTHON_ADD_MODULE(${MYPROJECT_PYTHON_MODULE_NAME} ${MYPROJECT_PYTHON_SRCS})
+  if(APPLE)
+    set_target_properties(${MYPROJECT_PYTHON_MODULE_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+  endif()
   install(TARGETS ${MYPROJECT_PYTHON_MODULE_NAME} DESTINATION ${MYPROJECT_INSTALL_LIB_DIR})
 
 endif()

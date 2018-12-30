@@ -31,7 +31,7 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
   find_package(PythonLibs)
   message("Found python library version: ${PYTHONLIBS_VERSION_STRING}")
   message("Found python include dirs: ${PYTHON_INCLUDE_DIRS}")
-  
+
   if (NOT PythonLibs_FOUND)
     set(BUILD_Python_Boost OFF CACHE BOOL "Build boost::python bindings." FORCE)
     set(BUILD_Python_PyBind OFF CACHE BOOL "Build PyBind11 bindings." FORCE)
