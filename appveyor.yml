@@ -25,22 +25,28 @@ environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14"
-      PYTHON: "C:/Python35"
+      MB_PYTHON: "C:/Python35"
+      DO_PIP: 1
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14 Win64"
-      PYTHON: "C:/Python35-x64"
+      MB_PYTHON: "C:/Python35-x64"
+      DO_PIP: 1
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14"
-      PYTHON: "C:/Python36"
+      MB_PYTHON: "C:/Python36"
+      DO_PIP: 1
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14 Win64"
-      PYTHON: "C:/Python36-x64"
+      MB_PYTHON: "C:/Python36-x64"
+      DO_PIP: 1
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       COMPILER: "Visual Studio 15"
-      PYTHON: "C:/Python37"
+      MB_PYTHON: "C:/Python37"
+      DO_PIP: 1
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       COMPILER: "Visual Studio 15 Win64"
-      PYTHON: "C:/Python37-x64"
+      MB_PYTHON: "C:/Python37-x64"
+      DO_PIP: 1
 
 matrix:
     fast_finish: true
@@ -52,29 +58,54 @@ platform:
   - Any CPU
 
 before_build:
-  - echo --------------------------------------------------------------------------------
-  - dir C:\
-  - echo "COMPILER=%COMPILER%, PYTHON=%PYTHON%, CONFIGURATION=%CONFIGURATION%"
-  - cmake -version
-  - pwd
-  - git submodule update -q --init --recursive
-  - set PATH=%PYTHON%;%PATH%
-  - echo "PATH=%PATH%"
-  - echo --------------------------------------------------------------------------------
+- cmd: |
+    echo --------------------------------------------------------------------------------
+    dir C:\
+    echo --------------------------------------------------------------------------------
+    dir C:\Qt
+    echo --------------------------------------------------------------------------------
+    echo "COMPILER=%COMPILER%, PYTHON=%MB_PYTHON%, CONFIGURATION=%CONFIGURATION%"
+    cmake -version
+    pwd
+    git submodule update -q --init --recursive
+    set PATH=%MB_PYTHON%;%PATH%
+    echo "PATH=%PATH%"
+    echo --------------------------------------------------------------------------------
 
 build_script:
-  - echo --------------------------------------------------------------------------------
-  - echo "Build CMakeCatchTemplate:"
-  - mkdir build
-  - cd build
-  - cmake -G "%COMPILER%" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF --config %CONFIGURATION% ..
-  - cmake --build . --config %CONFIGURATION%
-  - echo --------------------------------------------------------------------------------
+- cmd: |
+    echo --------------------------------------------------------------------------------
+    echo "Build CMakeCatchTemplate:"
+    mkdir build
+    cd build
+    cmake -G "%COMPILER%" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF --config %CONFIGURATION% ..
+    cmake --build . --config %CONFIGURATION%
+    echo --------------------------------------------------------------------------------
+    pwd
+    cd MYPROJECT-build
+    IF /I "%DO_PIP%" EQU "1" (
+      "%PYTHON%/python.exe" -m pip install --upgrade pip
+      "%PYTHON%/python.exe" -m pip install --upgrade setuptools
+      "%PYTHON%/python.exe" -m pip install --user .
+      "%PYTHON%/python.exe" setup.py bdist_wheel
+    )
 
 test_script:
-  - echo --------------------------------------------------------------------------------
-  - pwd
-  - cd MYPROJECT-build
-  - pwd
-  - ctest -C %CONFIGURATION%
-  - echo --------------------------------------------------------------------------------
+- cmd: |
+    echo --------------------------------------------------------------------------------
+    pwd
+    ctest -C %CONFIGURATION%
+    echo --------------------------------------------------------------------------------
+
+artifacts:
+  - path: dist\*.whl
+    name: wheels
+
+deploy_script:
+- cmd: |
+    if (${Env:APPVEYOR_REPO_TAG} -eq "true") (
+      if /I "%DO_PIP%" EQU "1" (
+        "%PYTHON%/python.exe" -m pip install twine
+        "%PYTHON%/python.exe" -m twine upload --repository pypi dist/* -u NOT_SET -p NOT_SET
+      )
+    )
