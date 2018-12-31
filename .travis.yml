@@ -12,79 +12,245 @@
 #
 #============================================================================*/
 
-language: cpp
-sudo: required
+# Inspired by: https://github.com/skvark/opencv-python
+# Firstly, we want to compile the C++ library of this project on
+# Linux and Mac. If you are just doing a C++ library, you can comment out
+# the python specific bits. But this project is mainly intended to enable
+# C++ developers to get their libraries wrapped and deployed in Python.
+# So, the focus of this .travis.yml is to help C++ AND Python testing.
+
+env:
+  global:
+    # Prompt
+    - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
+
+    # Default settings that may be over-ridden for various builds.
+    - TEST_DEPENDS="numpy==1.11.1"
+    - BDIST_PARAMS=""
+    - USE_CCACHE=1
+    - PLAT=x86_64
+    - UNICODE_WIDTH=32
+
+# We are doing both C++ and Python here.
+language: generic
+
+# https://docs.travis-ci.com/user/reference/trusty/
 dist: trusty
+
+# Required to invoke docker ourselves as per https://docs.travis-ci.com/user/docker/
+sudo: required
+services: docker
+
+# https://docs.travis-ci.com/user/caching
+cache:
+  directories:
+    # https://stackoverflow.com/questions/39930171/cache-brew-builds-with-travis-ci
+    - $HOME/Library/Caches/Homebrew
+    - /usr/local/Homebrew/
+    # used in OSX custom build script dealing with local bottle caching
+    - $HOME/local_bottle_metadata
+    # `cache: ccache: true` has no effect if `language:` is not `c` or `cpp`
+    - $HOME/.ccache
+
 addons:
-    apt:
-        sources:
-          # add PPAs with more up-to-date toolchains
-          - ubuntu-toolchain-r-test
-          - llvm-toolchain-precise-3.6
-        packages:
-          # install toolchains
-          - gcc-5
-          - g++-5
-          - clang-3.6
+  apt:
+    packages: cmake
+  homebrew:
+    packages: cmake
 
 matrix:
+  fast_finish: true
   include:
-    - compiler: gcc
+    # Builds for MacOS
+    - os: osx
+      language: generic
+      osx_image: xcode8
+      env:
+        - MB_PYTHON_VERSION=2.7
+        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
+    - os: osx
+      language: generic
+      osx_image: xcode8
+      env:
+        - MB_PYTHON_VERSION=3.4
+        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
+    - os: osx
+      language: generic
+      osx_image: xcode8
+      env:
+        - MB_PYTHON_VERSION=3.5
+        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
+    - os: osx
+      language: generic
+      osx_image: xcode8
+      env:
+        - MB_PYTHON_VERSION=3.6
+        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
+    - os: osx
+      language: generic
+      osx_image: xcode8
+      env:
+        - MB_PYTHON_VERSION=3.7
+        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
+        - TEST_DEPENDS=numpy==1.14.5
+    # Builds for Linux
+    - os: linux
+      compiler: gcc
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-4.9
-      env: COMPILER=g++-4.9
-    - compiler: gcc
+            - g++-4.8
+      env:
+        - MB_PYTHON_VERSION=2.7
+        - COMPILER=g++-4.8
+      cache:
+        directories: $HOME/.ccache
+    - os: linux
+      compiler: gcc
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-5
-      env: COMPILER=g++-5
-    - compiler: clang
+            - g++-5.4
+      env:
+        - MB_PYTHON_VERSION=2.7
+        - COMPILER=g++-5.4
+      cache:
+        directories: $HOME/.ccache
+    - os: linux
+      compiler: gcc
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
           packages:
-            - clang-3.6
-      env: COMPILER=clang++-3.6
-    - compiler: clang
+            - g++-4.8
+      env:
+        - MB_PYTHON_VERSION=3.4
+        - COMPILER=g++-4.8
+      cache:
+        directories: $HOME/.ccache
+    - os: linux
+      compiler: gcc
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.7
           packages:
-            - clang-3.7
-      env: COMPILER=clang++-3.7
+            - g++-5.4
+      env:
+        - MB_PYTHON_VERSION=3.4
+        - COMPILER=g++-5.4
+      cache:
+        directories: $HOME/.ccache
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.8
+      env:
+        - MB_PYTHON_VERSION=3.5
+        - COMPILER=g++-4.8
+      cache:
+        directories: $HOME/.ccache
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5.4
+      env:
+        - MB_PYTHON_VERSION=3.5
+        - COMPILER=g++-5.4
+      cache:
+        directories: $HOME/.ccache
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.8
+      env:
+        - MB_PYTHON_VERSION=3.6
+        - TEST_DEPENDS=numpy==1.11.3
+        - COMPILER=g++-4.8
+      cache:
+        directories: $HOME/.ccache
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5.4
+      env:
+        - MB_PYTHON_VERSION=3.6
+        - TEST_DEPENDS=numpy==1.11.3
+        - COMPILER=g++-5.4
+      cache:
+        directories: $HOME/.ccache
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.8
+      env:
+        - MB_PYTHON_VERSION=3.7
+        - TEST_DEPENDS=numpy==1.14.5
+        - COMPILER=g++-4.8
+      cache:
+        directories: $HOME/.ccache
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5.4
+      env:
+        - MB_PYTHON_VERSION=3.7
+        - TEST_DEPENDS=numpy==1.14.5
+        - COMPILER=g++-5.4
+      cache:
+        directories: $HOME/.ccache
 
 before_install:
-  - |
-    sudo apt-get update
-    sudo apt-get -yqq install freeglut3
-    sudo apt-get -yqq install freeglut3-dev 
-    sudo apt-get -yqq install binutils-gold 
-    sudo apt-get -yqq install libglew-dev 
-    sudo apt-get -yqq install mesa-common-dev  
-    sudo apt-get -yqq install build-essential 
-    sudo apt-get -yqq install libglew1.5-dev 
-    sudo apt-get -yqq install libglm-dev 
-    sudo apt-get -yqq install mesa-utils-extra 
-    sudo apt-get -yqq install libgl1-mesa-dev 
-    sudo apt-get -yqq install libglapi-mesa 
-    wget -q https://cmake.org/files/v3.6/cmake-3.6.3-Linux-x86_64.sh
-    sh cmake-3.6.3-Linux-x86_64.sh --skip-license
+  # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
+  # You may be able to get away with a much smaller list, depending on your actual testing requirements.
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get update; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install freeglut3; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install freeglut3-dev; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install binutils-gold; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install libglew-dev; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install mesa-common-dev; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install build-essential; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install libglew1.5-dev; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install libglm-dev; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install mesa-utils-extra; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install libgl1-mesa-dev; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install libglapi-mesa; fi
+#   wget -q https://cmake.org/files/v3.6/cmake-3.6.3-Linux-x86_64.sh
+#    sh cmake-3.6.3-Linux-x86_64.sh --skip-license
 
 script:
   - mkdir build
   - cd build
-  - ../bin/cmake -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
+  - ../bin/cmake -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
   - make
   - cd MYPROJECT-build
   - ctest .
