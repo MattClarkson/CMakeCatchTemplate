@@ -25,22 +25,22 @@ environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14"
-      PYTHON: "C:\Python35"
+      PYTHON: "C:/Python35"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14 Win64"
-      PYTHON: "C:\Python35-x64"
+      PYTHON: "C:/Python35-x64"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14"
-      PYTHON: "C:\Python36"
+      PYTHON: "C:/Python36"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14 Win64"
-      PYTHON: "C:\Python36-x64"
+      PYTHON: "C:/Python36-x64"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       COMPILER: "Visual Studio 15"
-      PYTHON: "C:\Python37"
+      PYTHON: "C:/Python37"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       COMPILER: "Visual Studio 15 Win64"
-      PYTHON: "C:\Python37-x64"
+      PYTHON: "C:/Python37-x64"
 
 matrix:
     fast_finish: true
@@ -49,33 +49,32 @@ configuration:
   - Release
 
 platform:
-  - x86
-  - x64
+  - Any CPU
 
 before_build:
   - echo --------------------------------------------------------------------------------
-  - echo Contents of C drive:
   - dir C:\
-  - echo Appveyor environment info:
-  - echo COMPILER = %COMPILER%, CONFIGURATION = %CONFIGURATION%
-  - echo CMake information:
+  - echo "COMPILER=%COMPILER%, PYTHON=%PYTHON%, CONFIGURATION=%CONFIGURATION%"
   - cmake -version
-  - echo Current working dir:
   - pwd
   - git submodule update -q --init --recursive
   - set PATH=%PYTHON%;%PATH%
-  - rem --------------------------------------------------------------------------------
+  - echo "PATH=%PATH%"
+  - echo --------------------------------------------------------------------------------
 
 build_script:
   - echo --------------------------------------------------------------------------------
-  - echo Build CMakeCatchTemplate:
+  - echo "Build CMakeCatchTemplate:"
   - mkdir build
   - cd build
   - cmake -G "%COMPILER%" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF --config %CONFIGURATION% ..
   - cmake --build . --config %CONFIGURATION%
+  - echo --------------------------------------------------------------------------------
 
 test_script:
+  - echo --------------------------------------------------------------------------------
   - pwd
   - cd MYPROJECT-build
   - pwd
   - ctest -C %CONFIGURATION%
+  - echo --------------------------------------------------------------------------------
