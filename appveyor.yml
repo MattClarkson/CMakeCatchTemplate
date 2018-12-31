@@ -27,20 +27,41 @@ environment:
   matrix:
     - COMPILER: "Visual Studio 14 Win64"
 
-platform:
-  - x64
-
 configuration:
   - Release
 
 matrix:
-  fast_finish: true
+  - PYTHON: "C:\Python27"
+    COMPILER: "Visual Studio 9"
+    QT_ROOT: "C:\\Qt\\5.6\\msvc2015_64"
+  - PYTHON: "C:\Python27-x64"
+    COMPILER: "Visual Studio 9 Win64"
+  - PYTHON: "C:\Python34"
+    COMPILER: "Visual Studio 10"
+  - PYTHON: "C:\Python34-x64"
+    COMPILER: "Visual Studio 10 Win64"
+  - PYTHON: "C:\Python35"
+    COMPILER: "Visual Studio 14"
+  - PYTHON: "C:\Python35-x64"
+    COMPILER: "Visual Studio 14 Win64"
+  - PYTHON: "C:\Python36"
+    COMPILER: "Visual Studio 14"
+  - PYTHON: "C:\Python36-x64"
+    COMPILER: "Visual Studio 14 Win64"
+  - PYTHON: "C:\Python37"
+    COMPILER: "Visual Studio 15"
+  - PYTHON: "C:\Python37-x64"
+    COMPILER: "Visual Studio 15 Win 64"
 
 before_build:
   - echo --------------------------------------------------------------------------------
+  - echo Contents of C drive:
+  - dir C:\
   - echo Appveyor environment info:
   - echo COMPILER = %COMPILER%, CONFIGURATION = %CONFIGURATION%
+  - echo CMake information:
   - cmake -version
+  - echo Current working dir:
   - pwd
   - git submodule update -q --init --recursive
   - set PATH=C:\Python36-x64;%PATH%
@@ -51,7 +72,7 @@ build_script:
   - echo Build CMakeCatchTemplate:
   - mkdir build
   - cd build
-  - cmake -G "%COMPILER%" -DCMAKE_PREFIX_PATH=C:\\Qt\\5.6\\msvc2015_64 -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=ON -DBUILD_Python_Boost:BOOL=OFF -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF --config %CONFIGURATION% ..
+  - cmake -G "%COMPILER%" -DCMAKE_PREFIX_PATH="%QT_ROOT%" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF --config %CONFIGURATION% ..
   - cmake --build . --config %CONFIGURATION%
 
 test_script:
