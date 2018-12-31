@@ -14,8 +14,6 @@
 
 version: "{build}"
 
-os: Visual Studio 2015
-
 init:
   - git config --global core.autocrlf input
 
@@ -25,33 +23,31 @@ shallow_clone: false
 
 environment:
   matrix:
-    - COMPILER: "Visual Studio 14 Win64"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      COMPILER: "Visual Studio 14"
+      PYTHON: "C:\Python35"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      COMPILER: "Visual Studio 14 Win64"
+      PYTHON: "C:\Python35-x64"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      COMPILER: "Visual Studio 14"
+      PYTHON: "C:\Python36"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      COMPILER: "Visual Studio 14 Win64"
+      PYTHON: "C:\Python36-x64"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      COMPILER: "Visual Studio 15"
+      PYTHON: "C:\Python37"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      COMPILER: "Visual Studio 15 Win64"
+      PYTHON: "C:\Python37-x64"
 
 configuration:
   - Release
 
-matrix:
-  - PYTHON: "C:\Python27"
-    COMPILER: "Visual Studio 9"
-    QT_ROOT: "C:\\Qt\\5.6\\msvc2015_64"
-  - PYTHON: "C:\Python27-x64"
-    COMPILER: "Visual Studio 9 Win64"
-  - PYTHON: "C:\Python34"
-    COMPILER: "Visual Studio 10"
-  - PYTHON: "C:\Python34-x64"
-    COMPILER: "Visual Studio 10 Win64"
-  - PYTHON: "C:\Python35"
-    COMPILER: "Visual Studio 14"
-  - PYTHON: "C:\Python35-x64"
-    COMPILER: "Visual Studio 14 Win64"
-  - PYTHON: "C:\Python36"
-    COMPILER: "Visual Studio 14"
-  - PYTHON: "C:\Python36-x64"
-    COMPILER: "Visual Studio 14 Win64"
-  - PYTHON: "C:\Python37"
-    COMPILER: "Visual Studio 15"
-  - PYTHON: "C:\Python37-x64"
-    COMPILER: "Visual Studio 15 Win 64"
+platform:
+  - x86
+  - x64
 
 before_build:
   - echo --------------------------------------------------------------------------------
@@ -64,7 +60,7 @@ before_build:
   - echo Current working dir:
   - pwd
   - git submodule update -q --init --recursive
-  - set PATH=C:\Python36-x64;%PATH%
+  - set PATH=%PYTHON%;%PATH%
   - rem --------------------------------------------------------------------------------
 
 build_script:
@@ -72,7 +68,7 @@ build_script:
   - echo Build CMakeCatchTemplate:
   - mkdir build
   - cd build
-  - cmake -G "%COMPILER%" -DCMAKE_PREFIX_PATH="%QT_ROOT%" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF --config %CONFIGURATION% ..
+  - cmake -G "%COMPILER%" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF --config %CONFIGURATION% ..
   - cmake --build . --config %CONFIGURATION%
 
 test_script:
