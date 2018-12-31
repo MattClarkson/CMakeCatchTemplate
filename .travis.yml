@@ -117,10 +117,10 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-5.4
+            - g++-5
       env:
         - MB_PYTHON_VERSION=2.7
-        - COMPILER=g++-5.4
+        - COMPILER=g++-5
       cache:
         directories: $HOME/.ccache
     - os: linux
@@ -143,10 +143,10 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-5.4
+            - g++-5
       env:
         - MB_PYTHON_VERSION=3.4
-        - COMPILER=g++-5.4
+        - COMPILER=g++-5
       cache:
         directories: $HOME/.ccache
     - os: linux
@@ -169,10 +169,10 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-5.4
+            - g++-5
       env:
         - MB_PYTHON_VERSION=3.5
-        - COMPILER=g++-5.4
+        - COMPILER=g++-5
       cache:
         directories: $HOME/.ccache
     - os: linux
@@ -196,11 +196,11 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-5.4
+            - g++-5
       env:
         - MB_PYTHON_VERSION=3.6
         - TEST_DEPENDS=numpy==1.11.3
-        - COMPILER=g++-5.4
+        - COMPILER=g++-5
       cache:
         directories: $HOME/.ccache
     - os: linux
@@ -224,11 +224,11 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-5.4
+            - g++-5
       env:
         - MB_PYTHON_VERSION=3.7
         - TEST_DEPENDS=numpy==1.14.5
-        - COMPILER=g++-5.4
+        - COMPILER=g++-5
       cache:
         directories: $HOME/.ccache
 
