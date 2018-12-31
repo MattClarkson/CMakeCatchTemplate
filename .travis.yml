@@ -251,11 +251,11 @@ before_install:
 #    sh cmake-3.6.3-Linux-x86_64.sh --skip-license
 
 script:
-  - echo Working directory is:
-  - echo $CWD
-  - echo PATH is:
-  - echo $PATH
-  - echo cmake version is:
+  - echo "Working directory is:"
+  - echo "$CWD"
+  - echo "PATH is:"
+  - echo "$PATH"
+  - echo "cmake version is:"
   - cmake --version
   - mkdir build
   - cd build

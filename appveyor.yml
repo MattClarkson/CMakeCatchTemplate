@@ -42,6 +42,9 @@ environment:
       COMPILER: "Visual Studio 15 Win64"
       PYTHON: "C:\Python37-x64"
 
+matrix:
+    fast_finish: true
+    
 configuration:
   - Release
 
