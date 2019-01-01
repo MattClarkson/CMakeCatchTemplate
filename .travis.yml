@@ -41,17 +41,6 @@ dist: trusty
 sudo: required
 services: docker
 
-# https://docs.travis-ci.com/user/caching
-cache:
-  directories:
-    # https://stackoverflow.com/questions/39930171/cache-brew-builds-with-travis-ci
-    - $HOME/Library/Caches/Homebrew
-    - /usr/local/Homebrew/
-    # used in OSX custom build script dealing with local bottle caching
-    - $HOME/local_bottle_metadata
-    # `cache: ccache: true` has no effect if `language:` is not `c` or `cpp`
-    - $HOME/.ccache
-
 addons:
   apt:
     packages:
@@ -108,8 +97,6 @@ matrix:
       env:
         - MB_PYTHON_VERSION=2.7
         - COMPILER=g++-4.8
-      cache:
-        directories: $HOME/.ccache
     - os: linux
       compiler: gcc
       addons:
@@ -121,8 +108,6 @@ matrix:
       env:
         - MB_PYTHON_VERSION=2.7
         - COMPILER=g++-5
-      cache:
-        directories: $HOME/.ccache
     - os: linux
       compiler: gcc
       addons:
@@ -134,8 +119,6 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.4
         - COMPILER=g++-4.8
-      cache:
-        directories: $HOME/.ccache
     - os: linux
       compiler: gcc
       addons:
@@ -147,8 +130,6 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.4
         - COMPILER=g++-5
-      cache:
-        directories: $HOME/.ccache
     - os: linux
       compiler: gcc
       addons:
@@ -160,8 +141,6 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.5
         - COMPILER=g++-4.8
-      cache:
-        directories: $HOME/.ccache
     - os: linux
       compiler: gcc
       addons:
@@ -173,8 +152,6 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.5
         - COMPILER=g++-5
-      cache:
-        directories: $HOME/.ccache
     - os: linux
       compiler: gcc
       addons:
@@ -187,8 +164,6 @@ matrix:
         - MB_PYTHON_VERSION=3.6
         - TEST_DEPENDS=numpy==1.11.3
         - COMPILER=g++-4.8
-      cache:
-        directories: $HOME/.ccache
     - os: linux
       compiler: gcc
       addons:
@@ -201,8 +176,6 @@ matrix:
         - MB_PYTHON_VERSION=3.6
         - TEST_DEPENDS=numpy==1.11.3
         - COMPILER=g++-5
-      cache:
-        directories: $HOME/.ccache
     - os: linux
       compiler: gcc
       addons:
@@ -215,8 +188,6 @@ matrix:
         - MB_PYTHON_VERSION=3.7
         - TEST_DEPENDS=numpy==1.14.5
         - COMPILER=g++-4.8
-      cache:
-        directories: $HOME/.ccache
     - os: linux
       compiler: gcc
       addons:
@@ -229,8 +200,6 @@ matrix:
         - MB_PYTHON_VERSION=3.7
         - TEST_DEPENDS=numpy==1.14.5
         - COMPILER=g++-5
-      cache:
-        directories: $HOME/.ccache
 
 before_install:
   # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
