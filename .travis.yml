@@ -34,6 +34,7 @@ env:
 # We are doing both C++ and Python here.
 language: generic
 
+# Leaving this at trusty. Ideally we want manylinux docker images.
 # https://docs.travis-ci.com/user/reference/trusty/
 dist: trusty
 
@@ -55,48 +56,44 @@ matrix:
   include:
     # Builds for MacOS
     - os: osx
+      python: 2.7
       language: generic
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=2.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
-      python:
-        "2.7"
     - os: osx
+      python: 3.4
       language: generic
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.4
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
-      python:
-        "3.4"
     - os: osx
+      python: 3.5
       language: generic
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.5
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
-      python:
-        "3.5"
     - os: osx
+      python: 3.6
       language: generic
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.6
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
-      python:
-        "3.6"
     - os: osx
+      python: 3.7
       language: generic
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
         - TEST_DEPENDS=numpy==1.14.5
-      python:
-        "3.7"
     # Builds for Linux
     - os: linux
+      python: 2.7
       compiler: gcc
       addons:
         apt:
@@ -107,9 +104,8 @@ matrix:
       env:
         - MB_PYTHON_VERSION=2.7
         - COMPILER=g++-4.8
-      python:
-        "2.7"
     - os: linux
+      python: 2.7
       compiler: gcc
       addons:
         apt:
@@ -120,9 +116,8 @@ matrix:
       env:
         - MB_PYTHON_VERSION=2.7
         - COMPILER=g++-5
-      python:
-        "2.7"
     - os: linux
+      python: 3.4
       compiler: gcc
       addons:
         apt:
@@ -133,9 +128,8 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.4
         - COMPILER=g++-4.8
-      python:
-        "3.4"
     - os: linux
+      python: 3.4
       compiler: gcc
       addons:
         apt:
@@ -146,9 +140,8 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.4
         - COMPILER=g++-5
-      python:
-        "3.4"
     - os: linux
+      python: 3.5
       compiler: gcc
       addons:
         apt:
@@ -159,9 +152,8 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.5
         - COMPILER=g++-4.8
-      python:
-        "3.5"
     - os: linux
+      python: 3.5
       compiler: gcc
       addons:
         apt:
@@ -172,9 +164,8 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.5
         - COMPILER=g++-5
-      python:
-        "3.5"
     - os: linux
+      python: 3.6
       compiler: gcc
       addons:
         apt:
@@ -186,9 +177,8 @@ matrix:
         - MB_PYTHON_VERSION=3.6
         - TEST_DEPENDS=numpy==1.11.3
         - COMPILER=g++-4.8
-      python:
-        "3.6"
     - os: linux
+      python: 3.6
       compiler: gcc
       addons:
         apt:
@@ -200,9 +190,8 @@ matrix:
         - MB_PYTHON_VERSION=3.6
         - TEST_DEPENDS=numpy==1.11.3
         - COMPILER=g++-5
-      python:
-        "3.6"
     - os: linux
+      python: 3.7
       compiler: gcc
       addons:
         apt:
@@ -214,9 +203,8 @@ matrix:
         - MB_PYTHON_VERSION=3.7
         - TEST_DEPENDS=numpy==1.14.5
         - COMPILER=g++-4.8
-      python:
-        "3.7"
     - os: linux
+      python: 3.7
       compiler: gcc
       addons:
         apt:
@@ -228,8 +216,6 @@ matrix:
         - MB_PYTHON_VERSION=3.7
         - TEST_DEPENDS=numpy==1.14.5
         - COMPILER=g++-5
-      python:
-        "3.7"
 
 before_install:
   # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
