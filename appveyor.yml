@@ -22,7 +22,7 @@ clone_folder: c:\projects\CMakeCatchTemplate
 shallow_clone: false
 
 environment:
-  DO_PIP: "true"
+  DO_PYTHON_BUILD: "true"
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14"
@@ -55,10 +55,6 @@ platform:
 before_build:
 - cmd: |
     echo --------------------------------------------------------------------------------
-    dir C:\
-    echo --------------------------------------------------------------------------------
-    dir C:\Qt
-    echo --------------------------------------------------------------------------------
     echo "COMPILER=%COMPILER%, PYTHON=%MB_PYTHON%, CONFIGURATION=%CONFIGURATION%"
     cmake -version
     pwd
@@ -76,10 +72,7 @@ build_script:
     cmake -G "%COMPILER%" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF --config %CONFIGURATION% ..
     cmake --build . --config %CONFIGURATION%
     echo --------------------------------------------------------------------------------
-    pwd
-    cd MYPROJECT-build
-    pwd
-    if "%DO_PIP%" == "true" (
+    if %DO_PYTHON_BUILD% == "true" (
       echo "Running python commands"
       "%MB_PYTHON%/python.exe" -m pip install --upgrade pip
       "%MB_PYTHON%/python.exe" -m pip install --upgrade setuptools
@@ -88,22 +81,34 @@ build_script:
       echo "Finished python commands"
     )
 
+after_build:
+- ps: |
+    echo --------------------------------------------------------------------------------
+    cd ${Env:APPVEYOR_BUILD_FOLDER}
+    pwd
+    if (${Env:DO_PYTHON_BUILD} -eq "true") {
+      echo "Running python commands"
+      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade pip
+      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade setuptools
+      &"${Env:MB_PYTHON}/python.exe" -m pip install --user .
+      &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
+      echo "Finished python commands"
+    }
+
 test_script:
 - cmd: |
     echo --------------------------------------------------------------------------------
     pwd
+    cd MYPROJECT-build
+    pwd
     ctest -C %CONFIGURATION%
     echo --------------------------------------------------------------------------------
 
-artifacts:
-  - path: dist\*.whl
-    name: wheels
-
 deploy_script:
-- cmd: |
-    if "%APPVEYOR_REPO_TAG%" == "true" (
-      if "%DO_PIP% == "true" (
-        "%PYTHON%/python.exe" -m pip install twine
-        "%PYTHON%/python.exe" -m twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing dist/*
-      )
-    )
+- ps: |
+    if (${Env:APPVEYOR_REPO_TAG} -eq "true") {
+      if (${Env:DO_PYTHON_BUILD} -eq "true") {
+        &"${Env:MB_PYTHON}/python.exe" -m pip install twine
+        &"${Env:MB_PYTHON}/python.exe" -m twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing dist/*
+      }
+    }

@@ -30,10 +30,8 @@ env:
     - USE_CCACHE=1
     - PLAT=x86_64
     - UNICODE_WIDTH=32
-    - DO_PIP="true"
+    - DO_PYTHON_BUILD="true"
 
-# We are doing both C++ and Python here, but set Python to make sure correct version is installed.
-language: python
 dist: xenial
 
 # Required to invoke docker ourselves as per https://docs.travis-ci.com/user/docker/
@@ -54,33 +52,39 @@ matrix:
   include:
     # Builds for MacOS
     - os: osx
+      language: generic
       osx_image: xcode8
       env:
-        - MB_PYTHON_VERSION=2.7
+        - PYENV_VERSION=2.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
+      language: generic
       osx_image: xcode8
       env:
-        - MB_PYTHON_VERSION=3.4
+        - PYENV_VERSION=3.4.9
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
+      language: generic
       osx_image: xcode8
       env:
-        - MB_PYTHON_VERSION=3.5
+        - PYENV_VERSION=3.5.6
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
+      language: generic
       osx_image: xcode8
       env:
-        - MB_PYTHON_VERSION=3.6
+        - PYENV_VERSION=3.6.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
+      language: generic
       osx_image: xcode8
       env:
-        - MB_PYTHON_VERSION=3.7
+        - PYENV_VERSION=3.7.1
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
         - TEST_DEPENDS=numpy==1.14.5
     # Builds for Linux
     - os: linux
+      language: python
       python: 2.7
       compiler: gcc
       addons:
@@ -90,9 +94,9 @@ matrix:
           packages:
             - g++-4.8
       env:
-        - MB_PYTHON_VERSION=2.7
         - COMPILER=g++-4.8
     - os: linux
+      language: python
       python: 2.7
       compiler: gcc
       addons:
@@ -102,9 +106,9 @@ matrix:
           packages:
             - g++-5
       env:
-        - MB_PYTHON_VERSION=2.7
         - COMPILER=g++-5
     - os: linux
+      language: python
       python: 3.4
       compiler: gcc
       addons:
@@ -114,9 +118,9 @@ matrix:
           packages:
             - g++-4.8
       env:
-        - MB_PYTHON_VERSION=3.4
         - COMPILER=g++-4.8
     - os: linux
+      language: python
       python: 3.4
       compiler: gcc
       addons:
@@ -126,9 +130,9 @@ matrix:
           packages:
             - g++-5
       env:
-        - MB_PYTHON_VERSION=3.4
         - COMPILER=g++-5
     - os: linux
+      language: python
       python: 3.5
       compiler: gcc
       addons:
@@ -138,9 +142,9 @@ matrix:
           packages:
             - g++-4.8
       env:
-        - MB_PYTHON_VERSION=3.5
         - COMPILER=g++-4.8
     - os: linux
+      language: python
       python: 3.5
       compiler: gcc
       addons:
@@ -150,9 +154,9 @@ matrix:
           packages:
             - g++-5
       env:
-        - MB_PYTHON_VERSION=3.5
         - COMPILER=g++-5
     - os: linux
+      language: python
       python: 3.6
       compiler: gcc
       addons:
@@ -162,10 +166,10 @@ matrix:
           packages:
             - g++-4.8
       env:
-        - MB_PYTHON_VERSION=3.6
         - TEST_DEPENDS=numpy==1.11.3
         - COMPILER=g++-4.8
     - os: linux
+      language: python
       python: 3.6
       compiler: gcc
       addons:
@@ -175,10 +179,10 @@ matrix:
           packages:
             - g++-5
       env:
-        - MB_PYTHON_VERSION=3.6
         - TEST_DEPENDS=numpy==1.11.3
         - COMPILER=g++-5
     - os: linux
+      language: python
       python: 3.7
       compiler: gcc
       addons:
@@ -188,10 +192,10 @@ matrix:
           packages:
             - g++-4.8
       env:
-        - MB_PYTHON_VERSION=3.7
         - TEST_DEPENDS=numpy==1.14.5
         - COMPILER=g++-4.8
     - os: linux
+      language: python
       python: 3.7
       compiler: gcc
       addons:
@@ -201,7 +205,6 @@ matrix:
           packages:
             - g++-5
       env:
-        - MB_PYTHON_VERSION=3.7
         - TEST_DEPENDS=numpy==1.14.5
         - COMPILER=g++-5
 
@@ -225,7 +228,12 @@ install: |
   if [ "$TRAVIS_OS_NAME" = "osx" ]; then
     brew update
     brew install pyenv
-    pyenv install ${MB_PYTHON_VERSION}
+    pyenv install ${PYENV_VERSION}
+    pyenv global ${PYENV_VERSION}
+    wp=`which python`
+    wpd=`dirname $wp`
+    export PATH=${wpd}:$PATH
+    echo $PATH
   fi
 
 script: |
@@ -241,25 +249,28 @@ script: |
   make
   cd MYPROJECT-build
   ctest .
-  if [ "${DO_PIP}" == "true" ]; then
+  cd ${TRAVIS_BUILD_DIR}
+  if [ "${DO_PYTHON_BUILD}" = "true" ]; then
     echo "Running python commands"
-    python3 -m pip install --upgrade pip
-    python3 -m pip install --upgrade setuptools
-    python3 -m pip install --user .
-    python3 setup.py bdist_wheel
+    python -m pip install --upgrade pip
+    python -m pip install --upgrade setuptools
+    python -m pip install --user .
+    python setup.py bdist_wheel
     echo "Finished python commands"
   fi
 
 after_success: |
   # Upload wheels to pypi if requested
   if [ -n "$TRAVIS_TAG" ]; then
-    set -x
-    pip install twine
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      pip install --upgrade pyOpenSSL
+    if [ "${DO_PYTHON_BUILD}" = "true"]; then
+      set -x
+      pip install twine
+      if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then
+        pip install --upgrade pyOpenSSL
+      fi
+      twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing dist/*
+      set +x
     fi
-    twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing dist/*
-    set +x
   else
     echo "Tag not set, deployment skipped."
   fi
