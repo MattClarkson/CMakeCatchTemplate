@@ -22,31 +22,26 @@ clone_folder: c:\projects\CMakeCatchTemplate
 shallow_clone: false
 
 environment:
+  DO_PIP: "true"
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14"
       MB_PYTHON: "C:/Python35"
-      DO_PIP: "true"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14 Win64"
       MB_PYTHON: "C:/Python35-x64"
-      DO_PIP: "true"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14"
       MB_PYTHON: "C:/Python36"
-      DO_PIP: "true"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14 Win64"
       MB_PYTHON: "C:/Python36-x64"
-      DO_PIP: "true"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       COMPILER: "Visual Studio 15"
       MB_PYTHON: "C:/Python37"
-      DO_PIP: "true"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       COMPILER: "Visual Studio 15 Win64"
       MB_PYTHON: "C:/Python37-x64"
-      DO_PIP: "true"
 
 matrix:
     fast_finish: true
