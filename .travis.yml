@@ -30,13 +30,11 @@ env:
     - USE_CCACHE=1
     - PLAT=x86_64
     - UNICODE_WIDTH=32
+    - DO_PIP="true"
 
 # We are doing both C++ and Python here, but set Python to make sure correct version is installed.
 language: python
-
-# Leaving this at trusty. Ideally we want manylinux docker images.
-# https://docs.travis-ci.com/user/reference/trusty/
-dist: trusty
+dist: xenial
 
 # Required to invoke docker ourselves as per https://docs.travis-ci.com/user/docker/
 sudo: required
@@ -56,31 +54,26 @@ matrix:
   include:
     # Builds for MacOS
     - os: osx
-      python: 2.7
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=2.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
-      python: 3.4
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.4
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
-      python: 3.5
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.5
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
-      python: 3.6
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.6
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
-      python: 3.7
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.7
@@ -212,37 +205,50 @@ matrix:
         - TEST_DEPENDS=numpy==1.14.5
         - COMPILER=g++-5
 
-before_install:
-  # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
-  # You may be able to get away with a much smaller list, depending on your actual testing requirements.
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get update; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install freeglut3; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install freeglut3-dev; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install binutils-gold; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install libglew-dev; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install mesa-common-dev; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install build-essential; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install libglew1.5-dev; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install libglm-dev; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install mesa-utils-extra; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install libgl1-mesa-dev; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -yqq install libglapi-mesa; fi
-#   wget -q https://cmake.org/files/v3.6/cmake-3.6.3-Linux-x86_64.sh
-#    sh cmake-3.6.3-Linux-x86_64.sh --skip-license
+install: |
+  if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+    sudo apt-get update
+    # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
+    # You may be able to get away with a much smaller list, depending on your actual testing requirements.
+    sudo apt-get -yqq install freeglut3
+    sudo apt-get -yqq install freeglut3-dev
+    sudo apt-get -yqq install binutils-gold
+    sudo apt-get -yqq install libglew-dev
+    sudo apt-get -yqq install mesa-common-dev
+    sudo apt-get -yqq install build-essential
+    sudo apt-get -yqq install libglew1.5-dev
+    sudo apt-get -yqq install libglm-dev
+    sudo apt-get -yqq install mesa-utils-extra
+    sudo apt-get -yqq install libgl1-mesa-dev
+    sudo apt-get -yqq install libglapi-mesa
+  fi
+  if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+    brew update
+    brew install pyenv
+    pyenv install ${MB_PYTHON_VERSION}
+  fi
 
-script:
-  - echo "Working directory is:"
-  - echo "$CWD"
-  - echo "PATH is:"
-  - echo "$PATH"
-  - echo "cmake version is:"
-  - cmake --version
-  - mkdir build
-  - cd build
-  - cmake -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
-  - make
-  - cd MYPROJECT-build
-  - ctest .
+script: |
+  echo "Working directory is:"
+  echo "$CWD"
+  echo "PATH is:"
+  echo "$PATH"
+  echo "cmake version is:"
+  cmake --version
+  mkdir build
+  cd build
+  cmake -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
+  make
+  cd MYPROJECT-build
+  ctest .
+  if [ "${DO_PIP}" == "true" ]; then
+    echo "Running python commands"
+    python3 -m pip install --upgrade pip
+    python3 -m pip install --upgrade setuptools
+    python3 -m pip install --user .
+    python3 setup.py bdist_wheel
+    echo "Finished python commands"
+  fi
 
 after_success: |
   # Upload wheels to pypi if requested
@@ -253,7 +259,7 @@ after_success: |
       pip install --upgrade pyOpenSSL
     fi
     twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing dist/*
-      set +x
+    set +x
   else
     echo "Tag not set, deployment skipped."
   fi
