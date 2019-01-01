@@ -31,8 +31,8 @@ env:
     - PLAT=x86_64
     - UNICODE_WIDTH=32
 
-# We are doing both C++ and Python here.
-language: generic
+# We are doing both C++ and Python here, but set Python to make sure correct version is installed.
+language: python
 
 # Leaving this at trusty. Ideally we want manylinux docker images.
 # https://docs.travis-ci.com/user/reference/trusty/
@@ -57,35 +57,30 @@ matrix:
     # Builds for MacOS
     - os: osx
       python: 2.7
-      language: generic
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=2.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       python: 3.4
-      language: generic
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.4
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       python: 3.5
-      language: generic
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.5
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       python: 3.6
-      language: generic
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.6
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       python: 3.7
-      language: generic
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.7
