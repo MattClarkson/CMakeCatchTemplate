@@ -17,11 +17,14 @@ version: "{build}"
 init:
   - git config --global core.autocrlf input
 
+# If you use this project as a template to create your own,
+# you will need to rename all instances of CMakeCatchTemplate in this file.
 clone_folder: c:\projects\CMakeCatchTemplate
 
 shallow_clone: false
 
 environment:
+  # Set DO_PYTHON_BUILD to false, if you are only interested in C++ builds.
   DO_PYTHON_BUILD: "true"
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
@@ -44,12 +47,15 @@ environment:
       MB_PYTHON: "C:/Python37-x64"
 
 matrix:
-    fast_finish: true
+  # This is so that if any of the above builds fails, then the whole build fails early.
+  fast_finish: true
     
 configuration:
   - Release
 
 platform:
+  # Set to 'Any CPU', as it is the COMPILER string listed above that tells
+  # cmake to pick a generator for either a 64 or 32 bit build.
   - Any CPU
 
 before_build:
@@ -66,24 +72,18 @@ before_build:
 build_script:
 - cmd: |
     echo --------------------------------------------------------------------------------
-    echo "Build CMakeCatchTemplate:"
+    echo "Building the C++ part of CMakeCatchTemplate:"
+    pwd
     mkdir build
     cd build
     cmake -G "%COMPILER%" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF --config %CONFIGURATION% ..
     cmake --build . --config %CONFIGURATION%
     echo --------------------------------------------------------------------------------
-    if %DO_PYTHON_BUILD% == "true" (
-      echo "Running python commands"
-      "%MB_PYTHON%/python.exe" -m pip install --upgrade pip
-      "%MB_PYTHON%/python.exe" -m pip install --upgrade setuptools
-      "%MB_PYTHON%/python.exe" -m pip install --user .
-      "%MB_PYTHON%/python.exe" setup.py bdist_wheel
-      echo "Finished python commands"
-    )
 
 after_build:
 - ps: |
     echo --------------------------------------------------------------------------------
+    echo "Building the Python part of CMakeCatchTemplate:"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
     if (${Env:DO_PYTHON_BUILD} -eq "true") {
@@ -94,10 +94,14 @@ after_build:
       &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
       echo "Finished python commands"
     }
+    echo --------------------------------------------------------------------------------
 
 test_script:
 - cmd: |
     echo --------------------------------------------------------------------------------
+    cd %APPVEYOR_BUILD_FOLDER%
+    pwd
+    cd build
     pwd
     cd MYPROJECT-build
     pwd
@@ -106,6 +110,8 @@ test_script:
 
 deploy_script:
 - ps: |
+    cd ${Env:APPVEYOR_BUILD_FOLDER}
+    pwd
     if (${Env:APPVEYOR_REPO_TAG} -eq "true") {
       if (${Env:DO_PYTHON_BUILD} -eq "true") {
         &"${Env:MB_PYTHON}/python.exe" -m pip install twine
