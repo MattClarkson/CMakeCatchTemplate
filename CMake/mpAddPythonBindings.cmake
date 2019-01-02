@@ -26,13 +26,19 @@ endif()
 
 if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
-  find_package(PythonInterp)
+  if (DEFINED MYPROJECT_PYTHON_VERSION)
+    find_package(PythonInterp ${MYPROJECT_PYTHON_VERSION} EXACT REQUIRED)
+    find_package(PythonLibs ${MYPROJECT_PYTHON_VERSION} EXACT REQUIRED)
+  else()
+    find_package(PythonInterp)
+    find_package(PythonLibs)
+  endif()
+
   message("Found python interpreter: ${PYTHON_EXECUTABLE}")
-  find_package(PythonLibs)
   message("Found python library version: ${PYTHONLIBS_VERSION_STRING}")
   message("Found python include dirs: ${PYTHON_INCLUDE_DIRS}")
 
-  if (NOT PythonLibs_FOUND)
+  if (NOT PythonLibs_FOUND OR NOT PythonInterp_FOUND)
     set(BUILD_Python_Boost OFF CACHE BOOL "Build boost::python bindings." FORCE)
     set(BUILD_Python_PyBind OFF CACHE BOOL "Build PyBind11 bindings." FORCE)
     message("Forcing BUILD_Python_Boost and BUILD_Python_PyBind to OFF as no Python libs were found.")

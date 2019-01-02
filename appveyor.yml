@@ -117,4 +117,10 @@ deploy_script:
         &"${Env:MB_PYTHON}/python.exe" -m pip install twine
         &"${Env:MB_PYTHON}/python.exe" -m twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing dist/*
       }
+      else {
+        echo "DO_PYTHON_BUILD not set, deployment skipped."
+      }
+    }
+    else {
+      echo "Tag not set, deployment skipped."
     }
