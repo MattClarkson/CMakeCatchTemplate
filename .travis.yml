@@ -230,6 +230,7 @@ install: |
     brew install pyenv
     pyenv install ${PYENV_VERSION}
     pyenv global ${PYENV_VERSION}
+    eval "$(pyenv init -)"
     wp=`which python`
     wpd=`dirname $wp`
     export PATH=${wpd}:$PATH
