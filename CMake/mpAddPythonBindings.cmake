@@ -28,7 +28,7 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
   if (DEFINED MYPROJECT_PYTHON_VERSION)
     find_package(PythonInterp ${MYPROJECT_PYTHON_VERSION} EXACT REQUIRED)
-    find_package(PythonLibs ${MYPROJECT_PYTHON_VERSION} EXACT REQUIRED)
+    find_package(PythonLibs ${MYPROJECT_PYTHON_VERSION} REQUIRED)
   else()
     find_package(PythonInterp)
     find_package(PythonLibs)
