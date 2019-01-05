@@ -4,3 +4,6 @@
 [submodule "Code/Lib/PythonBoost/pyboostcvconverter"]
 	path = Code/Lib/PythonBoost/pyboostcvconverter
 	url = https://github.com/Algomorph/pyboostcvconverter.git
+[submodule "multibuild"]
+	path = multibuild
+	url = https://github.com/matthew-brett/multibuild.git
