@@ -80,21 +80,6 @@ build_script:
     cmake --build . --config %CONFIGURATION%
     echo --------------------------------------------------------------------------------
 
-after_build:
-- ps: |
-    echo --------------------------------------------------------------------------------
-    echo "Building the Python wheel part of CMakeCatchTemplate:"
-    cd ${Env:APPVEYOR_BUILD_FOLDER}
-    pwd
-    if (${Env:DO_PYTHON_BUILD} -eq "true") {
-      echo "Running python commands"
-      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade pip
-      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade setuptools
-      &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
-      echo "Finished python commands"
-    }
-    echo --------------------------------------------------------------------------------
-
 test_script:
 - cmd: |
     echo --------------------------------------------------------------------------------
@@ -111,6 +96,21 @@ test_script:
       echo "Finished python tests."
     }
 
+    echo --------------------------------------------------------------------------------
+
+after_test:
+- ps: |
+    echo --------------------------------------------------------------------------------
+    echo "Building the Python wheel part of CMakeCatchTemplate:"
+    cd ${Env:APPVEYOR_BUILD_FOLDER}
+    pwd
+    if (${Env:DO_PYTHON_BUILD} -eq "true") {
+      echo "Running python commands"
+      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade pip
+      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade setuptools
+      &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
+      echo "Finished python commands"
+    }
     echo --------------------------------------------------------------------------------
 
 deploy_script:
