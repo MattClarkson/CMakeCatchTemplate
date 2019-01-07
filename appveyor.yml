@@ -104,11 +104,16 @@ after_test:
       echo "Finished python tests."
       echo "Building python wheel."
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade pip
+      if ($LastExitCode -ne 0) {throw $LastExitCode}
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade setuptools
+      if ($LastExitCode -ne 0) {throw $LastExitCode}
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade six
+      if ($LastExitCode -ne 0) {throw $LastExitCode}
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade numpy
+      if ($LastExitCode -ne 0) {throw $LastExitCode}
       &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
-      echo "Building python wheel."
+      if ($LastExitCode -ne 0) {throw $LastExitCode}
+      echo "Finished building python wheel."
     }
     echo --------------------------------------------------------------------------------
 
@@ -119,7 +124,9 @@ deploy_script:
     if (${Env:APPVEYOR_REPO_TAG} -eq "true") {
       if (${Env:DO_PYTHON_BUILD} -eq "true") {
         &"${Env:MB_PYTHON}/python.exe" -m pip install twine
+        if ($LastExitCode -ne 0) {throw $LastExitCode}
         &"${Env:MB_PYTHON}/python.exe" -m twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing dist/*
+        if ($LastExitCode -ne 0) {throw $LastExitCode}
       }
       else {
         echo "DO_PYTHON_BUILD not set, deployment skipped."
