@@ -105,6 +105,8 @@ after_test:
       echo "Building python wheel."
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade pip
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade setuptools
+      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade six
+      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade numpy
       &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
       echo "Building python wheel."
     }
