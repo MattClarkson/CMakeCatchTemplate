@@ -28,6 +28,7 @@ import six
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
+import versioneer
 
 # Get the long description, as top-level README.md
 with open('README.md') as f:
@@ -85,7 +86,7 @@ setup(
 
     # Must match the version number in CMakeLists.txt.
     # We could try to parse the CMakeLists.txt file, but lets keep it simple.
-    version='0.0.1',
+    version=versioneer.get_version(),
     author='Myself',
     author_email='me@mydomain.com',
     description='A software package for whatever.',
