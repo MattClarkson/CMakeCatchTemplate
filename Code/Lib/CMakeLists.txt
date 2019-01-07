@@ -37,14 +37,3 @@ target_link_libraries(${MYPROJECT_LIBRARY_NAME} PRIVATE ${ALL_THIRD_PARTY_LIBRAR
 MYPROJECT_INSTALL_HEADERS()
 MYPROJECT_INSTALL_LIBRARY(${MYPROJECT_LIBRARY_NAME})
 
-if(BUILD_Python_Boost)
-  add_subdirectory(PythonBoost)
-endif()
-
-if(BUILD_Python_PyBind)
-  add_subdirectory(PythonPyBind)
-endif()
-
-if(BUILD_UNITY_WRAPPER)
-  add_subdirectory(UnityWrapper)
-endif()
