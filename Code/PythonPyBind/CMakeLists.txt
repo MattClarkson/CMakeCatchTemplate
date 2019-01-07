@@ -23,7 +23,7 @@ if(NOT BUILDING_GUIS)
     mpLibPython.cpp
   )
   add_subdirectory(pybind11)
-  link_libraries(${MYPROJECT_LIBRARY_NAME})
+  link_libraries(${MYPROJECT_LIBRARY_NAME} ${ALL_THIRD_PARTY_LIBRARIES})
   pybind11_add_module(${MYPROJECT_PYTHON_MODULE_NAME} ${MYPROJECT_PYTHON_SRCS})
   if(APPLE)
     set_target_properties(${MYPROJECT_PYTHON_MODULE_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")

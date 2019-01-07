@@ -42,7 +42,7 @@ if(NOT BUILDING_GUIS)
     list(APPEND MYPROJECT_PYTHON_SRCS mpLibPython.cpp) # Rename as appropriate.
   endif()
 
-  link_libraries(${MYPROJECT_LIBRARY_NAME})
+  link_libraries(${MYPROJECT_LIBRARY_NAME} ${ALL_THIRD_PARTY_LIBRARIES})
   PYTHON_ADD_MODULE(${MYPROJECT_PYTHON_MODULE_NAME} ${MYPROJECT_PYTHON_SRCS})
   if(APPLE)
     set_target_properties(${MYPROJECT_PYTHON_MODULE_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
