@@ -24,7 +24,7 @@ clone_folder: c:\projects\CMakeCatchTemplate
 shallow_clone: false
 
 environment:
-  # Set DO_PYTHON_BUILD to false, if you are only interested in C++ builds.
+  # Set DO_PYTHON_BUILD to false, if you are only interested in the C++ part.
   DO_PYTHON_BUILD: "true"
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
@@ -83,14 +83,13 @@ build_script:
 after_build:
 - ps: |
     echo --------------------------------------------------------------------------------
-    echo "Building the Python part of CMakeCatchTemplate:"
+    echo "Building the Python wheel part of CMakeCatchTemplate:"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
     if (${Env:DO_PYTHON_BUILD} -eq "true") {
       echo "Running python commands"
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade pip
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade setuptools
-      &"${Env:MB_PYTHON}/python.exe" -m pip install --user .
       &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
       echo "Finished python commands"
     }
@@ -106,6 +105,12 @@ test_script:
     cd MYPROJECT-build
     pwd
     ctest -C %CONFIGURATION%
+    if (${Env:DO_PYTHON_BUILD} -eq "true") {
+      echo "Running python tests."
+      echo "Currently there are none."
+      echo "Finished python tests."
+    }
+
     echo --------------------------------------------------------------------------------
 
 deploy_script:
