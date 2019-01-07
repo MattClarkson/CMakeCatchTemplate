@@ -14,8 +14,6 @@
 
 if(NOT BUILDING_GUIS)
 
-  # if running pip install, MYPROJECT_PYTHON_MODULE_NAME is passed in from setup.py
-  # So, if its not specified, we just name it after the current library with a 'python' suffix.
   if (NOT MYPROJECT_PYTHON_MODULE_NAME OR MYPROJECT_PYTHON_MODULE_NAME STREQUAL "")
     set(MYPROJECT_PYTHON_MODULE_NAME "${MYPROJECT_LIBRARY_NAME}python")
   endif()
