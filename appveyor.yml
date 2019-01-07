@@ -111,6 +111,8 @@ after_test:
       if ($LastExitCode -ne 0) {throw $LastExitCode}
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade numpy
       if ($LastExitCode -ne 0) {throw $LastExitCode}
+      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade wheel
+      if ($LastExitCode -ne 0) {throw $LastExitCode}
       &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
       if ($LastExitCode -ne 0) {throw $LastExitCode}
       echo "Finished building python wheel."
