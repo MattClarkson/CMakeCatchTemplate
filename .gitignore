@@ -20,3 +20,8 @@
 # CLion/IntelliJ
 *cmake-build-debug
 .idea/*
+
+# From building python wheels, (normally using CI servers).
+build/
+dist/
+*.egg-info
