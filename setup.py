@@ -81,7 +81,7 @@ class CMakeBuild(build_ext):
 setup(
     # Must match python module name in your c++ code, or else you end
     # up with two dynamically linked libraries inside one wheel.
-    name=os.path.join(dir_name, '-python'),
+    name=dir_name + '-python',
 
     # Must match the version number in CMakeLists.txt.
     # We could try to parse the CMakeLists.txt file, but lets keep it simple.
