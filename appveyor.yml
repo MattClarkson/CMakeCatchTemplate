@@ -98,6 +98,8 @@ after_test:
     echo "Building the Python wheel part of CMakeCatchTemplate:"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
+    $env:Path += ";%MB_PYTHON%"
+    $env:Path += ";%MB_PYTHON%/Scripts"
     if (${Env:DO_PYTHON_BUILD} -eq "true") {
       echo "Running python tests."
       echo "Currently there are none."
