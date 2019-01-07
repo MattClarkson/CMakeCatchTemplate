@@ -25,7 +25,7 @@ shallow_clone: false
 
 environment:
   # Set DO_PYTHON_BUILD to false, if you are only interested in the C++ part.
-  DO_PYTHON_BUILD: 1
+  DO_PYTHON_BUILD: true
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       COMPILER: "Visual Studio 14"
@@ -90,12 +90,6 @@ test_script:
     cd MYPROJECT-build
     pwd
     ctest -C %CONFIGURATION%
-    if (${Env:DO_PYTHON_BUILD} -eq 1) {
-      echo "Running python tests."
-      echo "Currently there are none."
-      echo "Finished python tests."
-    }
-
     echo --------------------------------------------------------------------------------
 
 after_test:
@@ -104,12 +98,15 @@ after_test:
     echo "Building the Python wheel part of CMakeCatchTemplate:"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
-    if (${Env:DO_PYTHON_BUILD} -eq 1) {
-      echo "Running python commands"
+    if (${Env:DO_PYTHON_BUILD} -eq "true") {
+      echo "Running python tests."
+      echo "Currently there are none."
+      echo "Finished python tests."
+      echo "Building python wheel."
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade pip
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade setuptools
       &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
-      echo "Finished python commands"
+      echo "Building python wheel."
     }
     echo --------------------------------------------------------------------------------
 
@@ -118,7 +115,7 @@ deploy_script:
     cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
     if (${Env:APPVEYOR_REPO_TAG} -eq "true") {
-      if (${Env:DO_PYTHON_BUILD} -eq 1) {
+      if (${Env:DO_PYTHON_BUILD} -eq "true") {
         &"${Env:MB_PYTHON}/python.exe" -m pip install twine
         &"${Env:MB_PYTHON}/python.exe" -m twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing dist/*
       }
