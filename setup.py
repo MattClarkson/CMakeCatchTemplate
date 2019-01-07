@@ -22,6 +22,7 @@
 # The required CMake version is set in CMakeLists.txt as a C++ developer would expect.
 
 import os
+import platform
 import re
 import subprocess
 import six
@@ -66,17 +67,25 @@ class CMakeBuild(build_ext):
         cmake_args = ['-DMYPROJECT_PYTHON_OUTPUT_DIRECTORY=' + ext_dir,
                       '-DMYPROJECT_PYTHON_MODULE_NAME=' + self.distribution.get_name()
                       ]
+        build_args = []
 
         six.print_("build_extension:name=" + str(ext.name))
         six.print_("build_extension:ext_dir=" + str(ext_dir))
         six.print_("self.distribution.get_name()=" + str(self.distribution.get_name()))
 
+        cfg = 'Debug' if self.debug else 'Release'
+        cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
+
+        if platform.system() == "Windows":
+            cmake_args += ['--config', cfg]
+            build_args += ['--config', cfg]
+        if os.environ.get('COMPILER') is not None:
+            cmake_args += ['-G', '"' + str(os.environ.get('COMPILER')) + '"']
+
         env = os.environ.copy()
-        if not os.path.exists(self.build_temp):
-            os.makedirs(self.build_temp)
 
         subprocess.check_call(['cmake', ext.source_dir] + cmake_args, cwd=ext.build_dir, env=env)
-        subprocess.check_call(['cmake', '--build', '.'], cwd=ext.build_dir)
+        subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=ext.build_dir)
 
 
 setup(

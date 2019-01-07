@@ -28,22 +28,22 @@ environment:
   DO_PYTHON_BUILD: true
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      COMPILER: "Visual Studio 14"
+      COMPILER: "Visual Studio 14 2015"
       MB_PYTHON: "C:/Python35"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      COMPILER: "Visual Studio 14 Win64"
+      COMPILER: "Visual Studio 14 2015 Win64"
       MB_PYTHON: "C:/Python35-x64"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      COMPILER: "Visual Studio 14"
+      COMPILER: "Visual Studio 14 2015"
       MB_PYTHON: "C:/Python36"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      COMPILER: "Visual Studio 14 Win64"
+      COMPILER: "Visual Studio 14 2015 Win64"
       MB_PYTHON: "C:/Python36-x64"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      COMPILER: "Visual Studio 15"
+      COMPILER: "Visual Studio 15 2017"
       MB_PYTHON: "C:/Python37"
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-      COMPILER: "Visual Studio 15 Win64"
+      COMPILER: "Visual Studio 15 2017 Win64"
       MB_PYTHON: "C:/Python37-x64"
 
 matrix:
@@ -97,9 +97,9 @@ after_test:
     echo --------------------------------------------------------------------------------
     echo "Building the Python wheel part of CMakeCatchTemplate:"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
-    pwd
-    $env:Path += ";%MB_PYTHON%"
-    $env:Path += ";%MB_PYTHON%/Scripts"
+    cmake -version
+    pwd    
+    ${Env:PATH} = "%MB_PYTHON%;%MB_PYTHON%/Scripts;${Env:PATH}"
     if (${Env:DO_PYTHON_BUILD} -eq "true") {
       echo "Running python tests."
       echo "Currently there are none."
@@ -113,7 +113,7 @@ after_test:
       if ($LastExitCode -ne 0) {throw $LastExitCode}
       &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade numpy
       if ($LastExitCode -ne 0) {throw $LastExitCode}
-      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade wheel
+      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade --no-warn-script-location wheel
       if ($LastExitCode -ne 0) {throw $LastExitCode}
       &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
       if ($LastExitCode -ne 0) {throw $LastExitCode}
