@@ -225,8 +225,8 @@ In Summary, the Use-Cases are:
  2. GUI app or GUI with command line apps: Use dynamic linking, set BUILD_SHARED_LIBS=ON.
 
 
-Preferred Branching Workflow
-----------------------------
+Preferred Branching Workflow for Contributions.
+-----------------------------------------------
 
  1. Raise issue in this project's Github Issue Tracker.
  2. Fork repository.
@@ -236,4 +236,4 @@ Preferred Branching Workflow
  4. Code on that branch.
  5. Push to your remote when ready.
  6. Create pull request.
- 7. We will review code, and merge to master when it looks ready.
+ 7. We will review code, suggest and required changes and merge to master when it is ready.
