@@ -20,8 +20,8 @@ course developed by [Dr. James Hetherington](http://www.ucl.ac.uk/research-it-se
 and [Dr. Matt Clarkson](https://iris.ucl.ac.uk/iris/browse/profile?upi=MJCLA42).
 
 
-Features
---------
+Main Features
+-------------
 
 The main features provided are:
 
@@ -43,26 +43,120 @@ The main features provided are:
 16. If doing Boost.Python and OpenCV, an example of passing a numpy ndarray to OpenCV, computing something, and returning a cv::Mat as a numpy ndarray, thanks to Gregory Kramida's pyboostcvconverter.
 
 
-Usage
------
+Basic Build Instructions
+------------------------
 
-The main way to use this project is:
+This project itself can be built if you just want to test it. In Linux terms that
+would be:
+``` cmake
+git clone https://github.com/MattClarkson/CMakeCatchTemplate
+mkdir CMakeCatchTemplate-Build
+cd CMakeCatchTemplate-Build
+cmake ../CMakeCatchTemplate
+make
+```
+But ideally, you should use this as a template to create your own project. To do so,
+please refer to the [CMakeTemplateRenamer](https://github.com/MattClarkson/CMakeTemplateRenamer)
+which will show you how to clone this repository, and rename all the variables to names of your choice.
+Then you would simply build your new project, using cmake, as shown above.
 
- 1. Clone this project. If you intend to use [pybind11](https://github.com/pybind/pybind11), or [Boost.Python](https://www.boost.org/doc/libs/1_69_0/libs/python/doc/html/index.html) and [pyboostcvconverter](https://github.com/Algomorph/pyboostcvconverter), you must use ```git clone --recursive``` as pybind and pyboostcvconverter are included as a git submodules.
- 2. Rename the top-level project folder to the folder name of your choice.
- 3. Rename all instances of ```MYPROJECT``` (all uppercase), ```myproject``` (all lowercase), ```MyProject``` (camelcase) and the namespace ```mp``` with names of your choice, by running the `rename.sh` script in a ```bash``` environment. Credit and thanks go to [ddervs](https://github.com/ddervs) for `rename.sh`. Running `rename.sh` should be performed before running CMake for the first time if you plan on doing an "in source" build.
- 4. Set your KWStyle and CppCheck settings in ```Utilities/KWStyle``` and ```Utilities/CppCheck```.
- 5. Check it all builds.
- 6. Check the unit tests pass.
- 7. Fix anything that doesn't pass.
- 8. Optionally strip out or turn off the bits you don't need (see below).
- 9. Check it all builds and the tests pass again.
-10. Commit it to your own local git repository.
-11. Set the remote URL correctly.
-12. Push to remote.
 
-So, right from your first commit, you will have a lot of functionality inherited from this project. If you started from a git repo, you will also have the full commit log. If
-you started from an exported source tree, you won't have the full commit log.
+Further Build Instructions
+--------------------------
+
+This project can be configured to build against Eigen, Boost, OpenCV, glog, gflags, VTK and PCL.
+These were chosen as an example of how to use CMake, and some common
+C++ projects. These dependencies are optional, and this project will compile without them.
+
+Furthermore, these dependencies can be downloaded and built,
+or the user can specify directories of previously compiled
+libraries.
+
+To download and build dependencies, use CMake to ensure:
+
+  * BUILD_SUPERBUILD:BOOL=ON
+
+where ```ON``` is the default. Then to build any of Eigen, Boost or OpenCV etc., use CMake to set:
+
+  * BUILD_Eigen:BOOL=ON|OFF
+  * BUILD_Boost:BOOL=ON|OFF
+  * BUILD_OpenCV:BOOL=ON|OFF
+
+and so on. If you set BUILD_SUPERBUILD=OFF, and these BUILD_whatever variables are on, then CMake will just try finding
+locally installed versions rather then downloading them.
+
+To switch between static/dynamic linking, use CMake to set:
+
+  * BUILD_SHARED_LIBS:BOOL=ON|OFF
+
+To switch between Debug and Release mode, use CMake to set:
+
+  * CMAKE_BUILD_TYPE:STRING=Debug|Release
+
+Note: Only Debug and Release are supported.
+
+Note: your host system is very likely to have a version of Boost that
+is different to the one provided here. So if you want to use Boost,
+you should probably try and use the one provided by this SuperBuild.
+
+
+Python Build
+------------
+
+This project can be used to build Python extensions.
+
+* Clone CMakeCatchTemplate (or your generated project), using ```--recursive```.
+* Use CMake to set BUILD_Python_Boost or BUILD_Python_PyBind to ON.
+* Run a C++ build first.
+* Set PYTHON_PATH to pick up your C++ extension.
+* Look in Code/Lib/PythonBoost or Code/Lib/PythonPybind for examples.
+
+Then, for example using Boost.Python:
+```
+import myprojectpython as mp
+mp.my_first_add_function(1,6)
+```
+
+
+Windows Users
+-------------
+
+If you build the project with shared libraries (BUILD_SHARED_LIBS:BOOL=ON)
+then after the SuperBuild has successfully completed, you should look for the batch file
+StartVS_Debug.bat or StartVS_Release.bat in the MYPROJECT-build folder.
+This sets the path before launching Visual Studio, so that when you come to run your
+application or unit tests within Visual Studio, the dynamically
+loaded libraries are found at run time.
+
+
+Tested On
+---------
+
+ * Windows - Windows 8, VS2013, CMake 3.6.3, Qt 5.4.2
+ * Linux - Centos 7, g++ 4.8.5, CMake 3.5.1, Qt 5.6.2
+ * Mac - OSX 10.10.5, clang 6.0, CMake 3.9.4, Qt 5.6.2
+ * Also refer to .travis.yml and appveyor.yml for other combinations
+
+Minimum CMake version is 3.5. If you turn GUI options on, then the minimum Qt is version 5. 
+Qt4 is not supported and not planned to be supported. If you are using VTK you should 
+try a Qt version >= 5.5.0 to take advantage of the new OpenGL2 backend. 
+If you need pybind, you need at least C++11, so on Windows you should have at least VS2015.
+
+
+Remove Unwanted Code
+--------------------
+
+You may find that you do not need all of the code in this repository. We could have
+made a different repository for each of the Use-Cases, but then there would be a lot of code
+duplication and overlap. So, for now, its all one repository. Take a look in the ```Code``` folder.
+Remove the directories you do not need, and change ```Code/CMakeLists.txt``` accordingly.
+You can also search the top level CMakeLists.txt for code that looks like
+```mpAddSomething``` and ```mpIncludeSomething```
+and easily chop out 3rd party libraries
+you do not need. We believe its easier to remove code you don't need than it is to
+build up a lot of CMake code, based on hours of searching the internet. At least the CMake
+code here has been tested... to some degree.
+
 
 
 A Note on Packaging
@@ -128,114 +222,6 @@ In Summary, the Use-Cases are:
 
  1. Library with command line app: Use static linking, set BUILD_SHARED_LIBS=OFF.
  2. GUI app or GUI with command line apps: Use dynamic linking, set BUILD_SHARED_LIBS=ON.
-
-
-Tested On
----------
-
- * Windows - Windows 8, VS2013, CMake 3.6.3, Qt 5.4.2
- * Linux - Centos 7, g++ 4.8.5, CMake 3.5.1, Qt 5.6.2
- * Mac - OSX 10.10.5, clang 6.0, CMake 3.9.4, Qt 5.6.2
- * Also refer to .travis.yml and appveyor.yml for other combinations
-
-Minimum CMake version is 3.5. Minimum Qt is version 5. Qt4 is not supported and not planned to be supported.
-If you are using VTK you should try a Qt version >= 5.5.0 to take advantage of the new OpenGL2 backend.
-If you need pybind, you need at least C++11, so on Windows you should have at least VS2015.
-
-
-Build Instructions
-------------------
-
-This project can be configured to build against Eigen, Boost, OpenCV, glog, gflags, VTK and PCL.
-These were chosen as an example of how to use CMake, and some common
-C++ projects. These dependencies are optional, and this project
-will compile without them.
-
-Furthermore, these dependencies can be downloaded and built,
-or the user can specify directories of previously compiled
-libraries.
-
-To download and build dependencies, use CMake to set:
-
-  * BUILD_SUPERBUILD:BOOL=ON
-
-where ```ON``` is the default. Then to build any of Eigen, Boost or OpenCV etc., use CMake to set:
-
-  * BUILD_Eigen:BOOL=ON|OFF
-  * BUILD_Boost:BOOL=ON|OFF
-  * BUILD_OpenCV:BOOL=ON|OFF
-
-and so on. If you set BUILD_SUPERBUILD=OFF, and these BUILD_whatever variables are on, then CMake will just try finding
-locally installed versions rather then downloading them.
-
-To switch between static/dynamic linking, use CMake to set:
-
-  * BUILD_SHARED_LIBS:BOOL=ON|OFF
-
-To switch between Debug and Release mode, use CMake to set:
-
-  * CMAKE_BUILD_TYPE:STRING=Debug|Release
-
-Note: Only Debug and Release are supported.
-
-Note: your host system is very likely to have a version of Boost that
-is different to the one provided here. So if you want to use Boost,
-you should probably try and use the one provided by this SuperBuild.
-
-
-Python Build
-------------
-
-This project can be built with python setuptools. First try:
-
-```
-git clone https://github.com/MattClarkson/CMakeCatchTemplate.git
-pip install [--user] ./CMakeCatchTemplate
-```
-
-Then
-```
-import myprojectpython as mp
-mp.my_first_add_function(1,6)
-```
-Then you can see a working example of how things string together. Look in
-setup.py as setuptools is calling CMake. Thanks go to [this example](https://github.com/pybind/cmake_example).
-
-So, if you ultimately want a python module that is pip-installable, and you followed
-the instructions above to form your own project, with its own name, own variables and so on, then try:
-
- 1. First get all your C++ working, with unit tests and so on.
- 2. Then rebuild using ```BUILD_Python_Boost```or ```BUILD_Python_PyBind``` and follow the examples in ```Code/Lib/PythonBoost``` or ```Code/Lib/PythonPybind``` to define your python interface.
- 3. Once the python module is compiling, then setup all your CMake options so that the default settings are correct.
- 4. Set values in setup.py according to the comments therein.
-
-Note: Don't forget to clone with ```--recursive``` if you are using PyBind instead of Boost.
-
-
-Windows Users
--------------
-
-If you build the project with shared libraries (BUILD_SHARED_LIBS:BOOL=ON)
-then after the SuperBuild has successfully completed, you should look for the batch file
-StartVS_Debug.bat or StartVS_Release.bat in the MYPROJECT-build folder.
-This sets the path before launching Visual Studio, so that when you come to run your
-application or unit tests within Visual Studio, the dynamically
-loaded libraries are found at run time.
-
-
-Remove Unwanted Code
---------------------
-
-You may find that you do not need all of the code in this repository. We could have
-made a different repository for each of the above Use-Cases, but then there would be a lot of code
-duplication and overlap. So, for now, its all one repository. Take a look in the ```Code``` folder.
-Remove the directories you do not need, and change ```Code/CMakeLists.txt``` accordingly.
-You can also search the top level CMakeLists.txt for code that looks like
-```mpAddSomething``` and ```mpIncludeSomething```
-and easily chop out 3rd party libraries
-you do not need. We believe its easier to remove code you don't need than it is to
-build up a lot of CMake code, based on hours of searching the internet. At least the CMake
-code here has been tested... to some degree.
 
 
 Preferred Branching Workflow
