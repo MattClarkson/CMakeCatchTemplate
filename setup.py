@@ -74,11 +74,13 @@ class CMakeBuild(build_ext):
         six.print_("self.distribution.get_name()=" + str(self.distribution.get_name()))
 
         cfg = 'Debug' if self.debug else 'Release'
-        cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
 
         if platform.system() == "Windows":
             cmake_args += ['--config', cfg]
             build_args += ['--config', cfg]
+        else:
+            cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
+
         if os.environ.get('COMPILER') is not None:
             cmake_args += ['-G', str(os.environ.get('COMPILER'))]
 
