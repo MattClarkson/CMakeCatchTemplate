@@ -77,7 +77,7 @@ class CMakeBuild(build_ext):
 
         if platform.system() == "Windows":
             cmake_args += ['--config ' + cfg]
-            build_args += ['--config ' + cfg]
+            build_args += ['--config', cfg]
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
 
