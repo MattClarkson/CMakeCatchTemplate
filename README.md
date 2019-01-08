@@ -49,7 +49,7 @@ Basic Build Instructions
 This project itself can be built if you just want to test it. In Linux terms that
 would be:
 ``` cmake
-git clone https://github.com/MattClarkson/CMakeCatchTemplate
+git clone --recursive https://github.com/MattClarkson/CMakeCatchTemplate
 mkdir CMakeCatchTemplate-Build
 cd CMakeCatchTemplate-Build
 cmake ../CMakeCatchTemplate
@@ -111,7 +111,8 @@ This project can be used to build Python extensions.
 * Set PYTHON_PATH to pick up your C++ extension.
 * Look in Code/Lib/PythonBoost or Code/Lib/PythonPybind for examples.
 
-Then, for example using Boost.Python:
+Examples are in Code/Lib/PythonBoost or Code/Lib/PythonPybind. 
+So using the Code/Lib/PythonBoost example we have:
 ```
 import myprojectpython as mp
 mp.my_first_add_function(1,6)
