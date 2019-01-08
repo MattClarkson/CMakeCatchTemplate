@@ -64,8 +64,8 @@ class CMakeBuild(build_ext):
 
     def build_extension(self, ext):
         ext_dir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
-        cmake_args = ['-DMYPROJECT_PYTHON_OUTPUT_DIRECTORY=' + ext_dir,
-                      '-DMYPROJECT_PYTHON_MODULE_NAME=' + self.distribution.get_name()
+        cmake_args = ['-DMYPROJECT_PYTHON_OUTPUT_DIRECTORY:PATH=' + ext_dir,
+                      '-DMYPROJECT_PYTHON_MODULE_NAME:STRING=' + self.distribution.get_name()
                       ]
         build_args = []
 
