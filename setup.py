@@ -68,7 +68,6 @@ class CMakeBuild(build_ext):
                       '-DMYPROJECT_PYTHON_MODULE_NAME:STRING=' + self.distribution.get_name()
                       ]
         build_args = []
-        build_args += cmake_args
 
         six.print_("build_extension:name=" + str(ext.name))
         six.print_("build_extension:ext_dir=" + str(ext_dir))
@@ -88,7 +87,7 @@ class CMakeBuild(build_ext):
         env = os.environ.copy()
 
         subprocess.check_call(['cmake'] + cmake_args + [ext.source_dir], cwd=ext.build_dir, env=env)
-        subprocess.check_call(['cmake'] + build_args + ['--build', '.'], cwd=ext.build_dir)
+        subprocess.check_call(['cmake'] + ['--build', '.'], cwd=ext.build_dir)
 
 
 setup(
