@@ -80,7 +80,7 @@ class CMakeBuild(build_ext):
             cmake_args += ['--config', cfg]
             build_args += ['--config', cfg]
         if os.environ.get('COMPILER') is not None:
-            cmake_args += ['-G', '"' + str(os.environ.get('COMPILER')) + '"']
+            cmake_args += ['-G', str(os.environ.get('COMPILER'))]
 
         env = os.environ.copy()
 
