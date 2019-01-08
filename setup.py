@@ -76,8 +76,8 @@ class CMakeBuild(build_ext):
         cfg = 'Debug' if self.debug else 'Release'
 
         if platform.system() == "Windows":
-            cmake_args += ['--config', cfg]
-            build_args += ['--config', cfg]
+            cmake_args += ['--config ' + cfg]
+            build_args += ['--config ' + cfg]
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
 
