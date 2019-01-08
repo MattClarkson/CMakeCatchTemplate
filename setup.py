@@ -68,6 +68,7 @@ class CMakeBuild(build_ext):
                       '-DMYPROJECT_PYTHON_MODULE_NAME:STRING=' + self.distribution.get_name()
                       ]
         build_args = []
+        build_args += cmake_args
 
         six.print_("build_extension:name=" + str(ext.name))
         six.print_("build_extension:ext_dir=" + str(ext_dir))
