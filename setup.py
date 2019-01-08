@@ -87,7 +87,7 @@ class CMakeBuild(build_ext):
         env = os.environ.copy()
 
         subprocess.check_call(['cmake'] + cmake_args + [ext.source_dir], cwd=ext.build_dir, env=env)
-        subprocess.check_call(['cmake'] + ['--build', '.'], cwd=ext.build_dir)
+        subprocess.check_call(['cmake'] + ['--build', '.'] + build_args, cwd=ext.build_dir)
 
 
 setup(
