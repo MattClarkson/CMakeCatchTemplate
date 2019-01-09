@@ -16,8 +16,26 @@
 # Test for macOS with [ -n "$IS_OSX" ]
 
 function pre_build {
-  # Any stuff that you need to do before you start building the wheels
-  # Runs in the root directory of this repository.
+  if [ -n "$IS_OSX" ]; then
+    echo "Running pre_build for Mac."
+  else
+
+    # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
+    # You may be able to get away with a much smaller list, depending on your actual testing requirements.
+    sudo apt-get update
+    sudo apt-get -yqq install freeglut3
+    sudo apt-get -yqq install freeglut3-dev
+    sudo apt-get -yqq install binutils-gold
+    sudo apt-get -yqq install libglew-dev
+    sudo apt-get -yqq install mesa-common-dev
+    sudo apt-get -yqq install build-essential
+    sudo apt-get -yqq install libglew1.5-dev
+    sudo apt-get -yqq install libglm-dev
+    sudo apt-get -yqq install mesa-utils-extra
+    sudo apt-get -yqq install libgl1-mesa-dev
+    sudo apt-get -yqq install libglapi-mesa
+  fi
+
   pwd
   python --version
   cmake --version
@@ -28,7 +46,7 @@ function pre_build {
 }
 
 function run_tests {
-  # Runs tests on installed distribution from an empty directory
+  # Runs python tests on installed distribution from an empty directory
   :
 }
 
