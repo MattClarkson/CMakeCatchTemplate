@@ -215,12 +215,7 @@ script:
 #    echo "Finished python commands"
 #  fi
 #
-#script: |
-#    # Build and package
-#    set -x
-#    build_wheel $REPO_DIR $PLAT
-#    if [ -n "$USE_CCACHE" ]; then ccache --show-stats; fi
-#    set +x
+
 
 after_success: |
   # Upload wheels to pypi if requested
