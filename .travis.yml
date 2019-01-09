@@ -31,7 +31,7 @@ env:
     - REPO_DIR=.
     - BUILD_COMMIT=HEAD
     - BUILD_DEPENDS="numpy six"
-    - TEST_DEPENDS="numpy "
+    - TEST_DEPENDS="numpy six"
     - BDIST_PARAMS=""
     - PLAT=x86_64
     - UNICODE_WIDTH=32
