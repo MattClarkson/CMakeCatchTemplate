@@ -13,35 +13,44 @@
 #============================================================================*/
 
 # Inspired by: https://github.com/skvark/opencv-python
-# Firstly, we want to compile the C++ library of this project on
-# Linux and Mac. If you are just doing a C++ library, you can comment out
-# the python specific bits. But this project is mainly intended to enable
-# C++ developers to get their libraries wrapped and deployed in Python.
-# So, the focus of this .travis.yml is to help C++ AND Python testing.
+#        and : https://github.com/matthew-brett/multibuild
+# Firstly, we want to compile and test the C++ library of this project on
+# Linux and Mac. If you are only doing a C++ library, you can set DO_PYTHON_BUILD
+# to false. However, we hope tht lots of people will be inspired to provide
+# python wrappers for their C++ libraries, and if they do, building python
+# wheels is quite difficult. So, it would be good for this CMakeCatchTemplate
+# project to provide the mechanism to enable a C++ Python module to be easily
+# deployed. So, that is why we are doing all the Travis/Appveyor
+# on an environment that is suitable for BOTH C++ and Python.
+# So, we make use of Matthew Brett's multibuild.
 
 env:
   global:
     # Prompt
     - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
-
-    # Default settings that may be over-ridden for various builds.
+    - REPO_DIR=.
+    - BUILD_COMMIT=HEAD
     - TEST_DEPENDS="numpy==1.11.1"
     - BDIST_PARAMS=""
-    - USE_CCACHE=1
     - PLAT=x86_64
     - UNICODE_WIDTH=32
     - DO_PYTHON_BUILD="true"
 
-dist: xenial
-
-# Required to invoke docker ourselves as per https://docs.travis-ci.com/user/docker/
+language: python
+# The Travis Python version is unrelated to the version we build and test
+# with.  This is set with the MB_PYTHON_VERSION variable.
+python: 3.5
 sudo: required
+dist: trusty
 services: docker
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       - cmake
+      - g++-4.8
   homebrew:
     packages:
       - cmake
@@ -49,220 +58,201 @@ addons:
 
 matrix:
   fast_finish: true
+  exclude:
+    - python: 3.5
   include:
     # Builds for MacOS
     - os: osx
       language: generic
       osx_image: xcode8
       env:
-        - PYENV_VERSION=2.7
+        - MB_PYTHON_VERSION=2.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       language: generic
       osx_image: xcode8
       env:
-        - PYENV_VERSION=3.4.9
+        - MB_PYTHON_VERSION=3.4
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       language: generic
       osx_image: xcode8
       env:
-        - PYENV_VERSION=3.5.6
+        - MB_PYTHON_VERSION=3.5
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       language: generic
       osx_image: xcode8
       env:
-        - PYENV_VERSION=3.6.7
+        - MB_PYTHON_VERSION=3.6
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       language: generic
       osx_image: xcode8
       env:
-        - PYENV_VERSION=3.7.1
+        - MB_PYTHON_VERSION=3.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
         - TEST_DEPENDS=numpy==1.14.5
     # Builds for Linux
     - os: linux
-      language: python
-      python: 2.7
       compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-4.8
       env:
         - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=2.7
     - os: linux
-      language: python
-      python: 2.7
       compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-      env:
-        - COMPILER=g++-5
-    - os: linux
-      language: python
-      python: 3.4
-      compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-4.8
       env:
         - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=2.7
+        - UNICODE_WIDTH=16
     - os: linux
-      language: python
-      python: 3.4
       compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-      env:
-        - COMPILER=g++-5
-    - os: linux
-      language: python
-      python: 3.5
-      compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-4.8
       env:
         - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=2.7
+        - PLAT=i686
     - os: linux
-      language: python
-      python: 3.5
       compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
       env:
-        - COMPILER=g++-5
+        - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=2.7
+        - PLAT=i686
+        - UNICODE_WIDTH=16
     - os: linux
-      language: python
-      python: 3.6
       compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-4.8
       env:
+        - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=3.3
+    - os: linux
+      compiler: gcc
+      env:
+        - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=3.3
+        - PLAT=i686
+    - os: linux
+      compiler: gcc
+      env:
+        - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=3.4
+    - os: linux
+      compiler: gcc
+      env:
+        - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=3.4
+        - PLAT=i686
+    - os: linux
+      compiler: gcc
+      env:
+        - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=3.5
+    - os: linux
+      compiler: gcc
+      env:
+        - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=3.5
+        - PLAT=i686
+    - os: linux
+      compiler: gcc
+      env:
+        - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=3.6
         - TEST_DEPENDS=numpy==1.11.3
-        - COMPILER=g++-4.8
     - os: linux
-      language: python
-      python: 3.6
       compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
       env:
+        - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=3.6
+        - PLAT=i686
         - TEST_DEPENDS=numpy==1.11.3
-        - COMPILER=g++-5
     - os: linux
-      language: python
-      python: 3.7
       compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-4.8
       env:
-        - TEST_DEPENDS=numpy==1.14.5
         - COMPILER=g++-4.8
-    - os: linux
-      language: python
-      python: 3.7
-      compiler: gcc
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-      env:
+        - MB_PYTHON_VERSION=3.7
         - TEST_DEPENDS=numpy==1.14.5
-        - COMPILER=g++-5
+    - os: linux
+      compiler: gcc
+      env:
+        - COMPILER=g++-4.8
+        - MB_PYTHON_VERSION=3.7
+        - PLAT=i686
+        - TEST_DEPENDS=numpy==1.14.5
 
-install: |
-  if [ "$TRAVIS_OS_NAME" = "linux" ]; then
-    sudo apt-get update
+before_install:
+    - source multibuild/common_utils.sh
+    - source multibuild/travis_steps.sh
+    - before_install
+
+install:
+    # Maybe get and clean and patch source
+    - clean_code $REPO_DIR $BUILD_COMMIT
+    - build_wheel $REPO_DIR $PLAT
+
+script:
+    - install_run $PLAT
+
+#before_install: |
+#  if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+#    sudo apt-get update
     # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
     # You may be able to get away with a much smaller list, depending on your actual testing requirements.
-    sudo apt-get -yqq install freeglut3
-    sudo apt-get -yqq install freeglut3-dev
-    sudo apt-get -yqq install binutils-gold
-    sudo apt-get -yqq install libglew-dev
-    sudo apt-get -yqq install mesa-common-dev
-    sudo apt-get -yqq install build-essential
-    sudo apt-get -yqq install libglew1.5-dev
-    sudo apt-get -yqq install libglm-dev
-    sudo apt-get -yqq install mesa-utils-extra
-    sudo apt-get -yqq install libgl1-mesa-dev
-    sudo apt-get -yqq install libglapi-mesa
-  fi
-  if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-    brew update
-    brew install pyenv
-    pyenv install ${PYENV_VERSION}
-    pyenv global ${PYENV_VERSION}
-    eval "$(pyenv init -)"
-    wp=`which python`
-    wpd=`dirname $wp`
-    export PATH=${wpd}:$PATH
-    echo $PATH
-    python --version
-  fi
-
-script: |
-  echo "Working directory is:"
-  pwd
-  echo "PATH is:"
-  echo "$PATH"
-  echo "cmake version is:"
-  cmake --version
-  mkdir build
-  cd build
-  if [ "${PYENV_VERSION}" != "" ]; then
-    cmake_python_string="-DMYPROJECT_PYTHON_VERSION:STRING=${PYENV_VERSION}"
-  fi
-  cmake ${cmake_python_string} -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
-  make
-  cd MYPROJECT-build
-  ctest .
-  cd ${TRAVIS_BUILD_DIR}
-  if [ "${DO_PYTHON_BUILD}" = "true" ]; then
-    echo "Running python commands"
-    python -m pip install --upgrade pip
-    python -m pip install --upgrade setuptools
-    python -m pip install --user .
-    python setup.py bdist_wheel
-    echo "Finished python commands"
-  fi
+#    sudo apt-get -yqq install freeglut3
+#    sudo apt-get -yqq install freeglut3-dev
+#    sudo apt-get -yqq install binutils-gold
+#    sudo apt-get -yqq install libglew-dev
+#    sudo apt-get -yqq install mesa-common-dev
+#    sudo apt-get -yqq install build-essential
+#    sudo apt-get -yqq install libglew1.5-dev
+#    sudo apt-get -yqq install libglm-dev
+#    sudo apt-get -yqq install mesa-utils-extra
+#    sudo apt-get -yqq install libgl1-mesa-dev
+#    sudo apt-get -yqq install libglapi-mesa
+#  fi
+#  if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+#    brew update
+#    brew install pyenv
+#    pyenv install ${PYENV_VERSION}
+#    pyenv global ${PYENV_VERSION}
+#    eval "$(pyenv init -)"
+#    wp=`which python`
+#    wpd=`dirname $wp`
+#    export PATH=${wpd}:$PATH
+#    echo $PATH
+#    python --version
+#  fi
+#
+#install: |
+#  echo "Working directory is:"
+#  pwd
+#  echo "PATH is:"
+#  echo "$PATH"
+#  echo "cmake version is:"
+#  cmake --version
+#  mkdir build
+#  cd build
+#  if [ "${PYENV_VERSION}" != "" ]; then
+#    cmake_python_string="-DMYPROJECT_PYTHON_VERSION:STRING=${PYENV_VERSION}"
+#  fi
+#  cmake ${cmake_python_string} -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
+#  make
+#  cd MYPROJECT-build
+#  ctest .
+#  cd ${TRAVIS_BUILD_DIR}
+#  if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+#    echo "Running python commands"
+#    python -m pip install --upgrade pip
+#    python -m pip install --upgrade setuptools
+#    python -m pip install --user .
+#    python setup.py bdist_wheel
+#    echo "Finished python commands"
+#  fi
+#
+#script: |
+#    # Build and package
+#    set -x
+#    build_wheel $REPO_DIR $PLAT
+#    if [ -n "$USE_CCACHE" ]; then ccache --show-stats; fi
+#    set +x
 
 after_success: |
   # Upload wheels to pypi if requested
