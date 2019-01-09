@@ -44,18 +44,6 @@ sudo: required
 dist: trusty
 services: docker
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - cmake
-      - g++-4.8
-  homebrew:
-    packages:
-      - cmake
-    update: true
-
 matrix:
   fast_finish: true
   exclude:
@@ -97,83 +85,69 @@ matrix:
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=2.7
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=2.7
         - UNICODE_WIDTH=16
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=2.7
         - PLAT=i686
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=2.7
         - PLAT=i686
         - UNICODE_WIDTH=16
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=3.3
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=3.3
         - PLAT=i686
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=3.4
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=3.4
         - PLAT=i686
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=3.5
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=3.5
         - PLAT=i686
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=3.6
         - TEST_DEPENDS=numpy==1.11.3
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=3.6
         - PLAT=i686
         - TEST_DEPENDS=numpy==1.11.3
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=3.7
         - TEST_DEPENDS=numpy==1.14.5
     - os: linux
       compiler: gcc
       env:
-        - COMPILER=g++-4.8
         - MB_PYTHON_VERSION=3.7
         - PLAT=i686
         - TEST_DEPENDS=numpy==1.14.5
