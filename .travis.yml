@@ -30,7 +30,8 @@ env:
     - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
     - REPO_DIR=.
     - BUILD_COMMIT=HEAD
-    - TEST_DEPENDS="numpy==1.11.1"
+    - BUILD_DEPENDS="numpy six"
+    - TEST_DEPENDS="numpy "
     - BDIST_PARAMS=""
     - PLAT=x86_64
     - UNICODE_WIDTH=32
@@ -80,7 +81,6 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
-        - TEST_DEPENDS=numpy==1.14.5
     # Builds for Linux
     - os: linux
       compiler: gcc
@@ -133,24 +133,20 @@ matrix:
       compiler: gcc
       env:
         - MB_PYTHON_VERSION=3.6
-        - TEST_DEPENDS=numpy==1.11.3
     - os: linux
       compiler: gcc
       env:
         - MB_PYTHON_VERSION=3.6
         - PLAT=i686
-        - TEST_DEPENDS=numpy==1.11.3
     - os: linux
       compiler: gcc
       env:
         - MB_PYTHON_VERSION=3.7
-        - TEST_DEPENDS=numpy==1.14.5
     - os: linux
       compiler: gcc
       env:
         - MB_PYTHON_VERSION=3.7
         - PLAT=i686
-        - TEST_DEPENDS=numpy==1.14.5
 
 before_install:
     - source multibuild/common_utils.sh
