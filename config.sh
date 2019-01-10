@@ -64,6 +64,7 @@ function build_wheel {
     echo "Skipping build_bdist_wheel."
   fi
   echo "Checking dist folder."
-  ls dist/
+  pwd
+  ls -lrt dist/
   echo "Finished build_wheel."
 }
