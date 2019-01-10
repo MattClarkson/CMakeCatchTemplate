@@ -52,3 +52,7 @@ function run_tests {
   :
 }
 
+function build_wheel {
+  echo "Starting build_wheel"
+  pwd
+}
