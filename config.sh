@@ -60,7 +60,7 @@ function run_tests {
 function build_wheel {
   echo "Starting build_wheel: $@"
   pwd
-  if [ "$3" = "true"]; then
+  if [ "$3" = "true" ]; then
     build_bdist_wheel $@
   else
     echo "Skipping build_bdist_wheel."
