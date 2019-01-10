@@ -21,20 +21,22 @@ function pre_build {
   if [ -n "$IS_OSX" ]; then
     echo "pre_build is on Mac, no additional dependencies at the moment."
   else
+    echo "pre_build is on Linux. To Do. Fix additional dependencies."
+
     # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
     # You may be able to get away with a much smaller list, depending on your actual testing requirements.
-    sudo apt-get update
-    sudo apt-get -yqq install freeglut3
-    sudo apt-get -yqq install freeglut3-dev
-    sudo apt-get -yqq install binutils-gold
-    sudo apt-get -yqq install libglew-dev
-    sudo apt-get -yqq install mesa-common-dev
-    sudo apt-get -yqq install build-essential
-    sudo apt-get -yqq install libglew1.5-dev
-    sudo apt-get -yqq install libglm-dev
-    sudo apt-get -yqq install mesa-utils-extra
-    sudo apt-get -yqq install libgl1-mesa-dev
-    sudo apt-get -yqq install libglapi-mesa
+    #sudo apt-get update
+    #sudo apt-get -yqq install freeglut3
+    #sudo apt-get -yqq install freeglut3-dev
+    #sudo apt-get -yqq install binutils-gold
+    #sudo apt-get -yqq install libglew-dev
+    #sudo apt-get -yqq install mesa-common-dev
+    #sudo apt-get -yqq install build-essential
+    #sudo apt-get -yqq install libglew1.5-dev
+    #sudo apt-get -yqq install libglm-dev
+    #sudo apt-get -yqq install mesa-utils-extra
+    #sudo apt-get -yqq install libgl1-mesa-dev
+    #sudo apt-get -yqq install libglapi-mesa
   fi
 
   pwd
