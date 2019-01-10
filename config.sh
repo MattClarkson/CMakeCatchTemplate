@@ -57,14 +57,17 @@ function run_tests {
 
 function build_wheel {
   echo "Starting build_wheel: $@"
+  echo "REPO_DIR=$REPO_DIR"
+  echo "PLAT=$PLAT"
+  echo "DO_PYTHON_BUILD=$DO_PYTHON_BUILD"
   pwd
-  if [ "$3" = "true" ]; then
+  if [ "${DO_PYTHON_BUILD}" = "true" ]; then
     build_bdist_wheel $@
+    echo "Checking dist folder."
+    pwd
+    ls -lrt dist/
   else
     echo "Skipping build_bdist_wheel."
   fi
-  echo "Checking dist folder."
-  pwd
-  ls -lrt dist/
   echo "Finished build_wheel."
 }
