@@ -12,9 +12,6 @@
 #
 #============================================================================*/
 
-# Define custom utilities
-# Test for macOS with [ -n "$IS_OSX" ]
-
 function pre_build {
   echo "Starting pre_build."
 
@@ -53,8 +50,9 @@ function pre_build {
 }
 
 function run_tests {
-  # Runs python tests on installed distribution from an empty directory.
-  :
+  echo "Starting run_tests."
+  echo "Nothing to do as yet."
+  echo "Finished run_tests."
 }
 
 function build_wheel {
