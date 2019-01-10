@@ -62,12 +62,18 @@ function build_wheel {
   echo "DO_PYTHON_BUILD=$DO_PYTHON_BUILD"
   pwd
   if [ "${DO_PYTHON_BUILD}" = "true" ]; then
-    build_bdist_wheel $@
+    if [ -n "$IS_OSX" ]; then
+      build_bdist_wheel $@
+    else
+      build_wheel $@
+    fi
     echo "Checking dist folder."
     pwd
     ls -lrt dist/
   else
-    echo "Skipping build_bdist_wheel."
+    # Still want the C++ bit.
+    echo "Actually, we aren't doing python wheels."
+    pre_build
   fi
   echo "Finished build_wheel."
 }
