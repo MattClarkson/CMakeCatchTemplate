@@ -16,8 +16,10 @@
 # Test for macOS with [ -n "$IS_OSX" ]
 
 function pre_build {
+  echo "Starting pre_build."
+
   if [ -n "$IS_OSX" ]; then
-    echo "Running pre_build for Mac."
+    echo "pre_build is on Mac, no additional dependencies at the moment."
   else
     # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
     # You may be able to get away with a much smaller list, depending on your actual testing requirements.
@@ -45,6 +47,7 @@ function pre_build {
   cd MYPROJECT-build
   ctest .
   cd ../../
+  echo "Finished pre_build."
 }
 
 function run_tests {
@@ -59,5 +62,8 @@ function build_wheel {
     build_bdist_wheel $@
   else
     echo "Skipping build_bdist_wheel."
+  fi
+  echo "Checking dist folder."
+  ls dist/
   echo "Finished build_wheel."
 }
