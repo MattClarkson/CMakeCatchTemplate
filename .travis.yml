@@ -16,13 +16,13 @@
 #        and : https://github.com/matthew-brett/multibuild
 # Firstly, we want to compile and test the C++ library of this project on
 # Linux and Mac. If you are only doing a C++ library, you can set DO_PYTHON_BUILD
-# to false. However, we hope tht lots of people will be inspired to provide
+# to false. However, we hope that lots of people will be inspired to provide
 # python wrappers for their C++ libraries, and if they do, building python
 # wheels is quite difficult. So, it would be good for this CMakeCatchTemplate
 # project to provide the mechanism to enable a C++ Python module to be easily
-# deployed. So, that is why we are doing all the Travis/Appveyor
+# deployed. So, that is why we are doing all the Travis/Appveyor stuff
 # on an environment that is suitable for BOTH C++ and Python.
-# So, we make use of Matthew Brett's multibuild.
+# For this, we make use of Matthew Brett's multibuild, thanks to Matthew.
 
 env:
   global:
