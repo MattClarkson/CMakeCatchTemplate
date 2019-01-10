@@ -55,6 +55,6 @@ function run_tests {
 function build_wheel {
   echo "Starting build_wheel"
   pwd
-  python setup.py bdist_wheel
+  build_bdist_wheel $@
   echo "Finished build_wheel"
 }
