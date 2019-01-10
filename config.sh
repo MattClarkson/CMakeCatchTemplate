@@ -14,7 +14,7 @@
 
 function pre_build {
   echo "Starting pre_build."
-
+  get_cmake
   if [ -n "$IS_OSX" ]; then
     echo "pre_build is on Mac, no additional dependencies at the moment."
   else
