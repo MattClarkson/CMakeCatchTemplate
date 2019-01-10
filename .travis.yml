@@ -157,7 +157,7 @@ before_install:
     - before_install
 
 install:
-    - build_wheel $REPO_DIR $PLAT
+    - build_wheel $REPO_DIR $PLAT $DO_PYTHON_BUILD
 
 script:
     - install_run $PLAT

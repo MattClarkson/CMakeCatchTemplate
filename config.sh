@@ -53,7 +53,7 @@ function run_tests {
 }
 
 function build_wheel {
-  echo "Starting build_wheel"
+  echo "Starting build_wheel: $@"
   pwd
   build_bdist_wheel $@
   echo "Finished build_wheel"
