@@ -37,8 +37,6 @@ env:
     - BDIST_PARAMS=""
     - PLAT=x86_64
     - UNICODE_WIDTH=32
-    # Set DO_PYTHON_BUILD to false, if you are only interested in the C++ part.
-    - DO_PYTHON_BUILD="true"
 
 language: python
 # The Travis Python version is unrelated to the version we build and test
