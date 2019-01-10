@@ -30,11 +30,14 @@ env:
     - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
     - REPO_DIR=.
     - BUILD_COMMIT=HEAD
-    - BUILD_DEPENDS="numpy six"
+    # Build phase does C++ build, C++ test and Python wheel build.
+    - BUILD_DEPENDS="numpy six wheel"
+    # In a separate clean linux, you can add python tests (see config.sh) on YOUR installed wheel.
     - TEST_DEPENDS="numpy six"
     - BDIST_PARAMS=""
     - PLAT=x86_64
     - UNICODE_WIDTH=32
+    # Set DO_PYTHON_BUILD to false, if you are only interested in the C++ part.
     - DO_PYTHON_BUILD="true"
 
 language: python
@@ -163,13 +166,13 @@ after_success: |
   # Upload wheels to pypi if requested
   if [ -n "$TRAVIS_TAG" ]; then
     if [ "${DO_PYTHON_BUILD}" = "true"]; then
-      set -x
       pip install twine
       if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then
         pip install --upgrade pyOpenSSL
       fi
       twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing dist/*
-      set +x
+    else
+      echo "DO_PYTHON_BUILD not set, deployment skipped."
     fi
   else
     echo "Tag not set, deployment skipped."

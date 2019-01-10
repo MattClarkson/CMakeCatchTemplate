@@ -48,11 +48,13 @@ function pre_build {
 }
 
 function run_tests {
-  # Runs python tests on installed distribution from an empty directory
+  # Runs python tests on installed distribution from an empty directory.
   :
 }
 
 function build_wheel {
   echo "Starting build_wheel"
   pwd
+  python setup.py bdist_wheel
+  echo "Finished build_wheel"
 }
