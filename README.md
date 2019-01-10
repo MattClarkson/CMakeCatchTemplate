@@ -33,14 +33,15 @@ The main features provided are:
  6. CppCheck config, so you can check for some performance, style and correctness issues, when you have CppCheck installed on your system.
  7. Doxygen config, so you can generate documentation via a ```make docs``` or DOCS task in Visual Studio.
  8. If your code is open-source, you can register with a Continuous Integration service, so this project provides Travis and Appveyor examples.
- 9. CPack setup to produce installers for GUI apps QtVTKDemo and QMLVTKDemo along with installation code for command line apps.
-10. An example of the CMake required to build python interfaces to your C++ code, using ```boost::python```.
-11. An example of the CMake required to build python interfaces to your C++ code, using [pybind11](https://github.com/pybind/pybind11), with credit to [this example](https://github.com/pybind/cmake_example).
-12. An example of the CMake required to export a C-style module into [Unity](https://unity3d.com/).
-13. Support for OpenMP, which is passed through to FLANN, OpenCV and PCL.
-14. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.
-15. Support for MPI, which by default sets up the C++ libraries.
-16. If doing Boost.Python and OpenCV, an example of passing a numpy ndarray to OpenCV, computing something, and returning a cv::Mat as a numpy ndarray, thanks to Gregory Kramida's pyboostcvconverter.
+ 9. Basic examples of how to create a Qt+VTK, Qt+OpenGL or QML+VTK user interface, ensuring the VTK render engine works in Qt or QML framework, on Windows, Linux and Mac.
+10. CPack setup to produce installers for the GUI apps.
+11. An example of the CMake required to build python interfaces to your C++ code, using ```boost::python```.
+12. An example of the CMake required to build python interfaces to your C++ code, using [pybind11](https://github.com/pybind/pybind11), with credit to [this example](https://github.com/pybind/cmake_example).
+13. An example of the CMake required to export a C-style module into [Unity](https://unity3d.com/).
+14. Support for OpenMP, which is passed through to FLANN, OpenCV and PCL.
+15. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.
+16. Support for MPI, which by default sets up the C++ libraries.
+17. If doing Boost.Python and OpenCV, an example of passing a numpy ndarray to OpenCV, computing something, and returning a cv::Mat as a numpy ndarray, thanks to Gregory Kramida's pyboostcvconverter.
 
 
 Basic Build Instructions
@@ -65,7 +66,7 @@ Further Build Instructions
 --------------------------
 
 This project can be configured to build against Eigen, Boost, OpenCV, glog, gflags, VTK and PCL.
-These were chosen as an example of how to use CMake, and some common
+These were chosen as examples of how to use CMake, and some common
 C++ projects. These dependencies are optional, and this project will compile without them.
 
 Furthermore, these dependencies can be downloaded and built,
@@ -100,25 +101,6 @@ is different to the one provided here. So if you want to use Boost,
 you should probably try and use the one provided by this SuperBuild.
 
 
-Python Build
-------------
-
-This project can be used to build Python extensions.
-
-* Clone CMakeCatchTemplate (or your generated project), using ```--recursive```.
-* Use CMake to set BUILD_Python_Boost or BUILD_Python_PyBind to ON.
-* Run a C++ build first.
-* Set PYTHON_PATH to pick up your C++ extension.
-* Look in Code/Lib/PythonBoost or Code/Lib/PythonPybind for examples.
-
-Examples are in Code/Lib/PythonBoost or Code/Lib/PythonPybind. 
-So using the Code/Lib/PythonBoost example we have:
-```
-import myprojectpython as mp
-mp.my_first_add_function(1,6)
-```
-
-
 Windows Users
 -------------
 
@@ -129,6 +111,24 @@ This sets the path before launching Visual Studio, so that when you come to run 
 application or unit tests within Visual Studio, the dynamically
 loaded libraries are found at run time.
 
+
+Python Build
+------------
+
+This project can be used to build Python extensions.
+
+* Clone CMakeCatchTemplate (or your generated project), using ```--recursive```.
+* Use CMake to set BUILD_Python_Boost or BUILD_Python_PyBind to ON.
+* Run a C++ build first.
+* Set PYTHON_PATH to pick up your C++ extension.
+
+Examples are in Code/Lib/PythonBoost or Code/Lib/PythonPybind. 
+So using the Code/Lib/PythonBoost example, once PYTHON_PATH 
+can pick up your compiled module, you would be able to:
+```
+import myprojectPython as mp
+mp.my_first_add_function(1,6)
+```
 
 Tested On
 ---------

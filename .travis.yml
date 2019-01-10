@@ -14,42 +14,41 @@
 
 # Inspired by: https://github.com/skvark/opencv-python
 #        and : https://github.com/matthew-brett/multibuild
-# Firstly, we want to compile and test the C++ library of this project on
-# Linux and Mac. If you are only doing a C++ library, you can set DO_PYTHON_BUILD
-# to false. However, we hope that lots of people will be inspired to provide
-# python wrappers for their C++ libraries, and if they do, building python
-# wheels is quite difficult. So, it would be good for this CMakeCatchTemplate
-# project to provide the mechanism to enable a C++ Python module to be easily
-# deployed. So, that is why we are doing all the Travis/Appveyor stuff
-# on an environment that is suitable for BOTH C++ and Python.
-# For this, we make use of Matthew Brett's multibuild, thanks to Matthew.
+#        and : https://github.com/thompson318/ndicapi-wheels
 
-env:
-  global:
-    # Prompt
-    - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
-    - REPO_DIR=.
-    - BUILD_COMMIT=HEAD
-    # Build phase does C++ build, C++ test and Python wheel build.
-    - BUILD_DEPENDS="numpy six wheel"
-    # In a separate clean linux, you can add python tests (see config.sh) on YOUR installed wheel.
-    - TEST_DEPENDS="numpy six"
-    - BDIST_PARAMS=""
-    - PLAT=x86_64
-    - UNICODE_WIDTH=32
+# This project aims to provide C++ developers with a useful template
+# for developing their own project. Additionally, if the C++ developer
+# wants to build python wheels using for example Boost.Python or PyBind11,
+# then this project, and specifically this travis script enables that.
+# But the python parts should be optional, as some C++ developers will
+# not want them, but will want to take advantage of cross platform testing.
+# Set DO_PYTHON_BUILD to "false" if you don't want python wheels.
 
 language: python
 # The Travis Python version is unrelated to the version we build and test
-# with.  This is set with the MB_PYTHON_VERSION variable.
-python: 3.5
+# python wheels with.  This version of python for python wheels
+# is set with the MB_PYTHON_VERSION variable further below.
+python: 3.6
 sudo: required
 dist: trusty
 services: docker
 
+env:
+  global:
+    - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
+    - REPO_DIR=.
+    - BUILD_COMMIT=HEAD
+    - BUILD_DEPENDS="numpy six wheel"
+    - TEST_DEPENDS="numpy six"
+    - BDIST_PARAMS=""
+    - PLAT=x86_64
+    - UNICODE_WIDTH=32
+    - DO_PYTHON_BUILD="true"
+
 matrix:
   fast_finish: true
   exclude:
-    - python: 3.5
+    - python: 3.6
   include:
     # Builds for MacOS
     - os: osx
@@ -57,18 +56,6 @@ matrix:
       osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=2.7
-        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
-    - os: osx
-      language: generic
-      osx_image: xcode8
-      env:
-        - MB_PYTHON_VERSION=3.4
-        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
-    - os: osx
-      language: generic
-      osx_image: xcode8
-      env:
-        - MB_PYTHON_VERSION=3.5
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       language: generic
@@ -84,67 +71,39 @@ matrix:
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     # Builds for Linux
     - os: linux
-      compiler: gcc
       env:
         - MB_PYTHON_VERSION=2.7
     - os: linux
-      compiler: gcc
       env:
         - MB_PYTHON_VERSION=2.7
         - UNICODE_WIDTH=16
     - os: linux
-      compiler: gcc
       env:
         - MB_PYTHON_VERSION=2.7
         - PLAT=i686
     - os: linux
-      compiler: gcc
       env:
         - MB_PYTHON_VERSION=2.7
         - PLAT=i686
         - UNICODE_WIDTH=16
     - os: linux
-      compiler: gcc
-      env:
-        - MB_PYTHON_VERSION=3.3
-    - os: linux
-      compiler: gcc
-      env:
-        - MB_PYTHON_VERSION=3.3
-        - PLAT=i686
-    - os: linux
-      compiler: gcc
-      env:
-        - MB_PYTHON_VERSION=3.4
-    - os: linux
-      compiler: gcc
-      env:
-        - MB_PYTHON_VERSION=3.4
-        - PLAT=i686
-    - os: linux
-      compiler: gcc
       env:
         - MB_PYTHON_VERSION=3.5
     - os: linux
-      compiler: gcc
       env:
         - MB_PYTHON_VERSION=3.5
         - PLAT=i686
     - os: linux
-      compiler: gcc
       env:
         - MB_PYTHON_VERSION=3.6
     - os: linux
-      compiler: gcc
       env:
         - MB_PYTHON_VERSION=3.6
         - PLAT=i686
     - os: linux
-      compiler: gcc
       env:
         - MB_PYTHON_VERSION=3.7
     - os: linux
-      compiler: gcc
       env:
         - MB_PYTHON_VERSION=3.7
         - PLAT=i686
@@ -154,21 +113,42 @@ before_install:
     - source multibuild/travis_steps.sh
     - before_install
 
-install:
-    - build_wheel $REPO_DIR $PLAT $DO_PYTHON_BUILD
+install: |
+    clean_code $REPO_DIR $BUILD_COMMIT
 
-script:
-    - install_run $PLAT
+    if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+
+      # On Linux, this builds the C++ and then wheel
+      # inside the manylinux docker container.
+      # On Mac, it builds it inside the Travis Mac VM.
+
+      build_wheel $REPO_DIR $PLAT
+
+    else
+
+      # On Linux and Mac, this builds the C++
+      # inside the Travis VM. So, it may be a different OS
+      # to when / if you build Python wheels.
+
+      source ci_cmake_build.sh
+      cmake_build
+
+    fi
+
+script: |
+    if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+      install_run $PLAT
+    fi
 
 after_success: |
   # Upload wheels to pypi if requested
   if [ -n "$TRAVIS_TAG" ]; then
-    if [ "${DO_PYTHON_BUILD}" = "true"]; then
+    if [ "${DO_PYTHON_BUILD}" = "true" ]; then
       pip install twine
       if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then
         pip install --upgrade pyOpenSSL
       fi
-      twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing dist/*
+      twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing wheelhouse/*
     else
       echo "DO_PYTHON_BUILD not set, deployment skipped."
     fi
