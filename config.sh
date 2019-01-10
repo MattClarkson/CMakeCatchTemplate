@@ -19,7 +19,6 @@ function pre_build {
   if [ -n "$IS_OSX" ]; then
     echo "Running pre_build for Mac."
   else
-
     # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
     # You may be able to get away with a much smaller list, depending on your actual testing requirements.
     sudo apt-get update
@@ -45,6 +44,7 @@ function pre_build {
   make
   cd MYPROJECT-build
   ctest .
+  cd ../../
 }
 
 function run_tests {
