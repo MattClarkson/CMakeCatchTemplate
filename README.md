@@ -1,7 +1,7 @@
 CMakeCatchTemplate
 ------------------
 
-[![Build Status](https://travis-ci.org/MattClarkson/CMakeCatchTemplate.svg?branch=master)](https://travis-ci.org/MattClarkson/CMakeCatchTemplate)
+[![Build Status](https://travis-ci.com/MattClarkson/CMakeCatchTemplate.svg?branch=master)](https://travis-ci.com/MattClarkson/CMakeCatchTemplate)
 [![Build Status](https://ci.appveyor.com/api/projects/status/5pm89ej732c1ekf0/branch/master)](https://ci.appveyor.com/project/MattClarkson/cmakecatchtemplate)
 
 
