@@ -37,7 +37,7 @@ env:
   global:
     - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
     - REPO_DIR=.
-    - BUILD_COMMIT=${TRAVIS_COMMIT}
+    - BUILD_COMMIT=44-multi-platform-testing
     - BUILD_DEPENDS="numpy six wheel"
     - TEST_DEPENDS="numpy six"
     - BDIST_PARAMS=""
@@ -114,7 +114,6 @@ before_install:
     - before_install
 
 install:
-    - clean_code $REPO_DIR $BUILD_COMMIT
     - if [ "${DO_PYTHON_BUILD}" = "true" ]; then
 
         # On Linux, this builds the C++ and then wheel
