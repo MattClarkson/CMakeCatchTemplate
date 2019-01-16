@@ -15,6 +15,11 @@
 function pre_build {
   echo "Starting pre_build."
 
+  # Debug info.
+  pwd
+  python --version
+  cmake --version
+
   if [ -n "$IS_OSX" ]; then
     echo "pre_build is on Mac, no additional dependencies at the moment."
   else
@@ -39,14 +44,8 @@ function pre_build {
     # If you are, then such commands as above should either be
     # Debian based: sudo apt-get ...
     # Centos based: sudo yum ...
-    sudo yum install -y cmake3
-    
-  fi
 
-  # Debug info.
-  pwd
-  python --version
-  cmake --version
+  fi
 
   # Run the actual C++ build.
   source ci_cmake_build.sh
