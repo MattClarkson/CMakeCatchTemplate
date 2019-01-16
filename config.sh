@@ -35,13 +35,23 @@ function pre_build {
     #sudo apt-get -yqq install mesa-utils-extra
     #sudo apt-get -yqq install libgl1-mesa-dev
     #sudo apt-get -yqq install libglapi-mesa
+
+    # Note also. Look in .travis.yml. Decide if you are setting DO_PYTHON_BUILD to true.
+    # If you are, then such commands as above should either be
+    # Debian based: sudo apt-get ...
+    # Centos based: sudo yum ...
+    
   fi
 
+  # Debug info.
   pwd
   python --version
   cmake --version
+
+  # Run the actual C++ build.
   source ci_cmake_build.sh
   cmake_build
+
   echo "Finished pre_build."
 }
 
