@@ -18,7 +18,6 @@ function pre_build {
   if [ -n "$IS_OSX" ]; then
     echo "pre_build is on Mac, no additional dependencies at the moment."
   else
-    get_cmake
     echo "pre_build is on Linux. To Do. Fix additional dependencies."
 
     # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
