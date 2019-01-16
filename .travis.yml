@@ -113,8 +113,8 @@ before_install:
     - source multibuild/travis_steps.sh
     - before_install
 
-install:
-    - if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+install: |
+      if [ "${DO_PYTHON_BUILD}" = "true" ]; then
 
         # On Linux, this builds the C++ and then wheel
         # inside the manylinux docker container (Centos 5).
