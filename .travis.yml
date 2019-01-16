@@ -120,7 +120,11 @@ install: |
         # inside the manylinux docker container (Centos 5).
         # On Mac, it builds it inside the Travis Mac VM.
 
-        build_wheel $REPO_DIR $PLAT
+        if [ -n "$IS_OSX" ]; then
+          build_bdist_wheel $REPO_DIR $PLAT
+        else
+          build_wheel $REPO_DIR $PLAT
+        fi
 
       else
 
