@@ -37,7 +37,7 @@ env:
   global:
     - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
     - REPO_DIR=.
-    - BUILD_COMMIT=HEAD
+    - BUILD_COMMIT=${TRAVIS_COMMIT}
     - BUILD_DEPENDS="numpy six wheel"
     - TEST_DEPENDS="numpy six"
     - BDIST_PARAMS=""
