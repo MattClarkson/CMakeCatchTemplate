@@ -24,11 +24,7 @@
 # not want them, but will want to take advantage of cross platform testing.
 # Set DO_PYTHON_BUILD to "false" if you don't want python wheels.
 
-language: python
-# The Travis Python version is unrelated to the version we build and test
-# python wheels with.  This version of python for python wheels
-# is set with the MB_PYTHON_VERSION variable further below.
-python: 3.6
+language: generic
 sudo: required
 dist: trusty
 services: docker
@@ -47,8 +43,6 @@ env:
 
 matrix:
   fast_finish: true
-  exclude:
-    - python: 3.6
   include:
     # Builds for MacOS
 #    - os: osx
