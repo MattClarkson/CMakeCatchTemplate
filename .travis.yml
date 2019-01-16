@@ -113,27 +113,26 @@ before_install:
     - source multibuild/travis_steps.sh
     - before_install
 
-install: |
-    clean_code $REPO_DIR $BUILD_COMMIT
+install:
+    - clean_code $REPO_DIR $BUILD_COMMIT
+    - if [ "${DO_PYTHON_BUILD}" = "true" ]; then
 
-    if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+        # On Linux, this builds the C++ and then wheel
+        # inside the manylinux docker container (Centos 5).
+        # On Mac, it builds it inside the Travis Mac VM.
 
-      # On Linux, this builds the C++ and then wheel
-      # inside the manylinux docker container (Centos 5).
-      # On Mac, it builds it inside the Travis Mac VM.
+        build_wheel $REPO_DIR $PLAT
 
-      build_wheel $REPO_DIR $PLAT
+      else
 
-    else
+        # On Linux and Mac, this builds the C++
+        # inside the Travis VM. On Linux then this will
+        # be the OS listed above, e.g. Ubuntu trusty.
 
-      # On Linux and Mac, this builds the C++
-      # inside the Travis VM. On Linux then this will
-      # be the OS listed above, e.g. Ubuntu trusty.
+        source ci_cmake_build.sh
+        cmake_build
 
-      source ci_cmake_build.sh
-      cmake_build
-
-    fi
+      fi
 
 script: |
     if [ "${DO_PYTHON_BUILD}" = "true" ]; then
