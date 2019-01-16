@@ -119,7 +119,7 @@ install: |
     if [ "${DO_PYTHON_BUILD}" = "true" ]; then
 
       # On Linux, this builds the C++ and then wheel
-      # inside the manylinux docker container.
+      # inside the manylinux docker container (Centos 5).
       # On Mac, it builds it inside the Travis Mac VM.
 
       build_wheel $REPO_DIR $PLAT
@@ -127,8 +127,8 @@ install: |
     else
 
       # On Linux and Mac, this builds the C++
-      # inside the Travis VM. So, it may be a different OS
-      # to when / if you build Python wheels.
+      # inside the Travis VM. On Linux then this will
+      # be the OS listed above, e.g. Ubuntu trusty.
 
       source ci_cmake_build.sh
       cmake_build
@@ -141,17 +141,17 @@ script: |
     fi
 
 after_success: |
-  # Upload wheels to pypi if requested
-  if [ -n "$TRAVIS_TAG" ]; then
-    if [ "${DO_PYTHON_BUILD}" = "true" ]; then
-      pip install twine
-      if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then
-        pip install --upgrade pyOpenSSL
+    # Upload wheels to pypi if requested
+    if [ -n "$TRAVIS_TAG" ]; then
+      if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+        pip install twine
+        if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then
+          pip install --upgrade pyOpenSSL
+        fi
+        twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing wheelhouse/*
+      else
+        echo "DO_PYTHON_BUILD not set, deployment skipped."
       fi
-      twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing wheelhouse/*
     else
-      echo "DO_PYTHON_BUILD not set, deployment skipped."
+      echo "Tag not set, deployment skipped."
     fi
-  else
-    echo "Tag not set, deployment skipped."
-  fi
