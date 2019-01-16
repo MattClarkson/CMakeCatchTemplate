@@ -17,6 +17,7 @@ function pre_build {
 
   # Debug info.
   pwd
+  echo "PATH=$PATH"
   python --version
   cmake --version
 
