@@ -118,7 +118,7 @@ install: |
         if [ -n "$IS_OSX" ]; then
           build_bdist_wheel $REPO_DIR $PLAT
         else
-          DOCKER_IMAGE=quay.io/user/skvark/ quay.io/pypa/manylinux1_$PLAT
+          DOCKER_IMAGE=quay.io/user/skvark/manylinux1_$PLAT
           build_wheel $REPO_DIR $PLAT
         fi
 
