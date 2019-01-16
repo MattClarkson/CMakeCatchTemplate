@@ -108,6 +108,7 @@ before_install:
     - before_install
 
 install: |
+      set -x
       if [ "${DO_PYTHON_BUILD}" = "true" ]; then
 
         # On Linux, this builds the C++ and then wheel
@@ -130,6 +131,7 @@ install: |
         cmake_build
 
       fi
+      set +x
 
 script: |
     if [ "${DO_PYTHON_BUILD}" = "true" ]; then
