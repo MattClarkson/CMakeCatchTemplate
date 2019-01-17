@@ -103,7 +103,7 @@ setup(
     description='A software package for whatever.',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    ext_modules=[CMakeExtension(dir_name, dir_path)],
+    ext_modules=[CMakeExtension(str('MyProject') + 'Python', dir_path)],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
     license='BSD-3 license',
