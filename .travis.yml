@@ -108,7 +108,6 @@ before_install:
     - before_install
 
 install: |
-      set -x
       if [ "${DO_PYTHON_BUILD}" = "true" ]; then
 
         if [ -n "$IS_OSX" ]; then
@@ -133,7 +132,6 @@ install: |
         cmake_build
 
       fi
-      set +x
 
 script: |
     if [ "${DO_PYTHON_BUILD}" = "true" ]; then
