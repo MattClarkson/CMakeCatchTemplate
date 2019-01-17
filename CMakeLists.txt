@@ -35,11 +35,11 @@ endforeach()
 # Setup project name, and version. Version number gets baked into package name.
 ###############################################################################
 if (BUILD_SUPERBUILD)
-  project(MYPROJECT-superbuild)
+  project(MyProject-superbuild)
   set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
   set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
 else()
-  project(MYPROJECT VERSION 0.0.1)
+  project(MyProject VERSION 0.0.1)
 endif()
 
 
