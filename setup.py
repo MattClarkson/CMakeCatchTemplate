@@ -39,6 +39,9 @@ with open('README.md') as f:
 dir_path = os.path.dirname(os.path.realpath(__file__))
 dir_name = os.path.split(dir_path)[1]
 
+six.print_("Matt, dir_path=" + str(dir_path))
+six.print_("Matt, dir_name=" + str(dir_name))
+
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
