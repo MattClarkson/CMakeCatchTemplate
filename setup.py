@@ -38,11 +38,6 @@ with open('README.md') as f:
 # Get the top-level folder name of this project.
 dir_path = os.path.dirname(os.path.normpath(__file__))
 dir_name = os.path.split(dir_path)[1]
-cwd = os.getcwd()
-
-six.print_("Matt, dir_path=" + str(dir_path))
-six.print_("Matt, dir_name=" + str(dir_name))
-six.print_("Matt, cwd=" + str(cwd))
 
 
 class CMakeExtension(Extension):
