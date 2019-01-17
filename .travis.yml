@@ -120,7 +120,7 @@ install: |
           # On Linux, this builds the C++ and then wheel
           # inside a manylinux docker container (Centos 5).
           DOCKER_IMAGE=quay.io/skvark/manylinux1_$PLAT
-          build_wheel $REPO_DIR $PLAT
+          build_bdist_wheel $REPO_DIR $PLAT
         fi
 
       else
