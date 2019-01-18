@@ -59,9 +59,6 @@ function build_wheel {
   # Don't remove this function, or switch back to pip, as pip
   # doesn't get on well with versioneer.py
   # https://github.com/warner/python-versioneer/issues/121
-
-  # Pre-install the python, before we build our C++ project.
-  before_install
   build_bdist_wheel $@
 }
 
