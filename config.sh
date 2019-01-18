@@ -22,29 +22,24 @@ function pre_build {
   cmake --version
 
   if [ -n "$IS_OSX" ]; then
-    echo "pre_build is on Mac, no additional dependencies at the moment."
+    echo "pre_build is on Mac."
   else
-    echo "pre_build is on Linux. To Do. Fix additional dependencies."
+    echo "pre_build is on Linux."
 
-    # Note: Most of these were deduced while testing various combinations of VTK, PCL, OpenCV.
-    # You may be able to get away with a much smaller list, depending on your actual testing requirements.
-    #sudo apt-get update
-    #sudo apt-get -yqq install build-essential
-    #sudo apt-get -yqq install binutils-gold
-    #sudo apt-get -yqq install freeglut3
-    #sudo apt-get -yqq install freeglut3-dev
-    #sudo apt-get -yqq install libglew-dev
-    #sudo apt-get -yqq install libglew1.5-dev
-    #sudo apt-get -yqq install libglm-dev
-    #sudo apt-get -yqq install mesa-common-dev
-    #sudo apt-get -yqq install mesa-utils-extra
-    #sudo apt-get -yqq install libgl1-mesa-dev
-    #sudo apt-get -yqq install libglapi-mesa
-
-    # Note also. Look in .travis.yml. Decide if you are setting DO_PYTHON_BUILD to true.
-    # If you are, then such commands as above should either be
-    # Debian based: sudo apt-get ...
-    # Centos based: sudo yum ...
+    # IMPORTANT: Look in .travis.yml. Decide if your project requires DO_PYTHON_BUILD to be true.
+    # if DO_PYTHON_BUILD = true
+    #   i.e. you want to build C++ and then Python wheels. Therefore, this function is running inside
+    #   a manylinux docker image. Any library installations should use Centos based commands
+    #   like 'sudo yum install ...'.
+    #   OR
+    #   You should build your own docker image, specified that URL in .travis.yml,
+    #   and then you won't need any 'sudo yum install' type commands here.
+    #
+    # if DO_PYTHON_BUILD = false
+    #   then this function is running inside the main travis VM, most likely Ubuntu,
+    #   so you should set up dependencies in top-level .travis.yml, or try some
+    #   'sudo apt-get install' type commands here. But its more obvious if you
+    #   put them in the top level .travis.yml file.
 
   fi
 
@@ -55,9 +50,11 @@ function pre_build {
   echo "Finished pre_build."
 }
 
-
 function build_wheel {
-    build_bdist_wheel $@
+  # Don't remove this function, or switch back to pip, as pip
+  # doesn't get on well with versioneer.py
+  # https://github.com/warner/python-versioneer/issues/121
+  build_bdist_wheel $@
 }
 
 function run_tests {
