@@ -24,7 +24,10 @@
 # not want them, but will want to take advantage of cross platform testing.
 # Set DO_PYTHON_BUILD to "false" if you don't want python wheels.
 
-language: generic
+language: python
+# The Travis Python version is unrelated to the version we build and test
+# with.  This is set with the MB_PYTHON_VERSION variable.
+python: 3.6
 sudo: required
 dist: trusty
 services: docker
@@ -43,23 +46,23 @@ env:
 
 matrix:
   fast_finish: true
+  exclude:
+    # Exclude the default Python 3.6 build
+    - python: 3.6
   include:
     # Builds for MacOS
 #    - os: osx
 #      language: generic
-#      osx_image: xcode8
 #      env:
 #        - MB_PYTHON_VERSION=2.7
 #        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       language: generic
-      osx_image: xcode8
       env:
         - MB_PYTHON_VERSION=3.6
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
 #    - os: osx
 #      language: generic
-#      osx_image: xcode8
 #      env:
 #        - MB_PYTHON_VERSION=3.7
 #        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
