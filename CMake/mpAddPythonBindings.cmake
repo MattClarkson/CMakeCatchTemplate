@@ -52,7 +52,7 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 	  # Add this if you want numpy. Depends on your build env.
 	  # I've left it out for now, as cloned projects can decide if they need it.
 	  # It doesn't warrant another top level flag.
-	  # list(APPEND MYPROJECT_BOOST_LIBS "numpy${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
+	  list(APPEND MYPROJECT_BOOST_LIBS "numpy${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
     else()
       list(APPEND MYPROJECT_BOOST_LIBS "python")
     endif()
