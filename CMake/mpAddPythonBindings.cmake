@@ -37,14 +37,10 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
               OUTPUT_VARIABLE Py_INCLUDE_FILE)
     get_filename_component(PYTHON_INCLUDE_DIR ${Py_INCLUDE_FILE} DIRECTORY)
     message("Found python include dirs from python: ${PYTHON_INCLUDE_DIR}")
-    execute_process(
-      COMMAND "${PYTHON_EXECUTABLE}" -c
-              "from __future__ import print_function\ntry: import sysconfig; print(sysconfig.get_path('stdlib'), end='')\nexcept:pass\n"
-              OUTPUT_VARIABLE Py_LIB_DIR)
-    message("Found python lib dirs from python: ${Py_LIB_DIR}")
-    find_package(PythonLibs)
   endif()
 
+  find_package(PythonLibs)
+  
   message("Found python interpreter: ${PYTHON_EXECUTABLE}")
   message("Found python library version: ${PYTHONLIBS_VERSION_STRING}")
   message("Found python include dirs: ${PYTHON_INCLUDE_DIRS}")
