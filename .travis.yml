@@ -42,7 +42,7 @@ env:
     - BDIST_PARAMS=""
     - PLAT=x86_64
     - UNICODE_WIDTH=32
-    - DO_PYTHON_BUILD="false"
+    - DO_PYTHON_BUILD="true"
 
 matrix:
   fast_finish: true
