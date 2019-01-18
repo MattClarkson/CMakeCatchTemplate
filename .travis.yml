@@ -113,14 +113,14 @@ install: |
         if [ -n "$IS_OSX" ]; then
 
           # On Mac, it builds it inside the Travis Mac VM.
-          build_bdist_wheel $REPO_DIR $PLAT
+          build_wheel $REPO_DIR $PLAT
 
         else
 
           # On Linux, this builds the C++ and then wheel
           # inside a manylinux docker container (Centos 5).
           DOCKER_IMAGE=quay.io/skvark/manylinux1_$PLAT
-          build_bdist_wheel $REPO_DIR $PLAT
+          build_multilinux $PLAT "build_wheel $REPO_DIR"
         fi
 
       else

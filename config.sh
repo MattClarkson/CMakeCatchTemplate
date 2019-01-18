@@ -56,6 +56,10 @@ function pre_build {
 }
 
 
+function build_wheel {
+    build_bdist_wheel $@
+}
+
 function run_tests {
   echo "Starting run_tests."
   echo "Nothing to do as yet. You could run some python tests on your wheel perhaps?"
