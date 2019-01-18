@@ -1,58 +1,51 @@
-# Copyright (c) 2016 The Pybind Development Team, All rights reserved.
+# /*============================================================================
 #
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
+#  MYPROJECT: A software package for whatever.
 #
-# 1. Redistributions of source code must retain the above copyright notice, this
-#    list of conditions and the following disclaimer.
+#  Copyright (c) University College London (UCL). All rights reserved.
 #
-# 2. Redistributions in binary form must reproduce the above copyright notice,
-#    this list of conditions and the following disclaimer in the documentation
-#    and/or other materials provided with the distribution.
+#  This software is distributed WITHOUT ANY WARRANTY; without even
+#  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+#  PURPOSE.
 #
-# 3. Neither the name of the copyright holder nor the names of its contributors
-#    may be used to endorse or promote products derived from this software
-#    without specific prior written permission.
+#  See LICENSE.txt in the top level directory for details.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# You are under no obligation whatsoever to provide any bug fixes, patches, or
-# upgrades to the features, functionality or performance of the source code
-# ("Enhancements") to anyone; however, if you choose to make your Enhancements
-# available either publicly, or directly to the author of this software, without
-# imposing a separate written license agreement for such Enhancements, then you
-# hereby grant the following license: a non-exclusive, royalty-free perpetual
-# license to install, use, modify, prepare derivative works, incorporate into
-# other computer software, distribute, and sublicense such enhancements or
-# derivative works thereof, in binary and source code form.
-#
-# This setup.py was taken from https://github.com/pybind/cmake_example
-# and modified accordingly. Essentially, we assume the underlying CMake
-# project builds as-is with default arguments.
+# ============================================================================*/
+
+# Note: The whole premise of this setup.py is that this project is primarily
+# a C++ project, for C++ developers. So, all CMake-ing, and Building is
+# done in a pre-existing and pre-configured C++ build directory.
+# The only CMake variables that this script sets are:
+#   MYPROJECT_PYTHON_MODULE_NAME to give the output python module the correct name.
+#   MYPROJECT_PYTHON_OUTPUT_DIRECTORY to produce the output python module in the correct place
+# Furthermore, the Python build environment must not pick up a different version of CMake.
+# The required CMake version is set in CMakeLists.txt as a C++ developer would expect.
 
 import os
-import re
-import sys
 import platform
+import re
 import subprocess
-
+import six
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 from distutils.version import LooseVersion
+import versioneer
+
+# Get the long description, as top-level README.md
+with open('README.md') as f:
+    long_description = f.read()
+
+# Get the top-level folder name of this project.
+dir_path = os.path.dirname(os.path.normpath(__file__))
+dir_name = os.path.split(dir_path)[1]
+
 
 class CMakeExtension(Extension):
     def __init__(self, name, sourcedir=''):
         Extension.__init__(self, name, sources=[])
-        self.sourcedir = os.path.abspath(sourcedir)
+        self.source_dir = os.path.abspath(sourcedir)
+        self.super_build_dir = os.path.join(self.source_dir, 'build')
+        self.build_dir = os.path.join(self.super_build_dir, 'MYPROJECT-build')
 
 
 class CMakeBuild(build_ext):
@@ -63,45 +56,75 @@ class CMakeBuild(build_ext):
             raise RuntimeError("CMake must be installed to build the following extensions: " +
                                ", ".join(e.name for e in self.extensions))
 
-        if platform.system() == "Windows":
-            cmake_version = LooseVersion(re.search(r'version\s*([\d.]+)', out.decode()).group(1))
-            if cmake_version < '3.5.0':
-                raise RuntimeError("CMake >= 3.5.0 is required on Windows")
+        cmake_version = LooseVersion(re.search(r'version\s*([\d.]+)', out.decode()).group(1))
+        six.print_("CMake version in python build:" + str(cmake_version))
 
         for ext in self.extensions:
             self.build_extension(ext)
 
     def build_extension(self, ext):
-        extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
-        cmake_args = ['-DMYPROJECT_PYTHON_OUTPUT_DIRECTORY=' + extdir,
-                      '-DMYPROJECT_PYTHON_MODULE_NAME=' + self.distribution.get_name(),
-                      '-DPYTHON_EXECUTABLE=' + sys.executable]
+        ext_dir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
+        cmake_args = ['-DMYPROJECT_PYTHON_OUTPUT_DIRECTORY:PATH=' + ext_dir,
+                      '-DMYPROJECT_PYTHON_MODULE_NAME:STRING=' + self.distribution.get_name()
+                      ]
+        build_args = []
+
+        six.print_("build_extension:name=" + str(ext.name))
+        six.print_("build_extension:ext_dir=" + str(ext_dir))
+        six.print_("self.distribution.get_name()=" + str(self.distribution.get_name()))
 
         cfg = 'Debug' if self.debug else 'Release'
-        build_args = ['--config', cfg]
 
         if platform.system() == "Windows":
-            if sys.maxsize > 2**32:
-                cmake_args += ['-A', 'x64']
-            build_args += ['--', '/m']
+            cmake_args += ['--config ' + cfg]
+            build_args += ['--config', cfg]
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
-            build_args += ['--', '-j2']
+
+        if os.environ.get('COMPILER') is not None:
+            cmake_args += ['-G', str(os.environ.get('COMPILER'))]
 
         env = os.environ.copy()
-        if not os.path.exists(self.build_temp):
-            os.makedirs(self.build_temp)
-        subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
-        subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
+
+        subprocess.check_call(['cmake'] + cmake_args + [ext.source_dir], cwd=ext.build_dir, env=env)
+        subprocess.check_call(['cmake'] + ['--build', '.'] + build_args, cwd=ext.build_dir)
+
 
 setup(
-    name='myprojectpython', # must match python module name in your c++ code.
-    version='0.0.1', # must match CMakeLists.txt
+    # Must match python module name in your c++ code, or else you end
+    # up with two dynamically linked libraries inside one wheel.
+    name=(str('MyProject') + 'Python'),
+
+    # Must match the version number in CMakeLists.txt.
+    # We could try to parse the CMakeLists.txt file, but lets keep it simple.
+    version=versioneer.get_version(),
     author='Myself',
     author_email='me@mydomain.com',
     description='A software package for whatever.',
-    long_description='',
-    ext_modules=[CMakeExtension('CMakeCatchTemplate')], # must match top-level folder name.
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    ext_modules=[CMakeExtension(str('MyProject') + 'Python', dir_path)],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
+    license='BSD-3 license',
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Healthcare Industry',
+        'Intended Audience :: Information Technology',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: BSD License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3',
+        'Topic :: Scientific/Engineering :: Information Analysis',
+        'Topic :: Scientific/Engineering :: Medical Science Apps.',
+    ],
+
+    keywords='medical imaging',
+
+    install_requires=[
+        'six>=1.10',
+        'numpy>=1.11',
+    ],
 )

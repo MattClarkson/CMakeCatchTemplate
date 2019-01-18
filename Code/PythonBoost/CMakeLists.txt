@@ -14,10 +14,9 @@
 
 if(NOT BUILDING_GUIS)
 
-  # if running pip install, MYPROJECT_PYTHON_MODULE_NAME is passed in from setup.py
-  # So, if its not specified, we just name it after the current library with a 'python' suffix.
+
   if (NOT MYPROJECT_PYTHON_MODULE_NAME OR MYPROJECT_PYTHON_MODULE_NAME STREQUAL "")
-    set(MYPROJECT_PYTHON_MODULE_NAME "${MYPROJECT_LIBRARY_NAME}python")
+    set(MYPROJECT_PYTHON_MODULE_NAME "${PROJECT_NAME}Python" CACHE STRING "Basename for python module.")
   endif()
 
   set(MYPROJECT_PYTHON_SRCS)
@@ -42,7 +41,7 @@ if(NOT BUILDING_GUIS)
     list(APPEND MYPROJECT_PYTHON_SRCS mpLibPython.cpp) # Rename as appropriate.
   endif()
 
-  link_libraries(${MYPROJECT_LIBRARY_NAME})
+  link_libraries(${ALL_LIBRARIES})
   PYTHON_ADD_MODULE(${MYPROJECT_PYTHON_MODULE_NAME} ${MYPROJECT_PYTHON_SRCS})
   if(APPLE)
     set_target_properties(${MYPROJECT_PYTHON_MODULE_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")

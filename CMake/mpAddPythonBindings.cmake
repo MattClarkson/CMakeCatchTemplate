@@ -26,13 +26,26 @@ endif()
 
 if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
-  find_package(PythonInterp)
-  message("Found python interpreter: ${PYTHON_EXECUTABLE}")
+  if (DEFINED MYPROJECT_PYTHON_VERSION)
+    find_package(PythonInterp ${MYPROJECT_PYTHON_VERSION} EXACT REQUIRED)
+  else()
+    find_package(PythonInterp REQUIRED)
+
+    execute_process(
+      COMMAND "${PYTHON_EXECUTABLE}" -c
+              "from __future__ import print_function\ntry: import sysconfig; print(sysconfig.get_config_h_filename(), end='')\nexcept:pass\n"
+              OUTPUT_VARIABLE Py_INCLUDE_FILE)
+    get_filename_component(PYTHON_INCLUDE_DIR ${Py_INCLUDE_FILE} DIRECTORY)
+    message("Found python include dirs from python: ${PYTHON_INCLUDE_DIR}")
+  endif()
+
   find_package(PythonLibs)
+  
+  message("Found python interpreter: ${PYTHON_EXECUTABLE}")
   message("Found python library version: ${PYTHONLIBS_VERSION_STRING}")
   message("Found python include dirs: ${PYTHON_INCLUDE_DIRS}")
 
-  if (NOT PythonLibs_FOUND)
+  if (NOT PythonLibs_FOUND OR NOT PythonInterp_FOUND)
     set(BUILD_Python_Boost OFF CACHE BOOL "Build boost::python bindings." FORCE)
     set(BUILD_Python_PyBind OFF CACHE BOOL "Build PyBind11 bindings." FORCE)
     message("Forcing BUILD_Python_Boost and BUILD_Python_PyBind to OFF as no Python libs were found.")

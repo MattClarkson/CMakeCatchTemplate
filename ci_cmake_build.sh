@@ -12,17 +12,12 @@
 #
 #============================================================================*/
 
-if(NOT MYPROJECT_PYTHON_OUTPUT_DIRECTORY OR MYPROJECT_PYTHON_OUTPUT_DIRECTORY STREQUAL "")
-  set(MYPROJECT_PYTHON_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-endif()
-
-if(BUILD_Python_Boost OR BUILD_Python_PyBind)
-  include_directories(${PYTHON_INCLUDE_DIRS})
-  if(NOT APPLE)
-    link_libraries(${PYTHON_LIBRARIES})
-  endif()
-endif()
-
-if(BUILD_Python_PyBind)
-  include_directories(${PYTHON_INCLUDE_DIRS})
-endif()
+function cmake_build {
+  mkdir build
+  cd build
+  cmake -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
+  make
+  cd MYPROJECT-build
+  ctest .
+  cd ../../
+}
