@@ -48,12 +48,6 @@ function pre_build {
 
   fi
 
-  echo "Matt, ls -lrt in /opt/_internal/cpython-3.5.5 gives:"
-  ls -lrt /opt/python/cp35-cp35m
-
-  echo "Matt, ls -lrt in /opt/_internal/cpython-3.7.0 gives:"
-  ls -lrt /opt/python/cp37-cp37m
-
   # Run the actual C++ build.
   source ci_cmake_build.sh
   cmake_build
