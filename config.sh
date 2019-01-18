@@ -48,6 +48,12 @@ function pre_build {
 
   fi
 
+  echo "Matt, ls -lrt in /opt/python/cp35-cp35m gives:"
+  ls -lrt /opt/python/cp35-cp35m
+
+  echo "Matt, ls -lrt in /opt/python/cp37-cp37m gives:"
+  ls -lrt /opt/python/cp37-cp37m
+
   # Run the actual C++ build.
   source ci_cmake_build.sh
   cmake_build
