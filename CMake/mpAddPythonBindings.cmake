@@ -28,9 +28,20 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
   if (DEFINED MYPROJECT_PYTHON_VERSION)
     find_package(PythonInterp ${MYPROJECT_PYTHON_VERSION} EXACT REQUIRED)
-    find_package(PythonLibs ${MYPROJECT_PYTHON_VERSION} EXACT REQUIRED)
   else()
-    find_package(PythonInterp)
+    find_package(PythonInterp REQUIRED)
+
+    execute_process(
+      COMMAND "${PYTHON_EXECUTABLE}" -c
+              "from __future__ import print_function\ntry: import sysconfig; print(sysconfig.get_config_h_filename(), end='')\nexcept:pass\n"
+              OUTPUT_VARIABLE Py_INCLUDE_FILE)
+    get_filename_component(PYTHON_INCLUDE_DIR ${Py_INCLUDE_FILE} DIRECTORY)
+    message("Found python include dirs from python: ${PYTHON_INCLUDE_DIR}")
+    execute_process(
+      COMMAND "${PYTHON_EXECUTABLE}" -c
+              "from __future__ import print_function\ntry: import sysconfig; print(sysconfig.get_path('stdlib'), end='')\nexcept:pass\n"
+              OUTPUT_VARIABLE Py_LIB_DIR)
+    message("Found python lib dirs from python: ${Py_LIB_DIR}")
     find_package(PythonLibs)
   endif()
 
