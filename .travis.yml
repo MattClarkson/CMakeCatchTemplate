@@ -61,16 +61,16 @@ matrix:
     - python: 3.6
   include:
     # Builds for MacOS
-#    - os: osx
-#      language: generic
-#      env:
-#        - MB_PYTHON_VERSION=2.7
-#        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       language: generic
       env:
-        - MB_PYTHON_VERSION=3.6
+        - MB_PYTHON_VERSION=2.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
+#    - os: osx
+#      language: generic
+#      env:
+#        - MB_PYTHON_VERSION=3.6
+#        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
 #    - os: osx
 #      language: generic
 #      env:
@@ -100,16 +100,16 @@ matrix:
 #      env:
 #        - MB_PYTHON_VERSION=3.5
 #        - PLAT=i686
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=3.6
+#    - os: linux
+#      env:
+#        - MB_PYTHON_VERSION=3.6
 #    - os: linux
 #      env:
 #        - MB_PYTHON_VERSION=3.6
 #        - PLAT=i686
-#    - os: linux
-#      env:
-#        - MB_PYTHON_VERSION=3.7
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.7
 #    - os: linux
 #      env:
 #        - MB_PYTHON_VERSION=3.7
