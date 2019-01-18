@@ -120,70 +120,70 @@ before_install:
     - source multibuild/travis_steps.sh
     - before_install
 
-install:
-    - echo "Starting main library build section."
-    - if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+install: |
+    echo "Starting main library build section."
+    if [ "${DO_PYTHON_BUILD}" = "true" ]; then
 
-        echo "DO_PYTHON_BUILD=true, so will do C++ and then build a wheel."
+      echo "DO_PYTHON_BUILD=true, so will do C++ and then build a wheel."
 
-        if [ -n "$IS_OSX" ]; then
+      if [ -n "$IS_OSX" ]; then
 
-          # On Mac, it builds it inside the Travis Mac VM.
-          # So, you could add various homebrew commands to pre-install stuff,
-          # or if you are reading the travis documentation, you could use
-          # travis type directives like 'addons', which are normally configured above.
+        # On Mac, it builds it inside the Travis Mac VM.
+        # So, you could add various homebrew commands to pre-install stuff,
+        # or if you are reading the travis documentation, you could use
+        # travis type directives like 'addons', which are normally configured above.
 
-          build_wheel $REPO_DIR $PLAT
+        build_wheel $REPO_DIR $PLAT
 
-        else
+      else
 
-          # On Linux, this builds the C++ and then wheel
-          # inside a manylinux docker container (Centos 5).
+        # On Linux, this builds the C++ and then wheel
+        # inside a manylinux docker container (Centos 5).
 
-          DOCKER_IMAGE=quay.io/skvark/manylinux1_$PLAT
-          build_multilinux $PLAT "build_wheel $REPO_DIR"
+        DOCKER_IMAGE=quay.io/skvark/manylinux1_$PLAT
+        build_multilinux $PLAT "build_wheel $REPO_DIR"
+      fi
+
+    else
+
+      echo "DO_PYTHON_BUILD is not set to true, so will just do C++."
+
+      # This builds the C++ inside the Travis VM. On Linux  this will
+      # be the OS listed above, e.g. Ubuntu trusty. So, if your project
+      # is only doing C++ and not Python, you will need debian based
+      # 'sudo apt-get' type commands, either here, or if you are reading
+      # travis documentation, then using various travis type directives
+      # like 'addons', which are normally configured at the top of this file.
+
+      source ci_cmake_build.sh
+      cmake_build
+
+    fi
+    echo "Finished main library build section."
+
+script: |
+    echo "Starting to check if we are running tests on installed python wheel."
+    if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+      echo "DO_PYTHON_BUILD is set to true, which means config.sh::run_tests() is called."
+      install_run $PLAT
+    else
+      echo "Nothing to do as DO_PYTHON_BUILD is not set to true."
+    fi
+    echo "Finished running tests on installed python wheel."
+
+after_success: |
+    echo "Starting to check if we are deploying to PyPi"
+    if [ -n "$TRAVIS_TAG" ]; then
+      if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+        pip install twine
+        if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then
+          pip install --upgrade pyOpenSSL
         fi
-
+        twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing wheelhouse/*
       else
-
-        echo "DO_PYTHON_BUILD is not set to true, so will just do C++."
-
-        # This builds the C++ inside the Travis VM. On Linux  this will
-        # be the OS listed above, e.g. Ubuntu trusty. So, if your project
-        # is only doing C++ and not Python, you will need debian based
-        # 'sudo apt-get' type commands, either here, or if you are reading
-        # travis documentation, then using various travis type directives
-        # like 'addons', which are normally configured at the top of this file.
-
-        source ci_cmake_build.sh
-        cmake_build
-
+        echo "Deployment skipped as DO_PYTHON_BUILD is not set to true."
       fi
-    - echo "Finished main library build section."
-
-script:
-    - echo "Starting to check if we are running tests on installed python wheel."
-    - if [ "${DO_PYTHON_BUILD}" = "true" ]; then
-        echo "DO_PYTHON_BUILD is set to true, which means config.sh::run_tests() is called."
-        install_run $PLAT
-      else
-        echo "Nothing to do as DO_PYTHON_BUILD is not set to true."
-      fi
-    - echo "Finished running tests on installed python wheel."
-
-after_success:
-    - echo "Starting to check if we are deploying to PyPi"
-    - if [ -n "$TRAVIS_TAG" ]; then
-        if [ "${DO_PYTHON_BUILD}" = "true" ]; then
-          pip install twine
-          if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then
-            pip install --upgrade pyOpenSSL
-          fi
-          twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing wheelhouse/*
-        else
-          echo "Deployment skipped as DO_PYTHON_BUILD is not set to true."
-        fi
-      else
-        echo "Deployment skipped as git tag not set."
-      fi
-    - echo "Finished any necessary deployment."
+    else
+      echo "Deployment skipped as git tag not set."
+    fi
+    echo "Finished any necessary deployment."
