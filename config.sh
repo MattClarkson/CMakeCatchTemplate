@@ -26,16 +26,21 @@ function pre_build {
   else
     echo "pre_build is on Linux."
 
+    #############################################################################################
     # IMPORTANT: Look in .travis.yml. Decide if your project requires DO_PYTHON_BUILD to be true.
+    #############################################################################################
+    #
     # if DO_PYTHON_BUILD = true
+    #
     #   i.e. you want to build C++ and then Python wheels. Therefore, this function is running inside
-    #   a manylinux docker image. Any library installations should use Centos based commands
+    #   a manylinux docker image. Any library installations here should use Centos based commands
     #   like 'sudo yum install ...'.
     #   OR
-    #   You should build your own docker image, specified that URL in .travis.yml,
-    #   and then you won't need any 'sudo yum install' type commands here.
+    #   You should build your own docker image, specify that URL in .travis.yml,
+    #   and then you won't need any 'sudo yum install ...' type commands here.
     #
     # if DO_PYTHON_BUILD = false
+    #
     #   then this function is running inside the main travis VM, most likely Ubuntu,
     #   so you should set up dependencies in top-level .travis.yml, or try some
     #   'sudo apt-get install' type commands here. But its more obvious if you
