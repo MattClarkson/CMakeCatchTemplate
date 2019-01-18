@@ -66,54 +66,54 @@ matrix:
       env:
         - MB_PYTHON_VERSION=2.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
-#    - os: osx
-#      language: generic
-#      env:
-#        - MB_PYTHON_VERSION=3.6
-#        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
-#    - os: osx
-#      language: generic
-#      env:
-#        - MB_PYTHON_VERSION=3.7
-#        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
-    # Builds for Linux
-#    - os: linux
-#      env:
-#        - MB_PYTHON_VERSION=2.7
-#    - os: linux
-#      env:
-#        - MB_PYTHON_VERSION=2.7
-#        - UNICODE_WIDTH=16
-#    - os: linux
-#      env:
-#        - MB_PYTHON_VERSION=2.7
-#        - PLAT=i686
-#    - os: linux
-#      env:
-#        - MB_PYTHON_VERSION=2.7
-#        - PLAT=i686
-#        - UNICODE_WIDTH=16
+    - os: osx
+      language: generic
+      env:
+        - MB_PYTHON_VERSION=3.6
+        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
+    - os: osx
+      language: generic
+      env:
+        - MB_PYTHON_VERSION=3.7
+        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
+   # Builds for Linux
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=2.7
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=2.7
+        - UNICODE_WIDTH=16
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=2.7
+        - PLAT=i686
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=2.7
+        - PLAT=i686
+        - UNICODE_WIDTH=16
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.5
-#    - os: linux
-#      env:
-#        - MB_PYTHON_VERSION=3.5
-#        - PLAT=i686
-#    - os: linux
-#      env:
-#        - MB_PYTHON_VERSION=3.6
-#    - os: linux
-#      env:
-#        - MB_PYTHON_VERSION=3.6
-#        - PLAT=i686
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.5
+        - PLAT=i686
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.6
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.6
+        - PLAT=i686
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.7
-#    - os: linux
-#      env:
-#        - MB_PYTHON_VERSION=3.7
-#        - PLAT=i686
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.7
+        - PLAT=i686
 
 before_install:
     - source multibuild/common_utils.sh
