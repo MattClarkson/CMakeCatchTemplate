@@ -23,6 +23,9 @@ and [Dr. Matt Clarkson](https://iris.ucl.ac.uk/iris/browse/profile?upi=MJCLA42).
 Main Features
 -------------
 
+The main idea of this project is to try and help a C++ algorithm developer write their algorithm in a
+C++ library and then deploy the C++ library in a variety of scenarios. 
+
 The main features provided are:
 
  1. A Meta-Build, also known as a SuperBuild, to optionally download and build any of the following: Boost, Eigen, FLANN, OpenCV, glog, gflags, VTK and PCL. All of these can be left OFF and skipped. This results in a top-level build folder containing the compiled dependencies, and then a sub-folder containing the compiled code of this project.
@@ -42,6 +45,41 @@ The main features provided are:
 15. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.
 16. Support for MPI, which by default sets up the C++ libraries.
 17. If doing Boost.Python and OpenCV, an example of passing a numpy ndarray to OpenCV, computing something, and returning a cv::Mat as a numpy ndarray, thanks to Gregory Kramida's pyboostcvconverter.
+18. Support for Python Wheels, using [Matthew Brett's multibuild](https://github.com/matthew-brett/multibuild).
+
+
+Use Cases
+---------
+
+The feature list above is quite diverse, and in reality most developers won't want all of them.
+So, while you could attempt all of these, within the same project, 
+we envisage the following types of project types:
+
+* C++ command line interfaces. 
+* A C++ library in a C++ user interface, using Qt, or QML.
+* A C++ library in a Python module, or perhaps a Python GUI, where the Python is developed separately, outside of this project.
+* A C++ library in an environment such as Unity, developed outside of this project.
+
+So, the aim for the C++ developer would be to write a small algorithm library, and get the code out there
+into the hands of their users. This project can accommodate all of the above, and there are CMake
+options to switch these options OFF/ON.
+
+Furthermore, once you have a successful build for your use-case, you could 
+delete the bits of code that you don't need.  We could have made a different repository 
+for each of the use-cases, but then there would be a lot of code
+duplication and overlap. So, for now, its all one repository. If you want to
+streamline your project, you could:
+
+* Take a look in the ```Code``` folder. Remove the directories you do not need,
+and change ```Code/CMakeLists.txt``` accordingly.
+
+* Search the top level CMakeLists.txt for code that looks like
+```mpAddSomething``` and ```mpIncludeSomething``` and easily chop out 3rd party libraries
+you do not need. 
+
+We believe its easier to remove code you don't need than it is to
+build up a lot of CMake code, based on hours of searching the internet.
+At least the CMake code here has been tested... to some degree.
 
 
 Basic Build Instructions
@@ -65,8 +103,8 @@ Then you would simply build your new project, using cmake, as shown above.
 Further Build Instructions
 --------------------------
 
-This project can be configured to build against Eigen, Boost, OpenCV, glog, gflags, VTK and PCL.
-These were chosen as examples of how to use CMake, and some common
+This project can be configured, using CMake, to build against Eigen, Boost, OpenCV, glog, gflags, 
+VTK and PCL. These were chosen as examples of how to use CMake, and some common
 C++ projects. These dependencies are optional, and this project will compile without them.
 
 Furthermore, these dependencies can be downloaded and built,
@@ -112,23 +150,29 @@ application or unit tests within Visual Studio, the dynamically
 loaded libraries are found at run time.
 
 
-Python Build
-------------
+Running a Python Module
+-----------------------
 
-This project can be used to build Python extensions.
+This project can be used to build Python extensions, using either Boost.Python
+or PyBind11.
 
 * Clone CMakeCatchTemplate (or your generated project), using ```--recursive```.
 * Use CMake to set BUILD_Python_Boost or BUILD_Python_PyBind to ON.
-* Run a C++ build first.
-* Set PYTHON_PATH to pick up your C++ extension.
+* Run a C++ build.
+* Set PYTHON_PATH to the directory containing your C++ library.
 
-Examples are in Code/Lib/PythonBoost or Code/Lib/PythonPybind. 
-So using the Code/Lib/PythonBoost example, once PYTHON_PATH 
-can pick up your compiled module, you would be able to:
+Code examples are in Code/Lib/PythonBoost or Code/Lib/PythonPybind. 
+So using the Code/Lib/PythonBoost as an example, once PYTHON_PATH is set so
+that you can pick up your compiled module, you would then be able to:
 ```
 import myprojectPython as mp
 mp.my_first_add_function(1,6)
 ```
+
+Deploying wheels is a difficult process. To help here, we have been 
+inspired by [Matthew Brett's multibuild](https://github.com/matthew-brett/multibuild), so you would configure 
+.travis.yml and appveyor.yml to generate your Python Wheels.
+
 
 Tested On
 ---------
@@ -141,29 +185,14 @@ Tested On
 Minimum CMake version is 3.5. If you turn GUI options on, then the minimum Qt is version 5. 
 Qt4 is not supported and not planned to be supported. If you are using VTK you should 
 try a Qt version >= 5.5.0 to take advantage of the new OpenGL2 backend. 
-If you need pybind, you need at least C++11, so on Windows you should have at least VS2015.
+If you need PyBind11, you need at least C++11, so on Windows you should have at least VS2015.
 
 
-Remove Unwanted Code
---------------------
+A Note on Packaging and Deployment
+----------------------------------
 
-You may find that you do not need all of the code in this repository. We could have
-made a different repository for each of the Use-Cases, but then there would be a lot of code
-duplication and overlap. So, for now, its all one repository. Take a look in the ```Code``` folder.
-Remove the directories you do not need, and change ```Code/CMakeLists.txt``` accordingly.
-You can also search the top level CMakeLists.txt for code that looks like
-```mpAddSomething``` and ```mpIncludeSomething```
-and easily chop out 3rd party libraries
-you do not need. We believe its easier to remove code you don't need than it is to
-build up a lot of CMake code, based on hours of searching the internet. At least the CMake
-code here has been tested... to some degree.
-
-
-
-A Note on Packaging
--------------------
-
-There are many different issues and combinations to test when packaging an application. For example:
+There are many different issues and combinations to test when packaging an application.
+For example:
 
  * System: Windows / Linux / Mac.
  * Linkage: Shared libraries / Static libraries.
@@ -176,57 +205,20 @@ There are many different issues and combinations to test when packaging an appli
 It would take too long to document all of them and all of the issues involved. So, this project suggests
 some simple starting points, and recommendations.
 
-Assumptions:
+| Use Case | Important CMake settings | Workflow |
+| -------- | ------------------------ | -------- |
+| Command Line Apps | leave GUIs OFF, BUILD_SHARED_LIBS=OFF, CMAKE_INSTALL_PREFIX=/path/to/install/to | make, make install |
+| C++ Gui Apps | Learn to build Qt5 first, BUILD_SHARED_LIBS=ON, build against your compiled Qt | make, make package | 
+| Python Modules | must clone repo with --recursive, leave GUIs OFF, BUILD_SHARED_LIBS=OFF | make, test locally by setting PYTHON_PATH, configure CI builds (see appveyor.yml and .travis.yml) to make wheels, upload to PyPi |
+| Unity Modules |  leave GUIs OFF, BUILD_SHARED_LIBS=ON | make, then point Unity at the module. |
 
- 1. This project is only suitable for small C++ research projects, and the aim is to get simple libraries and apps done quickly. If you want bigger examples, then example projects like [DREAM3D](https://github.com/BlueQuartzSoftware/DREAM3D) or [FreeSurfer](https://github.com/freesurfer/freesurfer) can be used as illustrations of much larger examples. However each one is written by an excellent software engineer who makes a lot of custom made packaging code. So, anything more complex than what we have here, and you will have to write a lot of CMake code yourself.
- 2. With the exception of Unity modules, this project does not currently support dynamically discovered plugins that have no link-time dependency. This would require more CMake coding. This isn't too difficult, if its a pure Qt plugin. Follow Qt documentation to compile it, but then you'd have to write packaging code yourself, as most Qt documentation assumes you are using ```qmake``` not ```cmake```.
- 3. You have built your own Qt.
-
-Note that Assumption 2 refers to dynamically loaded (i.e. discovered at run-time, with no link-time dependency) plugins which are generally not supported.
-This project does support shared libraries (i.e. required at link time and run time, but shared between other libraries).
-
-Lots of people would like to take a shortcut and use Qt that comes with a package manager on Linux,
-or with Homebrew or Macports on MacOSX, or pre-compiled on Windows. We believe it is quicker to
-learn how to build Qt yourself, than it is to cope with the wrong version, or a version that does not have the features you want.
-It really doesn't take long to learn, and is quicker than debugging all the numerous packaging and deployment problems that
-come from using a Qt that you did not compile yourself.
-
-Therefore, this project is intended for the following 2 Use-Cases:
-
- 1. You are developing a small library or command line app, and NOT a GUI. Your focus is the core algorithm. You are an algorithm developer.
- 2. You are developing a GUI, or a GUI with supporting command line apps, so you are an application developer, or an integration developer.
-
-For the first Use-Case it is recommended that you build everything statically. You should run ```make install``` to install the software
-or the ```INSTALL``` task in Visual Studio, which will produce an SDK to link against. You can use non-GUI Qt, by turning on the flag MYPROJECT_USE_QT, but
-you should still use a version of Qt that has been compiled statically. Be aware that CMake will search around your system
-for various Qt libraries. If your statically compiled version of Qt has missing libraries, as you only compiled a
-subset of them, then CMake may well find other Qt libraries, possibly with dynamic linkage, from somewhere unexpected
-on your system. This will cause a problem when running ```make install```.
-
-For the second Use-Case, with GUI development, and particularly with Qt (which has various plugins) you should use shared linking,
-and run the ```make package``` command or ```PACKAGE``` task in Visual Studio to produce an installer,
-This project provides you with examples on how to build a GUI, but if you are building a GUI, this project will not build an installable SDK.
-Any command line apps will be bundled with the GUI, and should refer to the same bundled libraries for consistency.
-On Mac, proper ```.app``` bundles will be created.
-
-If you switch between Use-Case 1 and 2, you will need a complete rebuild at the SuperBuild level.
-This means, completely destroying the SuperBuild folder, and not just running ```make clean``` or the ```Clean```
-tasks in Visual Studio.
-
-For example, imagine you start with a command line app, and build without Qt, as you are just testing or using some VTK filters.
-Then at some point you decide you want to add a Qt GUI, then you will also need to rebuild VTK to pick up the
-Qt support classes like QVTKWidget. So you must do a full clean SuperBuild.
-
-So, basically, pick your main options, up front, for the SuperBuild, and then don't change them or be prepared for a full clean build.
-
-In Summary, the Use-Cases are:
-
- 1. Library with command line app: Use static linking, set BUILD_SHARED_LIBS=OFF.
- 2. GUI app or GUI with command line apps: Use dynamic linking, set BUILD_SHARED_LIBS=ON.
+If you change your use-case, you must do a full clean build. That means completely delete the build folder, not just do a ```make clean```.
 
 
 Preferred Branching Workflow for Contributions.
 -----------------------------------------------
+
+We welcome contributions to this project. Please use the following workflow.
 
  1. Raise issue in this project's Github Issue Tracker.
  2. Fork repository.
