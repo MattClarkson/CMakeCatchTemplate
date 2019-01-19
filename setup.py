@@ -93,7 +93,7 @@ class CMakeBuild(build_ext):
 setup(
     # Must match python module name in your c++ code, or else you end
     # up with two dynamically linked libraries inside one wheel.
-    name=(str('MyProject') + 'Python'),
+    name=(str('CMakeCatchTemplate') + 'Python'),
 
     # Must match the version number in CMakeLists.txt.
     # We could try to parse the CMakeLists.txt file, but lets keep it simple.
@@ -103,7 +103,7 @@ setup(
     description='A software package for whatever.',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    ext_modules=[CMakeExtension(str('MyProject') + 'Python', dir_path)],
+    ext_modules=[CMakeExtension(str('CMakeCatchTemplate') + 'Python', dir_path)],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
     license='BSD-3 license',
