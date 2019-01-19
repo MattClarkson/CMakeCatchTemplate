@@ -53,7 +53,7 @@ Use Cases
 
 The feature list above is quite diverse, and in reality most developers won't want all of them.
 So, while you could attempt all of these, within the same project, 
-we envisage the following types of project types:
+we envisage the following project types:
 
 * C++ command line interfaces. 
 * A C++ library in a C++ user interface, using Qt, or QML.
