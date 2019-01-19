@@ -98,9 +98,9 @@ setup(
     # Must match the version number in CMakeLists.txt.
     # We could try to parse the CMakeLists.txt file, but lets keep it simple.
     version=versioneer.get_version(),
-    author='Myself',
-    author_email='me@mydomain.com',
-    description='A software package for whatever.',
+    author='Matt Clarkson',
+    author_email='m.clarkson@ucl.ac.uk',
+    description='A template project, to enable people to build nicely structured C++ projects.',
     long_description=long_description,
     long_description_content_type='text/markdown',
     ext_modules=[CMakeExtension(str('CMakeCatchTemplate') + 'Python', dir_path)],
