@@ -129,7 +129,7 @@ deploy_script:
       if (${Env:DO_PYTHON_BUILD} -eq "true") {
         &"${Env:MB_PYTHON}/python.exe" -m pip install twine
         if ($LastExitCode -ne 0) {throw $LastExitCode}
-        &"${Env:MB_PYTHON}/python.exe" -m twine upload --repository pypi -u ${PYPI_USER} -p ${PYPI_PASS} --skip-existing wheelhouse/*
+        &"${Env:MB_PYTHON}/python.exe" -m twine upload --repository pypi -u ${PYPI_USER} -p ${PYPI_PASS} --skip-existing dist/*
         if ($LastExitCode -ne 0) {throw $LastExitCode}
       }
       else {
