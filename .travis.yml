@@ -179,7 +179,7 @@ after_success: |
         if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then
           pip install --upgrade pyOpenSSL
         fi
-        twine upload --repository pypi -u NOT_SET -p NOT_SET --skip-existing wheelhouse/*
+        twine upload --repository pypi -u ${PYPI_USER} -p ${PYPI_PASS} --skip-existing wheelhouse/*
       else
         echo "Deployment skipped as DO_PYTHON_BUILD is not set to true."
       fi
