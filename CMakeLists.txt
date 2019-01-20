@@ -39,7 +39,7 @@ if (BUILD_SUPERBUILD)
   set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
   set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
 else()
-  project(CMakeCatchTemplate VERSION 0.0.2)
+  project(CMakeCatchTemplate VERSION 0.0.4)
 endif()
 
 
