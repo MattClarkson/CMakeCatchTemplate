@@ -15,7 +15,8 @@
 #include <boost/python.hpp>
 #include "mpMyFunctions.h"
 
-BOOST_PYTHON_MODULE(myprojectpython)
+// The name of the module should match that in CMakeLists.txt
+BOOST_PYTHON_MODULE(CMakeCatchTemplatePython)
 {
   boost::python::def("my_first_add_function", mp::MyFirstAddFunction);
 }

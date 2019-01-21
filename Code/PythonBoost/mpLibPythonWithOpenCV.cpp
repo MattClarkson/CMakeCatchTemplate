@@ -41,7 +41,8 @@ static void init_ar(){
   return NUMPY_IMPORT_ARRAY_RETVAL;
 }
 
-BOOST_PYTHON_MODULE (myprojectpython) {
+// The name of the module should match that in CMakeLists.txt
+BOOST_PYTHON_MODULE (CMakeCatchTemplatePython) {
   init_ar();
 
   boost::python::to_python_converter<cv::Mat, pbcvt::matToNDArrayBoostConverter>();

@@ -156,7 +156,7 @@ Running a Python Module
 This project can be used to build Python extensions, using either Boost.Python
 or PyBind11.
 
-* Clone CMakeCatchTemplate (or your generated project), using ```--recursive```.
+* Clone CMakeCatchTemplate, using ```--recursive```.
 * Use CMake to set BUILD_Python_Boost or BUILD_Python_PyBind to ON.
 * Run a C++ build.
 * Set PYTHON_PATH to the directory containing your C++ library.
@@ -165,9 +165,11 @@ Code examples are in Code/Lib/PythonBoost or Code/Lib/PythonPybind.
 So using the Code/Lib/PythonBoost as an example, once PYTHON_PATH is set so
 that you can pick up your compiled module, you would then be able to:
 ```
-import myprojectPython as mp
+import CMakeCatchTemplatePython as mp
 mp.my_first_add_function(1,6)
 ```
+
+So, if you have generated your own project, then substitute your values as appropriate.
 
 Deploying wheels is a difficult process. To help here, we have been 
 inspired by [Matthew Brett's multibuild](https://github.com/matthew-brett/multibuild), so you would configure 
