@@ -11,7 +11,6 @@
   See LICENSE.txt in the top level directory for details.
 
 =============================================================================*/
-#define BOOST_PYTHON_STATIC_LIB
 #include <boost/python.hpp>
 #include "mpMyFunctions.h"
 

@@ -30,48 +30,24 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
     find_package(PythonInterp ${MYPROJECT_PYTHON_VERSION} EXACT REQUIRED)
   else()
     find_package(PythonInterp REQUIRED)
-    set(_CURRENT_VERSION "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
-    set(_CURRENT_VERSION_NO_DOTS "${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
-
-    message("Found python executable: ${PYTHON_EXECUTABLE}")
-
-    execute_process(
-      COMMAND "${PYTHON_EXECUTABLE}" -c
-              "from __future__ import print_function\ntry: import sysconfig; print(sysconfig.get_config_h_filename(), end='')\nexcept:pass\n"
-              OUTPUT_VARIABLE Py_INCLUDE_FILE)
-    get_filename_component(PYTHON_INCLUDE_DIR ${Py_INCLUDE_FILE} DIRECTORY)
-
-    message("Found python include dirs from python executable: ${PYTHON_INCLUDE_DIR}")
-
-    if (UNIX AND NOT APPLE)
-      execute_process(
-        COMMAND "${PYTHON_EXECUTABLE}" -c
-                "from __future__ import print_function\ntry: import sysconfig; print(sysconfig.get_path('platstdlib'), end='')\nexcept:pass\n"
-                OUTPUT_VARIABLE Py_LIB_DIR)
-      get_filename_component(PYTHON_LIBRARY_DIR ${Py_LIB_DIR} DIRECTORY)
-
-      message("Found python library dir from python executable: ${PYTHON_LIBRARY_DIR}")
-
-      find_library(PYTHON_LIBRARY
-        NAMES
-          python${_CURRENT_VERSION}mu
-          python${_CURRENT_VERSION}m
-          python${_CURRENT_VERSION}u
-          python${_CURRENT_VERSION}
-          python${_CURRENT_VERSION_NO_DOTS}mu
-          python${_CURRENT_VERSION_NO_DOTS}m
-          python${_CURRENT_VERSION_NO_DOTS}u
-          python${_CURRENT_VERSION_NO_DOTS}
-        NAMES_PER_DIR
-        HINTS
-          ${PYTHON_LIBRARY_DIR}
-      )
-      message("Set PYTHON_LIBRARY to ${PYTHON_LIBRARY}")
-    endif()
   endif()
 
-  find_package(PythonLibs)
-  
+  message("Found python executable: ${PYTHON_EXECUTABLE}")
+
+  execute_process(
+    COMMAND "${PYTHON_EXECUTABLE}" -c
+            "from __future__ import print_function\ntry: import sysconfig; print(sysconfig.get_config_h_filename(), end='')\nexcept:pass\n"
+            OUTPUT_VARIABLE Py_INCLUDE_FILE)
+  get_filename_component(PYTHON_INCLUDE_DIR ${Py_INCLUDE_FILE} DIRECTORY)
+
+  message("Found python include dirs from python executable: ${PYTHON_INCLUDE_DIR}")
+
+  if (DEFINED MYPROJECT_PYTHON_VERSION)
+    find_package(PythonLibs ${MYPROJECT_PYTHON_VERSION} EXACT REQUIRED)
+  else()
+    find_package(PythonInterp REQUIRED)
+  endif()
+
   message("Found python include dirs: ${PYTHON_INCLUDE_DIRS}")
   message("Found python library location: ${PYTHON_LIBRARIES}")
 
