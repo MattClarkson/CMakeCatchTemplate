@@ -26,14 +26,9 @@ endif()
 
 if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
-  if (DEFINED MYPROJECT_EXACT_PYTHON_VERSION)
-    find_package(PythonInterp ${MYPROJECT_EXACT_PYTHON_VERSION} EXACT REQUIRED)
-  elseif(DEFINED MYPROJECT_MINIMUM_PYTHON_VERSION)
-    find_package(PythonInterp ${MYPROJECT_MINIMUM_PYTHON_VERSION} REQUIRED)
-  else()
-    find_package(PythonInterp REQUIRED)
-  endif()
+  set(Python_ADDITIONAL_VERSIONS ${MYPROJECT_PYTHON_VERSION})
 
+  find_package(PythonInterp REQUIRED)
   message("Found python executable: ${PYTHON_EXECUTABLE}")
 
   execute_process(
@@ -44,13 +39,7 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
   message("Found python include dirs from python executable: ${PYTHON_INCLUDE_DIR}")
 
-  if (DEFINED MYPROJECT_EXACT_PYTHON_VERSION)
-    find_package(PythonLibs ${MYPROJECT_EXACT_PYTHON_VERSION} EXACT REQUIRED)
-  elseif(DEFINED MYPROJECT_MINIMUM_PYTHON_VERSION)
-    find_package(PythonLibs ${MYPROJECT_MINIMUM_PYTHON_VERSION} REQUIRED)
-  else()
-    find_package(PythonLibs REQUIRED)
-  endif()
+  find_package(PythonLibs REQUIRED)
 
   message("Found python include dirs: ${PYTHON_INCLUDE_DIRS}")
   message("Found python library location: ${PYTHON_LIBRARIES}")
