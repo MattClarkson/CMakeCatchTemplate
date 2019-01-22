@@ -13,11 +13,17 @@
 #============================================================================*/
 
 function cmake_build {
+  echo "Starting travis_cmake_build.sh"
+  pwd
+  echo "Requested python version:${MB_PYTHON_VERSION}"
+  cmake --version
+  python --version
   mkdir build
   cd build
-  cmake -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
+  cmake -DMYPROJECT_PYTHON_VERSION:STRING=${MB_PYTHON_VERSION} -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
   make
   cd MYPROJECT-build
   ctest .
   cd ../../
+  echo "Finished travis_cmake_build.sh"
 }

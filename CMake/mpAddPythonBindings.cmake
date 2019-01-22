@@ -45,7 +45,7 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
   if (DEFINED MYPROJECT_PYTHON_VERSION)
     find_package(PythonLibs ${MYPROJECT_PYTHON_VERSION} EXACT REQUIRED)
   else()
-    find_package(PythonInterp REQUIRED)
+    find_package(PythonLibs REQUIRED)
   endif()
 
   message("Found python include dirs: ${PYTHON_INCLUDE_DIRS}")
