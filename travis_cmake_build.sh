@@ -15,12 +15,12 @@
 function cmake_build {
   echo "Starting travis_cmake_build.sh"
   pwd
-  echo "Requested python version:${MB_PYTHON_VERSION}"
+  echo "Requested python version:${PYTHON_VERSION}"
   cmake --version
   python --version
   mkdir build
   cd build
-  cmake -DMYPROJECT_MINIMUM_PYTHON_VERSION:STRING=${MB_PYTHON_VERSION} -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
+  cmake -DMYPROJECT_MINIMUM_PYTHON_VERSION:STRING=${PYTHON_VERSION} -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
   make
   cd MYPROJECT-build
   ctest .
