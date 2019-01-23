@@ -338,7 +338,7 @@ set(MYPROJECT_INSTALL_BIN_DIR bin)
 
 foreach(type LIBRARY RUNTIME ARCHIVE)
   if(NOT MYPROJECT_PYTHON_OUTPUT_DIRECTORY STREQUAL "" AND ${type} STREQUAL "LIBRARY")
-    set(CMAKE_${type}_OUTPUT_DIRECTORY ${MYPROJECT_PYTHON_OUTPUT_DIRECTORY} CACHE INTERNAL "Output dir for Python module.")
+    set(CMAKE_${type}_OUTPUT_DIRECTORY $<1:${MYPROJECT_PYTHON_OUTPUT_DIRECTORY}> CACHE INTERNAL "Output dir for Python module.")
   else()
     set(CMAKE_${type}_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH} CACHE INTERNAL "Single output directory for building all libraries.")
   endif()
