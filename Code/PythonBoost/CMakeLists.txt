@@ -42,12 +42,10 @@ if(NOT BUILDING_GUIS)
   endif()
 
   link_libraries(${ALL_LIBRARIES})
+
   PYTHON_ADD_MODULE(${MYPROJECT_PYTHON_MODULE_NAME} ${MYPROJECT_PYTHON_SRCS})
   if(APPLE)
     set_target_properties(${MYPROJECT_PYTHON_MODULE_NAME} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
-  endif()
-  if(UNIX AND NOT APPLE)
-    set_target_properties(${MYPROJECT_PYTHON_MODULE_NAME} PROPERTIES LINK_FLAGS "--unresolved-symbols=ignore-in-shared-libs")
   endif()
 
   install(TARGETS ${MYPROJECT_PYTHON_MODULE_NAME} DESTINATION ${MYPROJECT_INSTALL_LIB_DIR})
