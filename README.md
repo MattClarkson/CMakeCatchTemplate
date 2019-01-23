@@ -44,8 +44,8 @@ The main features provided are:
 14. Support for OpenMP, which is passed through to FLANN, OpenCV and PCL.
 15. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.
 16. Support for MPI, which by default sets up the C++ libraries.
-17. If doing Boost.Python and OpenCV, an example of passing a numpy ndarray to OpenCV, computing something, and returning a cv::Mat as a numpy ndarray, thanks to Gregory Kramida's pyboostcvconverter.
-18. Support for Python Wheels, using [Matthew Brett's multibuild](https://github.com/matthew-brett/multibuild).
+17. If doing Boost.Python and OpenCV, an example of passing a numpy ndarray to OpenCV, computing something, and returning a cv::Mat as a numpy ndarray, thanks to [Gregory Kramida's pyboostcvconverter](https://github.com/Algomorph/pyboostcvconverter).
+18. Support for Python Wheels, thanks to [Matthew Brett's multibuild](https://github.com/matthew-brett/multibuild).
 
 
 Use Cases
