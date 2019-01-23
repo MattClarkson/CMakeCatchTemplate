@@ -18,11 +18,4 @@ endif()
 
 if(BUILD_Python_Boost OR BUILD_Python_PyBind)
   include_directories(${PYTHON_INCLUDE_DIRS})
-  if(NOT APPLE)
-    link_libraries(${PYTHON_LIBRARIES})
-  endif()
-endif()
-
-if(BUILD_Python_PyBind)
-  include_directories(${PYTHON_INCLUDE_DIRS})
 endif()
