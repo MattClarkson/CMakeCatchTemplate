@@ -35,11 +35,11 @@ endforeach()
 # Setup project name, and version. Version number gets baked into package name.
 ###############################################################################
 if (BUILD_SUPERBUILD)
-  project(MyProject-superbuild)
+  project(CMakeCatchTemplate-SuperBuild)
   set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
   set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
 else()
-  project(MyProject VERSION 0.0.1)
+  project(CMakeCatchTemplate VERSION 0.1.0)
 endif()
 
 
@@ -338,7 +338,7 @@ set(MYPROJECT_INSTALL_BIN_DIR bin)
 
 foreach(type LIBRARY RUNTIME ARCHIVE)
   if(NOT MYPROJECT_PYTHON_OUTPUT_DIRECTORY STREQUAL "" AND ${type} STREQUAL "LIBRARY")
-    set(CMAKE_${type}_OUTPUT_DIRECTORY ${MYPROJECT_PYTHON_OUTPUT_DIRECTORY} CACHE INTERNAL "Output dir for Python module.")
+    set(CMAKE_${type}_OUTPUT_DIRECTORY $<1:${MYPROJECT_PYTHON_OUTPUT_DIRECTORY}> CACHE INTERNAL "Output dir for Python module.")
   else()
     set(CMAKE_${type}_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH} CACHE INTERNAL "Single output directory for building all libraries.")
   endif()

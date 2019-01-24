@@ -4,4 +4,4 @@
 PATH=@ADDITIONAL_SEARCH_PATHS@;%PATH%
 PATH=@CMAKE_BINARY_DIR@/bin/@VS_BUILD_TYPE@;%PATH%
 
-start "myproject" "@VS_SOLUTION_FILE@"
+start "CMakeCatchTemplate" "@VS_SOLUTION_FILE@"

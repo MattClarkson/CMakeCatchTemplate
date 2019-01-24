@@ -93,23 +93,24 @@ class CMakeBuild(build_ext):
 setup(
     # Must match python module name in your c++ code, or else you end
     # up with two dynamically linked libraries inside one wheel.
-    name=(str('MyProject') + 'Python'),
+    name=(str('CMakeCatchTemplate') + 'Python'),
 
     # Must match the version number in CMakeLists.txt.
     # We could try to parse the CMakeLists.txt file, but lets keep it simple.
     version=versioneer.get_version(),
-    author='Myself',
-    author_email='me@mydomain.com',
-    description='A software package for whatever.',
+    author='Matt Clarkson',
+    author_email='m.clarkson@ucl.ac.uk',
+    description='A template project, to enable people to build nicely structured C++ projects.',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    ext_modules=[CMakeExtension(str('MyProject') + 'Python', dir_path)],
+    ext_modules=[CMakeExtension(str('CMakeCatchTemplate') + 'Python', dir_path)],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
     license='BSD-3 license',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
+        'Intended Audience :: Education',
         'Intended Audience :: Healthcare Industry',
         'Intended Audience :: Information Technology',
         'Intended Audience :: Science/Research',
@@ -117,11 +118,19 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
+        'Programming Language :: C++',
+        'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Information Analysis',
         'Topic :: Scientific/Engineering :: Medical Science Apps.',
+        'Topic :: Scientific/Engineering :: Physics',
+        'Topic :: Scientific/Engineering :: Visualization',
+        'Topic :: Software Development',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX :: Linux',
+        'Operating System :: MacOS',
     ],
 
-    keywords='medical imaging',
+    keywords='C++ cmake catch project template',
 
     install_requires=[
         'six>=1.10',

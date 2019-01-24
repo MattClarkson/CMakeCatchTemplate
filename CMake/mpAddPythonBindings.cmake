@@ -26,24 +26,23 @@ endif()
 
 if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
-  if (DEFINED MYPROJECT_PYTHON_VERSION)
-    find_package(PythonInterp ${MYPROJECT_PYTHON_VERSION} EXACT REQUIRED)
-  else()
-    find_package(PythonInterp REQUIRED)
+  set(Python_ADDITIONAL_VERSIONS ${MYPROJECT_PYTHON_VERSION})
 
-    execute_process(
-      COMMAND "${PYTHON_EXECUTABLE}" -c
-              "from __future__ import print_function\ntry: import sysconfig; print(sysconfig.get_config_h_filename(), end='')\nexcept:pass\n"
-              OUTPUT_VARIABLE Py_INCLUDE_FILE)
-    get_filename_component(PYTHON_INCLUDE_DIR ${Py_INCLUDE_FILE} DIRECTORY)
-    message("Found python include dirs from python: ${PYTHON_INCLUDE_DIR}")
-  endif()
+  find_package(PythonInterp REQUIRED)
+  message("Found python executable: ${PYTHON_EXECUTABLE}")
 
-  find_package(PythonLibs)
-  
-  message("Found python interpreter: ${PYTHON_EXECUTABLE}")
-  message("Found python library version: ${PYTHONLIBS_VERSION_STRING}")
+  execute_process(
+    COMMAND "${PYTHON_EXECUTABLE}" -c
+            "from __future__ import print_function\ntry: import sysconfig; print(sysconfig.get_config_h_filename(), end='')\nexcept:pass\n"
+            OUTPUT_VARIABLE Py_INCLUDE_FILE)
+  get_filename_component(PYTHON_INCLUDE_DIR ${Py_INCLUDE_FILE} DIRECTORY)
+
+  message("Found python include dirs from python executable: ${PYTHON_INCLUDE_DIR}")
+
+  find_package(PythonLibs REQUIRED)
+
   message("Found python include dirs: ${PYTHON_INCLUDE_DIRS}")
+  message("Found python library location: ${PYTHON_LIBRARIES}")
 
   if (NOT PythonLibs_FOUND OR NOT PythonInterp_FOUND)
     set(BUILD_Python_Boost OFF CACHE BOOL "Build boost::python bindings." FORCE)

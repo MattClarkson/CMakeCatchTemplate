@@ -44,8 +44,8 @@ The main features provided are:
 14. Support for OpenMP, which is passed through to FLANN, OpenCV and PCL.
 15. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.
 16. Support for MPI, which by default sets up the C++ libraries.
-17. If doing Boost.Python and OpenCV, an example of passing a numpy ndarray to OpenCV, computing something, and returning a cv::Mat as a numpy ndarray, thanks to Gregory Kramida's pyboostcvconverter.
-18. Support for Python Wheels, using [Matthew Brett's multibuild](https://github.com/matthew-brett/multibuild).
+17. If doing Boost.Python and OpenCV, an example of passing a numpy ndarray to OpenCV, computing something, and returning a cv::Mat as a numpy ndarray, thanks to [Gregory Kramida's pyboostcvconverter](https://github.com/Algomorph/pyboostcvconverter).
+18. Support for Python Wheels, thanks to [Matthew Brett's multibuild](https://github.com/matthew-brett/multibuild).
 
 
 Use Cases
@@ -53,9 +53,9 @@ Use Cases
 
 The feature list above is quite diverse, and in reality most developers won't want all of them.
 So, while you could attempt all of these, within the same project, 
-we envisage the following types of project types:
+we envisage the following project types:
 
-* C++ command line interfaces. 
+* A C++ library in C++ command line interfaces. 
 * A C++ library in a C++ user interface, using Qt, or QML.
 * A C++ library in a Python module, or perhaps a Python GUI, where the Python is developed separately, outside of this project.
 * A C++ library in an environment such as Unity, developed outside of this project.
@@ -156,18 +156,20 @@ Running a Python Module
 This project can be used to build Python extensions, using either Boost.Python
 or PyBind11.
 
-* Clone CMakeCatchTemplate (or your generated project), using ```--recursive```.
+* Clone CMakeCatchTemplate, using ```--recursive```.
 * Use CMake to set BUILD_Python_Boost or BUILD_Python_PyBind to ON.
 * Run a C++ build.
-* Set PYTHON_PATH to the directory containing your C++ library.
+* Set PYTHONPATH to the directory containing your C++ library.
 
 Code examples are in Code/Lib/PythonBoost or Code/Lib/PythonPybind. 
-So using the Code/Lib/PythonBoost as an example, once PYTHON_PATH is set so
+So using the Code/Lib/PythonBoost as an example, once PYTHONPATH is set so
 that you can pick up your compiled module, you would then be able to:
 ```
-import myprojectPython as mp
+import CMakeCatchTemplatePython as mp
 mp.my_first_add_function(1,6)
 ```
+
+So, if you have generated your own project, then substitute your values as appropriate.
 
 Deploying wheels is a difficult process. To help here, we have been 
 inspired by [Matthew Brett's multibuild](https://github.com/matthew-brett/multibuild), so you would configure 
@@ -209,7 +211,7 @@ some simple starting points, and recommendations.
 | -------- | ------------------------ | -------- |
 | Command Line Apps | leave GUIs OFF, BUILD_SHARED_LIBS=OFF, CMAKE_INSTALL_PREFIX=/path/to/install/to | make, make install |
 | C++ Gui Apps | Learn to build Qt5 first, BUILD_SHARED_LIBS=ON, build against your compiled Qt | make, make package | 
-| Python Modules | must clone repo with --recursive, leave GUIs OFF, BUILD_SHARED_LIBS=OFF | make, test locally by setting PYTHON_PATH, configure CI builds (see appveyor.yml and .travis.yml) to make wheels, upload to PyPi |
+| Python Modules | must clone repo with --recursive, leave GUIs OFF, BUILD_SHARED_LIBS=OFF | make, test locally by setting PYTHONPATH, configure CI builds (see appveyor.yml and .travis.yml) to make wheels, upload to PyPi |
 | Unity Modules |  leave GUIs OFF, BUILD_SHARED_LIBS=ON | make, then point Unity at the module. |
 
 If you change your use-case, you must do a full clean build. That means completely delete the build folder, not just do a ```make clean```.
