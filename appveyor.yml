@@ -65,12 +65,11 @@ platform:
 before_build:
 - ps: |
     echo --------------------------------------------------------------------------------
-    echo "Doing before_build:"
-    echo "COMPILER=${Env:COMPILER}, PYTHON=${Env:MB_PYTHON}, CONFIGURATION=${Env:CONFIGURATION}"
+    echo "Doing before_build: PYTHON=${Env:MB_PYTHON}"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
-    ${Env:PATH} = "%MB_PYTHON%;%MB_PYTHON%/Scripts;${Env:PATH}"
-    cmake -version
     pwd
+    ${Env:PATH} = "%MB_PYTHON%;%MB_PYTHON%/Scripts;${Env:PATH}"
+    echo "${Env:PATH}"
     git submodule update -q --init --recursive
     if ($LastExitCode -ne 0) {throw $LastExitCode}
     &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade pip
@@ -85,18 +84,23 @@ before_build:
     if ($LastExitCode -ne 0) {throw $LastExitCode}
 
 build_script:
-- cmd: |
+- ps: |
     echo --------------------------------------------------------------------------------
-    echo "Building the C++ part of CMakeCatchTemplate:"
-    cd %APPVEYOR_BUILD_FOLDER%
+    echo "Building the C++ part of CMakeCatchTemplate: PYTHON=${Env:MB_PYTHON}, COMPILER=${Env:COMPILER}, CONFIGURATION=${Env:CONFIGURATION}"
+    cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
+    ${Env:PATH} = "%MB_PYTHON%;%MB_PYTHON%/Scripts;${Env:PATH}"
+    echo "${Env:PATH}"
+    cmake -version
     mkdir build
     cd build
-    cmake -G "%COMPILER%" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=ON --config %CONFIGURATION% ..
-    cmake --build . --config %CONFIGURATION%
+    cmake -G "${Env:COMPILER}" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=ON --config ${Env:CONFIGURATION} ..
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
+    cmake --build . --config ${Env:CONFIGURATION}
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
 
 test_script:
-- cmd: |
+- ps: |
     echo --------------------------------------------------------------------------------
     cd %APPVEYOR_BUILD_FOLDER%
     pwd
@@ -104,7 +108,8 @@ test_script:
     pwd
     cd MYPROJECT-build
     pwd
-    ctest -C %CONFIGURATION%
+    ctest -C ${Env:CONFIGURATION}
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
 
 after_test:
 - ps: |
