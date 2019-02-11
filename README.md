@@ -145,9 +145,10 @@ Caveats
 With all of those above build options, it is worth stressing:
 
  * You will still be required to write CMake code. This project is only to provide an EXAMPLE.
- * If you are building any of the dependencies, you would need to ensure the correct CMake flags are set to a reasonable default.
+ * If you are building any of the dependencies, you would need to ensure the correct CMake flags are set to a reasonable default in order to compile those dependencies.
  * If you are testing on Travis or Appveyor, you need to configure your build to meet the required time limits, or else pay for more time.
- 
+ * If you are building Python Wheels, using the manylinux docker images, you may well need to provide your own docker image with dependencies pre-installed.
+
 So, once more: This project is just to provide an example.
 Its a template from which you can draw your own inspiration from.
 
