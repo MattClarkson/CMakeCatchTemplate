@@ -120,7 +120,6 @@ after_test:
       echo "Building python wheel."
       &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
       if ($LastExitCode -ne 0) {throw $LastExitCode}
-      echo "Finished building python wheel."
     }
 
 deploy_script:
