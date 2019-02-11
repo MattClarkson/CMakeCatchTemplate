@@ -73,7 +73,7 @@ if(NOT DEFINED PCL_DIR)
       -DBUILD_outofcore:BOOL=OFF
       -DBUILD_people:BOOL=OFF
       -DBUILD_recognition:BOOL=OFF
-      -DBUILD_registration:BOOL=ON
+      -DBUILD_registration:BOOL=OFF
       -DBUILD_sample_consensus:BOOL=OFF
       -DBUILD_search:BOOL=OFF
       -DBUILD_segmentation:BOOL=OFF
