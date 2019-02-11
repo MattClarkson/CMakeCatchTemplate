@@ -139,6 +139,19 @@ is different to the one provided here. So if you want to use Boost,
 you should probably try and use the one provided by this SuperBuild.
 
 
+Caveats
+-------
+
+With all of those above build options, it is worth stressing:
+
+ * You will still be required to write CMake code. This project is only to provide an EXAMPLE.
+ * If you are building any of the dependencies, you would need to ensure the correct CMake flags are set to a reasonable default.
+ * If you are testing on Travis or Appveyor, you need to configure your build to meet the required time limits, or else pay for more time.
+ 
+So, once more: This project is just to provide an example.
+Its a template from which you can draw your own inspiration from.
+
+ 
 Windows Users
 -------------
 
