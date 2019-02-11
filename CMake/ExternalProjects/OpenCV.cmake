@@ -62,6 +62,7 @@ if(NOT DEFINED OpenCV_DIR)
   else()
     list(APPEND _vtk_options
       -DWITH_LAPACK:BOOL=OFF
+      -DWITH_IPP:BOOL=OFF
     )
   endif()
 
