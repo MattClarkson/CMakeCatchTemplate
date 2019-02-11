@@ -41,7 +41,7 @@ if(NOT DEFINED OpenCV_DIR)
   # This will promote the idea that a small python extension should be as small
   # as possible, and just provide a few re-usable algorithms.
   ##############################################################################
-  set(_vtk_options
+  set(_additional_options
     -DWITH_QT:BOOL=OFF
     -DWITH_GTK:BOOL=OFF
     -DWITH_EIGEN:BOOL=OFF
@@ -56,11 +56,11 @@ if(NOT DEFINED OpenCV_DIR)
     -DOPENCV_PYTHON_SKIP_DETECTION:BOOL=ON
   )
   if (NOT APPLE)
-    list(APPEND _vtk_options
+    list(APPEND _additional_options
       -DWITH_LAPACK:BOOL=ON
     )
   else()
-    list(APPEND _vtk_options
+    list(APPEND _additional_options
       -DWITH_LAPACK:BOOL=OFF
       -DWITH_IPP:BOOL=OFF
     )
@@ -70,7 +70,7 @@ if(NOT DEFINED OpenCV_DIR)
 
     message("Building minimum OpenCV modules, as you want a Python build.")
 
-    list(APPEND _vtk_options
+    list(APPEND _additional_options
       -DBUILD_opencv_calib3d:BOOL=ON
       -DBUILD_opencv_core:BOOL=ON
       -DBUILD_opencv_imgproc:BOOL=ON
@@ -98,10 +98,11 @@ if(NOT DEFINED OpenCV_DIR)
 
     # Otherwise, we will build all default modules,
     # until someone provides more specific config here.
+
     message("Building mostly default OpenCV modules")
 
     if(BUILD_VTK)
-      list(APPEND _vtk_options
+      list(APPEND _additional_options
         -DWITH_VTK:BOOL=ON
         -DVTK_DIR:PATH=${VTK_DIR}
       )
@@ -147,7 +148,7 @@ if(NOT DEFINED OpenCV_DIR)
       -DBUILD_DOCS:BOOL=OFF
       -DBUILD_DOXYGEN_DOCS:BOOL=OFF
       -DBUILD_PERF_TESTS:BOOL=OFF
-      ${_vtk_options}
+      ${_additional_options}
       ${_cuda_options}
       "-DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS} ${MYPROJECT_CXX11_FLAG} -DVTK_MAJOR_VERSION=6" # Doesn't matter what version, as long as > 5.
       ${additional_cmake_args}

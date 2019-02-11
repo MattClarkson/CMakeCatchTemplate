@@ -25,7 +25,7 @@ if(DEFINED PCL_DIR AND NOT EXISTS ${PCL_DIR})
 endif()
 
 set(version "c230159f92")
-set(location "${NIFTK_EP_TARBALL_LOCATION}/PointCloudLibrary-pcl-${version}.tar.gz")
+set(location "https://github.com/PointCloudLibrary/pcl.git")
 mpMacroDefineExternalProjectVariables(PCL ${version} ${location})
 set(proj_DEPENDENCIES Boost Eigen FLANN)
 if (BUILD_VTK)
@@ -42,12 +42,63 @@ if(NOT DEFINED PCL_DIR)
   # as possible, and just provide a few re-usable algorithms.
   ##############################################################################
 
-  set(_vtk_options)
-  if(BUILD_VTK)
-    set(_vtk_options
-      -DBUILD_visualization:BOOL=${BUILD_PCL_VIS}
-      -DVTK_DIR:PATH=${VTK_DIR}
+  set(_additional_options
+    -DBUILD_apps:BOOL=OFF
+    -DBUILD_tools:BOOL=OFF
+    -DBUILD_examples:BOOL=OFF
+    -DBUILD_global_tests:BOOL=OFF
+    -DWITH_LIBUSB:BOOL=OFF    # On my Mac, this pulls in a dependency to /opt/local (MacPorts) which has the wrong version of boost.
+    -DWITH_PNG:BOOL=OFF       # Same problem
+    -DWITH_QHULL:BOOL=OFF     # Same problem
+    -DWITH_OPENNI:BOOL=OFF    # Same problem, but worse: For each device, PCL defaults this to TRUE, so FindX is always executed.
+    -DWITH_OPENNI2:BOOL=OFF   # Same problem, but worse: For each device, PCL defaults this to TRUE, so FindX is always executed.
+    -DWITH_PCAP:BOOL=OFF      # On my Mac, this is 32 bit, so barfs when linking 64 bit.
+  )
+
+  if(BUILD_Python_Boost OR BUILD_Python_PyBind)
+
+    message("Building minimum PCL modules, as you want a Python build.")
+
+    list(APPEND _additional_options
+      -DBUILD_2d:BOOL=OFF
+      -DBUILD_common:BOOL=ON
+      -DBUILD_features:BOOL=OFF
+      -DBUILD_filters:BOOL=OFF
+      -DBUILD_geometry:BOOL=OFF
+      -DBUILD_io:BOOL=OFF
+      -DBUILD_kdtree:BOOL=OFF
+      -DBUILD_keypoints:BOOL=OFF
+      -DBUILD_ml:BOOL=OFF
+      -DBUILD_octree:BOOL=OFF
+      -DBUILD_outofcore:BOOL=OFF
+      -DBUILD_people:BOOL=OFF
+      -DBUILD_recognition:BOOL=OFF
+      -DBUILD_registration:BOOL=ON
+      -DBUILD_sample_consensus:BOOL=OFF
+      -DBUILD_search:BOOL=OFF
+      -DBUILD_segmentation:BOOL=OFF
+      -DBUILD_simulation:BOOL=OFF
+      -DBUILD_stereo:BOOL=OFF
+      -DBUILD_surface:BOOL=OFF
+      -DBUILD_surface_on_nurbs:BOOL=OFF
+      -DBUILD_tracking:BOOL=OFF
+      -DBUILD_visualization:BOOL=OFF
     )
+
+  else()
+
+    # Otherwise, we will build all default modules,
+    # until someone provides more specific config here.
+
+    message("Building mostly default PCL modules")
+
+    if(BUILD_VTK)
+      list(APPEND _additional_options
+        -DBUILD_visualization:BOOL=${BUILD_PCL_VIS}
+        -DVTK_DIR:PATH=${VTK_DIR}
+      )
+    endif()
+
   endif()
 
   set(_cuda_options
@@ -81,8 +132,9 @@ if(NOT DEFINED PCL_DIR)
     SOURCE_DIR ${proj_SOURCE}
     BINARY_DIR ${proj_BUILD}
     INSTALL_DIR ${proj_INSTALL}
-    URL ${proj_LOCATION}
-    URL_MD5 ${proj_CHECKSUM}
+    GIT_REPOSITORY ${proj_LOCATION}
+    GIT_TAG ${proj_VERSION}
+    UPDATE_COMMAND ${GIT_EXECUTABLE} checkout ${proj_VERSION}
     PATCH_COMMAND ${PATCH_COMMAND} -N -p1 -i ${CMAKE_CURRENT_LIST_DIR}/PCL.patch
     CMAKE_GENERATOR ${gen}
     CMAKE_ARGS
@@ -103,16 +155,7 @@ if(NOT DEFINED PCL_DIR)
       -DPCL_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}
       -DOPENGL_glu_LIBRARY=${OPENGL_glu_LIBRARY}
       -DOPENGL_gl_LIBRARY=${OPENGL_gl_LIBRARY}
-      -DBUILD_apps:BOOL=OFF
-      -DBUILD_tools:BOOL=ON
-      -DBUILD_examples:BOOL=OFF
-      -DWITH_LIBUSB:BOOL=OFF    # On my Mac, this pulls in a dependency to /opt/local (MacPorts) which has the wrong version of boost.
-      -DWITH_PNG:BOOL=OFF       # Same problem
-      -DWITH_QHULL:BOOL=OFF     # Same problem
-      -DWITH_OPENNI:BOOL=OFF    # Same problem, but worse: For each device, PCL defaults this to TRUE, so FindX is always executed.
-      -DWITH_OPENNI2:BOOL=OFF   # Same problem, but worse: For each device, PCL defaults this to TRUE, so FindX is always executed.
-      -DWITH_PCAP:BOOL=OFF      # On my Mac, this is 32 bit, so barfs when linking 64 bit.
-      ${_vtk_options}
+      ${_additional_options}
       ${_cuda_options}
     CMAKE_CACHE_ARGS
       ${EP_COMMON_CACHE_ARGS}

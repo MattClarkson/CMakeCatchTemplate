@@ -73,6 +73,7 @@ if(NOT DEFINED VTK_DIR)
   else()
 
     # Otherwise, we will build all default modules.
+
     message("Building mostly default VTK modules")
 
     # And then this additionally turns on vtkRenderingExternal
