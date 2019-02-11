@@ -24,7 +24,7 @@ if(DEFINED OpenCV_DIR AND NOT EXISTS ${OpenCV_DIR})
   message(FATAL_ERROR "OpenCV_DIR variable is defined but corresponds to non-existing directory")
 endif()
 
-set(version "4.0.1")
+set(version "3.4.5")
 set(location "https://github.com/opencv/opencv.git")
 mpMacroDefineExternalProjectVariables(OpenCV ${version} ${location})
 set(proj_DEPENDENCIES )
