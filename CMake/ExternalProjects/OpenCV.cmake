@@ -80,7 +80,7 @@ if(NOT DEFINED OpenCV_DIR)
 
     # Otherwise, we will build all default modules,
     # until someone provides more specific config here.
-    message("Building mostly default VTK modules")
+    message("Building mostly default OpenCV modules")
 
     if(BUILD_VTK)
       list(APPEND _vtk_options
