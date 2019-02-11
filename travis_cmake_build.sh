@@ -21,7 +21,7 @@ function cmake_build {
   mkdir build
   cd build
   cmake -DMYPROJECT_PYTHON_VERSION:STRING=${PYTHON_VERSION} -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=OFF -DBUILD_glog:BOOL=OFF -DBUILD_gflags:BOOL=OFF -DBUILD_VTK:BOOL=ON -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF ..
-  make
+  make -j 2
   cd MYPROJECT-build
   ctest .
   cd ../../
