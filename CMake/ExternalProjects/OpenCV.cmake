@@ -50,8 +50,20 @@ if(NOT DEFINED OpenCV_DIR)
     -DWITH_FFMPEG:BOOL=OFF
     -DWITH_OPENMP:BOOL=${MYPROJECT_USE_OPENMP}
   )
+  if (NOT APPLE)
+    list(APPEND _vtk_options
+      -DWITH_LAPACK:BOOL=ON
+    )
+  else()
+    list(APPEND _vtk_options
+      -DWITH_LAPACK:BOOL=OFF
+    )
+  endif()
 
   if(BUILD_Python_Boost OR BUILD_Python_PyBind)
+
+    message("Building minimum OpenCV modules, as you want a Python build.")
+
     list(APPEND _vtk_options
       -DBUILD_opencv_apps:BOOL=OFF
       -DBUILD_opencv_calib3d:BOOL=ON
@@ -62,7 +74,7 @@ if(NOT DEFINED OpenCV_DIR)
       -DBUILD_opencv_gapi:BOOL=OFF
       -DBUILD_opencv_highgui:BOOL=OFF
       -DBUILD_opencv_imgcodecs:BOOL=OFF
-      -DBUILD_opencv_imgproc:BOOL=ON
+      -DBUILD_opencv_imgproc:BOOL=OFF
       -DBUILD_opencv_java_bindings_generator:BOOL=OFF
       -DBUILD_opencv_js:BOOL=OFF
       -DBUILD_opencv_ml:BOOL=OFF
