@@ -52,12 +52,17 @@ if(NOT DEFINED VTK_DIR)
         )
   endif()
 
+  ##############################################################################
   # Module selection logic.
   # When running on travis/appveyor, and building a small library that will
   # have a python interface, you will probably want the smallest build possible.
+  # This will promote the idea that a small python extension should be as small
+  # as possible, and as tightly focused as possible, and not try to be all
+  # things to all people.
+  #
   # So, as an example, the next if block shows how to turn most default
   # modules OFF, and then just turn on one set of algorithms.
-
+  ##############################################################################
   if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
     # So, a minimum build, plus one module.
@@ -68,16 +73,18 @@ if(NOT DEFINED VTK_DIR)
     )
   else()
 
-    # Otherwise, we will build all available modules.
+    # Otherwise, we will build all default modules.
+    message("Building mostly default VTK modules")
+
+    # And then this additionally turns on vtkRenderingExternal
+    # which is used for QML rendering, and valid from v7.1.0 onwards.
+    # Look in mpAddVTK, as we either build v6.1.0, or v8.2.0.
     if( NOT "${VTK_VERSION}" STREQUAL "v6.1.0")
-
-
-      # only valid in 7.0 onwards, used for QML rendering.
       list(APPEND additional_cmake_args
         -DModule_vtkRenderingExternal:BOOL=ON
       )
-
     endif()
+
   endif()
 
   # Optionally enable memory leak checks for any objects derived from vtkObject. This
