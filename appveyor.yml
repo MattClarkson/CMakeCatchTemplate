@@ -68,7 +68,7 @@ before_build:
     echo "Doing before_build: PYTHON=${Env:MB_PYTHON}"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
-    ${Env:PATH} = "%MB_PYTHON%;%MB_PYTHON%/Scripts;${Env:PATH}"
+    ${Env:PATH} = "${Env:MB_PYTHON};${Env:MB_PYTHON}/Scripts;${Env:PATH}"
     echo "${Env:PATH}"
     git submodule update -q --init --recursive
     if ($LastExitCode -ne 0) {throw $LastExitCode}
@@ -89,7 +89,7 @@ build_script:
     echo "Building the C++ part of CMakeCatchTemplate: PYTHON=${Env:MB_PYTHON}, COMPILER=${Env:COMPILER}, CONFIGURATION=${Env:CONFIGURATION}"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
-    ${Env:PATH} = "%MB_PYTHON%;%MB_PYTHON%/Scripts;${Env:PATH}"
+    ${Env:PATH} = "${Env:MB_PYTHON};${Env:MB_PYTHON}/Scripts;${Env:PATH}"
     echo "${Env:PATH}"
     cmake -version
     mkdir build
@@ -102,7 +102,7 @@ build_script:
 test_script:
 - ps: |
     echo --------------------------------------------------------------------------------
-    cd %APPVEYOR_BUILD_FOLDER%
+    cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
     cd build
     pwd
@@ -117,7 +117,7 @@ after_test:
     echo "Building the Python wheel part of CMakeCatchTemplate:"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
-    ${Env:PATH} = "%MB_PYTHON%;%MB_PYTHON%/Scripts;${Env:PATH}"
+    ${Env:PATH} = "${Env:MB_PYTHON};${Env:MB_PYTHON}/Scripts;${Env:PATH}"
     if (${Env:DO_PYTHON_BUILD} -eq "true") {
       echo "Running python tests."
       echo "Currently there are none."
