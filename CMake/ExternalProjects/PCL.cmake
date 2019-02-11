@@ -34,6 +34,14 @@ endif()
 
 if(NOT DEFINED PCL_DIR)
 
+  ##############################################################################
+  # Module selection logic.
+  # When running on travis/appveyor, and building a small library that will
+  # have a python interface, you will probably want the smallest build possible.
+  # This will promote the idea that a small python extension should be as small
+  # as possible, and just provide a few re-usable algorithms.
+  ##############################################################################
+
   set(_vtk_options)
   if(BUILD_VTK)
     set(_vtk_options

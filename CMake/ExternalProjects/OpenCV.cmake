@@ -39,8 +39,7 @@ if(NOT DEFINED OpenCV_DIR)
   # When running on travis/appveyor, and building a small library that will
   # have a python interface, you will probably want the smallest build possible.
   # This will promote the idea that a small python extension should be as small
-  # as possible, and as tightly focused as possible, and not try to be all
-  # things to all people.
+  # as possible, and just provide a few re-usable algorithms.
   ##############################################################################
   set(_vtk_options
     -DWITH_QT:BOOL=OFF
