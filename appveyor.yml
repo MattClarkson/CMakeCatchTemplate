@@ -72,6 +72,7 @@ before_build:
     cmake -version
     pwd
     git submodule update -q --init --recursive
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
     &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade pip
     if ($LastExitCode -ne 0) {throw $LastExitCode}
     &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade setuptools
@@ -87,6 +88,7 @@ build_script:
 - cmd: |
     echo --------------------------------------------------------------------------------
     echo "Building the C++ part of CMakeCatchTemplate:"
+    cd %APPVEYOR_BUILD_FOLDER%
     pwd
     mkdir build
     cd build
