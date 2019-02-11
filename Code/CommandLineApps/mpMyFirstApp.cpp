@@ -36,9 +36,9 @@
 #endif
 
 #ifdef BUILD_OpenCV
-#include <cv.h>
+#include <opencv2/core/core_c.h>
 #ifdef MYPROJECT_USE_CUDA
-#include "opencv2/core/cuda.hpp"
+#include <opencv2/core/cuda.hpp>
 #endif
 #endif
 
