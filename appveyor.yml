@@ -124,6 +124,7 @@ after_test:
       echo "Finished python tests."
       echo "Building python wheel."
       &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
+      echo "Finished building python wheel."
     }
 
 deploy_script:
