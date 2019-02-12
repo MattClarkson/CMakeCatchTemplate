@@ -34,8 +34,18 @@ if(BUILD_PCL AND NOT BUILD_FLANN)
 endif()
 
 if(BUILD_PCL_VIS AND NOT BUILD_PCL)
-  set(BUILD_PCL_VIS ON CACHE BOOL "Build PCL Visualisation tools." FORCE)
+  set(BUILD_PCL_VIS OFF CACHE BOOL "Build PCL Visualisation tools." FORCE)
   message("Forcing BUILD_PCL_VIS to OFF due to BUILD_PCL being OFF.")
+endif()
+
+if(BUILD_PCL_VIS AND BUILD_Python_Boost)
+  set(BUILD_PCL_VIS OFF CACHE BOOL "Build PCL Visualisation tools." FORCE)
+  message("Forcing BUILD_PCL_VIS to OFF due to BUILD_Python_Boost being ON.")
+endif()
+
+if(BUILD_PCL_VIS AND BUILD_Python_PyBind)
+  set(BUILD_PCL_VIS OFF CACHE BOOL "Build PCL Visualisation tools." FORCE)
+  message("Forcing BUILD_PCL_VIS to OFF due to BUILD_Python_PyBind being ON.")
 endif()
 
 # due to https://github.com/PointCloudLibrary/pcl/issues/712

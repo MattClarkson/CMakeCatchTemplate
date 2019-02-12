@@ -47,7 +47,7 @@ env:
     - DO_PYTHON_BUILD="true"
     - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
     - REPO_DIR=.
-    - BUILD_COMMIT=44-multi-platform-testing
+    - BUILD_COMMIT=HEAD
     - BUILD_DEPENDS="numpy six wheel"
     - TEST_DEPENDS="numpy six"
     - BDIST_PARAMS=""

@@ -63,67 +63,69 @@ platform:
   - Any CPU
 
 before_build:
-- cmd: |
+- ps: |
     echo --------------------------------------------------------------------------------
-    echo "COMPILER=%COMPILER%, PYTHON=%MB_PYTHON%, CONFIGURATION=%CONFIGURATION%"
-    cmake -version
+    echo "Doing before_build: PYTHON=${Env:MB_PYTHON}"
+    cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
+    ${Env:PATH} = "${Env:MB_PYTHON};${Env:MB_PYTHON}/Scripts;${Env:PATH}"
+    echo "${Env:PATH}"
     git submodule update -q --init --recursive
-    set PATH=%MB_PYTHON%;%PATH%
-    echo "PATH=%PATH%"
-    echo --------------------------------------------------------------------------------
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
+    &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade pip
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
+    &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade setuptools
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
+    &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade six
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
+    &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade numpy
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
+    &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade --no-warn-script-location wheel
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
 
 build_script:
-- cmd: |
+- ps: |
     echo --------------------------------------------------------------------------------
-    echo "Building the C++ part of CMakeCatchTemplate:"
+    echo "Building the C++ part of CMakeCatchTemplate: PYTHON=${Env:MB_PYTHON}, COMPILER=${Env:COMPILER}, CONFIGURATION=${Env:CONFIGURATION}"
+    cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
+    ${Env:PATH} = "${Env:MB_PYTHON};${Env:MB_PYTHON}/Scripts;${Env:PATH}"
+    echo "${Env:PATH}"
+    cmake -version
     mkdir build
     cd build
-    cmake -G "%COMPILER%" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=OFF -DBUILD_OpenCV:BOOL=OFF --config %CONFIGURATION% ..
-    cmake --build . --config %CONFIGURATION%
-    echo --------------------------------------------------------------------------------
+    cmake -G "${Env:COMPILER}" -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_PyBind:BOOL=OFF -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=ON -DBUILD_OpenCV:BOOL=ON --config ${Env:CONFIGURATION} ..
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
+    cmake --build . --config ${Env:CONFIGURATION}
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
 
 test_script:
-- cmd: |
+- ps: |
     echo --------------------------------------------------------------------------------
-    cd %APPVEYOR_BUILD_FOLDER%
+    cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
     cd build
     pwd
     cd MYPROJECT-build
     pwd
-    ctest -C %CONFIGURATION%
-    echo --------------------------------------------------------------------------------
+    ctest -C ${Env:CONFIGURATION}
+    if ($LastExitCode -ne 0) {throw $LastExitCode}
 
 after_test:
 - ps: |
     echo --------------------------------------------------------------------------------
     echo "Building the Python wheel part of CMakeCatchTemplate:"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
-    cmake -version
-    pwd    
-    ${Env:PATH} = "%MB_PYTHON%;%MB_PYTHON%/Scripts;${Env:PATH}"
+    pwd
+    ${Env:PATH} = "${Env:MB_PYTHON};${Env:MB_PYTHON}/Scripts;${Env:PATH}"
     if (${Env:DO_PYTHON_BUILD} -eq "true") {
       echo "Running python tests."
       echo "Currently there are none."
       echo "Finished python tests."
       echo "Building python wheel."
-      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade pip
-      if ($LastExitCode -ne 0) {throw $LastExitCode}
-      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade setuptools
-      if ($LastExitCode -ne 0) {throw $LastExitCode}
-      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade six
-      if ($LastExitCode -ne 0) {throw $LastExitCode}
-      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade numpy
-      if ($LastExitCode -ne 0) {throw $LastExitCode}
-      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade --no-warn-script-location wheel
-      if ($LastExitCode -ne 0) {throw $LastExitCode}
       &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
-      if ($LastExitCode -ne 0) {throw $LastExitCode}
       echo "Finished building python wheel."
     }
-    echo --------------------------------------------------------------------------------
 
 deploy_script:
 - ps: |

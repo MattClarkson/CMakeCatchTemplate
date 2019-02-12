@@ -21,6 +21,10 @@ function pre_build {
   python --version
   cmake --version
 
+  if [ -n "$BUILD_DEPENDS" ]; then
+    pip install $BUILD_DEPENDS
+  fi
+
   if [ -n "$IS_OSX" ]; then
     echo "pre_build is on Mac."
   else

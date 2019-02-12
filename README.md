@@ -51,9 +51,9 @@ The main features provided are:
 Use Cases
 ---------
 
-The feature list above is quite diverse, and in reality most developers won't want all of them.
-So, while you could attempt all of these, within the same project, 
-we envisage the following project types:
+The feature list above is quite diverse, and in reality most developers 
+won't want all of the above features. So, while you could attempt all of these, 
+within the same project, we envisage the following project types:
 
 * A C++ library in C++ command line interfaces. 
 * A C++ library in a C++ user interface, using Qt, or QML.
@@ -65,12 +65,12 @@ into the hands of their users. This project can accommodate all of the above, an
 options to switch these options OFF/ON.
 
 Furthermore, once you have a successful build for your use-case, you could 
-delete the bits of code that you don't need.  We could have made a different repository 
-for each of the use-cases, but then there would be a lot of code
+delete the bits of code that you don't need.  We could have made a different
+repository for each of the use-cases, but then there would be a lot of code
 duplication and overlap. So, for now, its all one repository. If you want to
 streamline your project, you could:
 
-* Take a look in the ```Code``` folder. Remove the directories you do not need,
+* Take a look in the ```Code``` sub-folder. Remove the directories you do not need,
 and change ```Code/CMakeLists.txt``` accordingly.
 
 * Search the top level CMakeLists.txt for code that looks like
@@ -79,22 +79,22 @@ you do not need.
 
 We believe its easier to remove code you don't need than it is to
 build up a lot of CMake code, based on hours of searching the internet.
-At least the CMake code here has been tested... to some degree.
+At least the CMake code here has been tested ... to some degree.
 
 
 Basic Build Instructions
 ------------------------
 
-This project itself can be built if you just want to test it. In Linux terms that
+This project itself can be built if you just want to evaluate it. In Linux terms that
 would be:
 ``` cmake
 git clone --recursive https://github.com/MattClarkson/CMakeCatchTemplate
 mkdir CMakeCatchTemplate-Build
 cd CMakeCatchTemplate-Build
-cmake ../CMakeCatchTemplate
+ccmake ../CMakeCatchTemplate
 make
 ```
-But ideally, you should use this as a template to create your own project. To do so,
+But ideally, you should use this project as a template to create your own project. To do so,
 please refer to the [CMakeTemplateRenamer](https://github.com/MattClarkson/CMakeTemplateRenamer)
 which will show you how to clone this repository, and rename all the variables to names of your choice.
 Then you would simply build your new project, using cmake, as shown above.
@@ -139,12 +139,26 @@ is different to the one provided here. So if you want to use Boost,
 you should probably try and use the one provided by this SuperBuild.
 
 
+Caveats
+-------
+
+With all of those above build options, it is worth stressing:
+
+ * You will still be required to write CMake code. This project is only to provide an EXAMPLE.
+ * If you are building any of the dependencies, you would need to ensure the correct CMake flags are set to a reasonable default in order to compile those dependencies.
+ * If you are testing on Travis or Appveyor, you need to configure your build to meet the required time limits, or else pay for more time.
+ * If you are building Python Wheels, using the manylinux docker images, you may well need to provide your own docker image with dependencies pre-installed, or you setup correct CMake defaults such that the SuperBuild can compile the dependencies withing your docker image.
+
+So, once more: This project is just to provide an example.
+Its a template from which you can draw your own inspiration from.
+
+ 
 Windows Users
 -------------
 
 If you build the project with shared libraries (BUILD_SHARED_LIBS:BOOL=ON)
 then after the SuperBuild has successfully completed, you should look for the batch file
-StartVS_Debug.bat or StartVS_Release.bat in the MYPROJECT-build folder.
+```StartVS_Debug.bat``` or ```StartVS_Release.bat``` in the ```MYPROJECT-build``` folder.
 This sets the path before launching Visual Studio, so that when you come to run your
 application or unit tests within Visual Studio, the dynamically
 loaded libraries are found at run time.
@@ -157,24 +171,23 @@ This project can be used to build Python extensions, using either Boost.Python
 or PyBind11.
 
 * Clone CMakeCatchTemplate, using ```--recursive```.
-* Use CMake to set BUILD_Python_Boost or BUILD_Python_PyBind to ON.
-* Run a C++ build.
-* Set PYTHONPATH to the directory containing your C++ library.
+* Use CMake to set BUILD_Python_Boost or BUILD_Python_PyBind to ON. These are mutually exclusive.
+* Run a C++ build, as shown above.
+* Set ```PYTHONPATH``` to the directory containing your C++ Python extension.
 
-Code examples are in Code/Lib/PythonBoost or Code/Lib/PythonPybind. 
-So using the Code/Lib/PythonBoost as an example, once PYTHONPATH is set so
+Code examples are in ```Code/PythonBoost``` or ```Code/PythonPybind```. 
+So using the ```Code/PythonBoost``` as an example, once ```PYTHONPATH``` is set so
 that you can pick up your compiled module, you would then be able to:
 ```
 import CMakeCatchTemplatePython as mp
 mp.my_first_add_function(1,6)
 ```
 
-So, if you have generated your own project, then substitute your values as appropriate.
-
 Deploying wheels is a difficult process. To help here, we have been 
-inspired by [Matthew Brett's multibuild](https://github.com/matthew-brett/multibuild), so you would configure 
-.travis.yml and appveyor.yml to generate your Python Wheels.
-
+inspired and assisted by [Matthew Brett's multibuild](https://github.com/matthew-brett/multibuild), 
+so you would configure .travis.yml and appveyor.yml to generate your own Python Wheels.
+This project itself is deployed to [PyPi](pypi.org) but obviously only includes the above
+function for illustrative purposes.
 
 Tested On
 ---------
