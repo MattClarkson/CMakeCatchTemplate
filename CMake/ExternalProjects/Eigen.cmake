@@ -24,8 +24,8 @@ if(DEFINED Eigen_DIR AND NOT EXISTS ${Eigen_DIR})
   message(FATAL_ERROR "Eigen_DIR variable is defined but corresponds to non-existing directory \"${Eigen_ROOT}\".")
 endif()
 
-set(version "3.2.2.1")
-set(location "${NIFTK_EP_TARBALL_LOCATION}/eigen-eigen-${version}.tar.bz2")
+set(version "323c052e1731")
+set(location "${NIFTK_EP_TARBALL_LOCATION}/eigen-eigen-${version}.tar.gz")
 mpMacroDefineExternalProjectVariables(Eigen ${version} ${location})
 set(proj_DEPENDENCIES )
 
