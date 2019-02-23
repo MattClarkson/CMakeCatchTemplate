@@ -36,7 +36,7 @@ with open('README.md') as f:
     long_description = f.read()
 
 # Get the top-level folder name of this project.
-dir_path = os.path.dirname(os.path.normpath(__file__))
+dir_path = os.path.dirname(os.path.abspath(__file__))
 dir_name = os.path.split(dir_path)[1]
 
 
@@ -63,9 +63,9 @@ class CMakeBuild(build_ext):
             self.build_extension(ext)
 
     def build_extension(self, ext):
-        ext_dir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
+        ext_dir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(self.distribution.get_name())))
         cmake_args = ['-DMYPROJECT_PYTHON_OUTPUT_DIRECTORY:PATH=' + ext_dir,
-                      '-DMYPROJECT_PYTHON_MODULE_NAME:STRING=' + self.distribution.get_name()
+                      '-DMYPROJECT_PYTHON_MODULE_NAME:STRING=' + ext.name
                       ]
         build_args = []
 
@@ -103,7 +103,7 @@ setup(
     description='A template project, to enable people to build nicely structured C++ projects.',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    ext_modules=[CMakeExtension(str('CMakeCatchTemplate') + 'Python', dir_path)],
+    ext_modules=[CMakeExtension(str('CMakeCatchTemplate') + 'Python', sourcedir=dir_path)],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
     license='BSD-3 license',
