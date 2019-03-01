@@ -216,10 +216,12 @@ include(mpSetupMSVCRuntime)
 
 
 ######################################################################
-# Try finding CUDA before SuperBuild, so that hopefully these vars
-# are more likely to be set consistently throughought all dependencies.
+# Try finding CUDA/OpenMP/OpenMPI before SuperBuild, so that variables
+# are more likely to be set consistently throughout all dependencies.
 ######################################################################
 include(mpIncludeCUDA)
+include(mpIncludeOpenMP)
+include(mpIncludeMPI)
 
 
 ######################################################################
@@ -322,9 +324,6 @@ endif(WIN32)
 if(WIN32 AND NOT BUILD_SHARED_LIBS)
   add_definitions(-DMYPROJECT_STATIC)
 endif()
-
-include(mpIncludeOpenMP)
-include(mpIncludeMPI)
 
 
 ######################################################################
