@@ -136,8 +136,9 @@ after_test:
       dir c:\python35\lib\site-packages
       &"${Env:MB_PYTHON}/python.exe" -m pip install pytest
       if ($LastExitCode -ne 0) {throw $LastExitCode}
-      &"${Env:MB_PYTHON}/python.exe" -m pytest -v -s Testing/
-      if ($LastExitCode -ne 0) {throw $LastExitCode}
+      # Uncomment this when you actually have tests.
+      # &"${Env:MB_PYTHON}/python.exe" -m pytest -v -s Testing/
+      # if ($LastExitCode -ne 0) {throw $LastExitCode}
       echo "Finished python tests."
     }
 

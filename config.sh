@@ -70,6 +70,8 @@ function run_tests {
   echo "Starting run_tests."
   pwd
   cd ..
-  python -m pytest  -v -s Testing/
+  # Uncomment this when you have some tests.
+  # If no tests are found, this fails with non-zero error code.
+  # python -m pytest  -v -s Testing/
   echo "Finished run_tests."
 }
