@@ -70,6 +70,6 @@ function run_tests {
   echo "Starting run_tests."
   pwd
   cd ..
-  python -m pytest  -v -s Testing/python/
+  python -m pytest  -v -s Testing/
   echo "Finished run_tests."
 }
