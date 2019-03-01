@@ -76,8 +76,8 @@ if(NOT DEFINED OpenCV_DIR)
       -DBUILD_opencv_imgproc:BOOL=ON
       -DBUILD_opencv_apps:BOOL=OFF
       -DBUILD_opencv_dnn:BOOL=OFF
-      -DBUILD_opencv_features2d:BOOL=OFF
-      -DBUILD_opencv_flann:BOOL=OFF
+      -DBUILD_opencv_features2d:BOOL=ON
+      -DBUILD_opencv_flann:BOOL=ON
       -DBUILD_opencv_gapi:BOOL=OFF
       -DBUILD_opencv_highgui:BOOL=OFF
       -DBUILD_opencv_imgcodecs:BOOL=OFF
