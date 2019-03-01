@@ -68,6 +68,8 @@ function build_wheel {
 
 function run_tests {
   echo "Starting run_tests."
-  echo "Nothing to do as yet. You could run some python tests on your wheel perhaps?"
+  pwd
+  cd ..
+  python -m pytest  -v -s Testing/python/
   echo "Finished run_tests."
 }
