@@ -244,3 +244,9 @@ We welcome contributions to this project. Please use the following workflow.
  5. Push to your remote when ready.
  6. Create pull request.
  7. We will review code, suggest and required changes and merge to master when it is ready.
+
+
+Examples Generated With This Template
+-------------------------------------
+
+ * [scikit-surgeryopencvcpp](https://github.com/UCL/scikit-surgeryopencvcpp) - image guided surgery functions using OpenCV, wrapped in Python.

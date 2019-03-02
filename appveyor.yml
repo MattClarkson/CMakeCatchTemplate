@@ -119,12 +119,27 @@ after_test:
     pwd
     ${Env:PATH} = "${Env:MB_PYTHON};${Env:MB_PYTHON}/Scripts;${Env:PATH}"
     if (${Env:DO_PYTHON_BUILD} -eq "true") {
-      echo "Running python tests."
-      echo "Currently there are none."
-      echo "Finished python tests."
       echo "Building python wheel."
       &"${Env:MB_PYTHON}/python.exe" setup.py bdist_wheel
+      if ($LastExitCode -ne 0) {throw $LastExitCode}
       echo "Finished building python wheel."
+      echo "Installing python wheel."
+      echo "Contents of dist directory:"
+      dir dist
+      $wheel_files = @(Get-ChildItem dist\* -include *.whl)
+      $wheel = $wheel_files[0]
+      echo "Wheel file is $wheel"
+      &"${Env:MB_PYTHON}/python.exe" -m pip install --upgrade --no-index --find-links dist/ $wheel
+      if ($LastExitCode -ne 0) {throw $LastExitCode}
+      echo "Finished installing python wheel."
+      echo "Running python tests."
+      dir c:\python35\lib\site-packages
+      &"${Env:MB_PYTHON}/python.exe" -m pip install pytest
+      if ($LastExitCode -ne 0) {throw $LastExitCode}
+      # Uncomment this when you actually have tests.
+      # &"${Env:MB_PYTHON}/python.exe" -m pytest -v -s Testing/
+      # if ($LastExitCode -ne 0) {throw $LastExitCode}
+      echo "Finished python tests."
     }
 
 deploy_script:

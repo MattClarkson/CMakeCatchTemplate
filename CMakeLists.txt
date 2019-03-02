@@ -67,13 +67,19 @@ include(mpMacroCreateGuiApplication)
 ######################################################################
 option(BUILD_TESTING "Build Unit tests." ON)
 option(BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
+mark_as_advanced(BUILD_SHARED_LIBS)
 option(BUILD_SUPERBUILD "Build MYPROJECT and the projects it depends on via SuperBuild.cmake." ON)
+mark_as_advanced(BUILD_SUPERBUILD)
 option(MYPROJECT_USE_OPENMP "Use OpenMP." OFF)
+mark_as_advanced(MYPROJECT_USE_OPENMP)
 option(MYPROJECT_USE_CUDA "Use CUDA." OFF)
+mark_as_advanced(MYPROJECT_USE_CUDA)
 option(MYPROJECT_DELAYLOAD_CUDA "(Windows only) If enabled the CUDA DLLs will be a soft delay-load dependency and MYPROJECT can run without them." OFF)
 mark_as_advanced(MYPROJECT_DELAYLOAD_CUDA)
 set(MYPROJECT_CUDA_ARCH_BIN "" CACHE STRING "CUDA compute capability to build for - user must specify it.") # See: https://en.wikipedia.org/wiki/CUDA
+mark_as_advanced(MYPROJECT_CUDA_ARCH_BIN)
 option(MYPROJECT_USE_MPI "Use MPI." OFF)
+mark_as_advanced(MYPROJECT_USE_MPI)
 
 
 ######################################################################
@@ -210,10 +216,12 @@ include(mpSetupMSVCRuntime)
 
 
 ######################################################################
-# Try finding CUDA before SuperBuild, so that hopefully these vars
-# are more likely to be set consistently throughought all dependencies.
+# Try finding CUDA/OpenMP/OpenMPI before SuperBuild, so that variables
+# are more likely to be set consistently throughout all dependencies.
 ######################################################################
 include(mpIncludeCUDA)
+include(mpIncludeOpenMP)
+include(mpIncludeMPI)
 
 
 ######################################################################
@@ -316,9 +324,6 @@ endif(WIN32)
 if(WIN32 AND NOT BUILD_SHARED_LIBS)
   add_definitions(-DMYPROJECT_STATIC)
 endif()
-
-include(mpIncludeOpenMP)
-include(mpIncludeMPI)
 
 
 ######################################################################

@@ -47,8 +47,7 @@ if(NOT DEFINED OpenCV_DIR)
     -DWITH_EIGEN:BOOL=OFF
     -DWITH_WEBP:BOOL=OFF  # On Mac, with Homebrew, this is read-only which breaks packaging.
     -DWITH_FFMPEG:BOOL=OFF
-    -DWITH_OPENMP:BOOL=${MYPROJECT_USE_OPENMP}
-    -DWITH_OPENMP:BOOL=OFF
+    -DWITH_OPENMP:BOOL=${OpenMP_FOUND}
     -DWITH_OPENNI:BOOL=OFF
     -DWITH_OPENNI2:BOOL=OFF
     -DWITH_OPENVX:BOOL=OFF
@@ -77,8 +76,8 @@ if(NOT DEFINED OpenCV_DIR)
       -DBUILD_opencv_imgproc:BOOL=ON
       -DBUILD_opencv_apps:BOOL=OFF
       -DBUILD_opencv_dnn:BOOL=OFF
-      -DBUILD_opencv_features2d:BOOL=OFF
-      -DBUILD_opencv_flann:BOOL=OFF
+      -DBUILD_opencv_features2d:BOOL=ON
+      -DBUILD_opencv_flann:BOOL=ON
       -DBUILD_opencv_gapi:BOOL=OFF
       -DBUILD_opencv_highgui:BOOL=OFF
       -DBUILD_opencv_imgcodecs:BOOL=OFF

@@ -68,6 +68,10 @@ function build_wheel {
 
 function run_tests {
   echo "Starting run_tests."
-  echo "Nothing to do as yet. You could run some python tests on your wheel perhaps?"
+  pwd
+  cd ..
+  # Uncomment this when you have some tests.
+  # If no tests are found, this fails with non-zero error code.
+  # python -m pytest  -v -s Testing/
   echo "Finished run_tests."
 }
