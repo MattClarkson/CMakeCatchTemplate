@@ -20,8 +20,14 @@
 =============================================================================*/
 #define PY_ARRAY_UNIQUE_SYMBOL pbcvt_ARRAY_API
 
+#include "mpException.h"
+
 #include <boost/python.hpp>
+#include <boost/python/exception_translator.hpp>
 #include <pyboostcvconverter/pyboostcvconverter.hpp>
+
+#include <ostream>
+#include <sstream>
 
 namespace mp {
 
@@ -39,6 +45,15 @@ static void init_ar(){
   Py_Initialize();
   import_array();
   return NUMPY_IMPORT_ARRAY_RETVAL;
+}
+
+void translate_exception(Exception const& e)
+{
+  std::ostringstream ss;
+  ss << e.GetDescription();
+  ss << " in file:" << e.GetFileName();
+  ss << ", line:" << e.GetLineNumber();
+  PyErr_SetString(PyExc_RuntimeError, ss.str().c_str());
 }
 
 // The name of the module should match that in CMakeLists.txt
