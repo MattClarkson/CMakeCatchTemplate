@@ -47,6 +47,10 @@
 #include <pcl/common/projection_matrix.h>
 #endif
 
+#ifdef BUILD_ArrayFire
+#include <arrayfire.h>
+#endif
+
 /**
  * \brief Demo file to check that includes and library linkage is correct.
  */
@@ -98,7 +102,14 @@ int main(int argc, char** argv)
 #endif // BUILD_OpenCV
 
 #ifdef BUILD_PCL
+    std::cout << "Compiled PCL support." << std::endl;
     pcl::PointCloud<pcl::PointXYZ> cloud;
+#endif
+
+#ifdef BUILD_ArrayFire
+    std::cout << "Compiled ArrayFire support." << std::endl;
+    af::setDevice(0);
+    af::info();
 #endif
 
     std::cout << "Calculating ... " << mp::MyFirstAddFunction(1, 2) << std::endl;
