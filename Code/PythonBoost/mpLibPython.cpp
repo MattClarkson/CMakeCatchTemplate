@@ -12,7 +12,21 @@
 
 =============================================================================*/
 #include <boost/python.hpp>
+#include <boost/python/exception_translator.hpp>
 #include "mpMyFunctions.h"
+#include "mpException.h"
+
+#include <ostream>
+#include <sstream>
+
+void translate_exception(Exception const& e)
+{
+  std::ostringstream ss;
+  ss << e.GetDescription();
+  ss << " in file:" << e.GetFileName();
+  ss << ", line:" << e.GetLineNumber();
+  PyErr_SetString(PyExc_RuntimeError, ss.str().c_str());
+}
 
 // The name of the module should match that in CMakeLists.txt
 BOOST_PYTHON_MODULE(CMakeCatchTemplatePython)
