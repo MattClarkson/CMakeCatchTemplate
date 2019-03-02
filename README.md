@@ -28,7 +28,7 @@ C++ library and then deploy the C++ library in a variety of scenarios.
 
 The main features provided are:
 
- 1. A Meta-Build, also known as a SuperBuild, to optionally download and build any of the following: Boost, Eigen, FLANN, OpenCV, glog, gflags, VTK and PCL. All of these can be left OFF and skipped. This results in a top-level build folder containing the compiled dependencies, and then a sub-folder containing the compiled code of this project.
+ 1. A Meta-Build, also known as a SuperBuild, to optionally download and build any of the following: Boost, Eigen, FLANN, OpenCV, glog, gflags, VTK, PCL and [ArrayFire](https://arrayfire.com/). All of these can be left OFF and skipped. This results in a top-level build folder containing the compiled dependencies, and then a sub-folder containing the compiled code of this project.
  2. A single library into which you can provide your main algorithms.
  3. Unit tests, using Catch, and run with CTest, so you can ensure correctness and enable regression testing of your functionality.
  4. A single command line application, to give the end user a minimalist runnable program.
@@ -41,7 +41,7 @@ The main features provided are:
 11. An example of the CMake required to build python interfaces to your C++ code, using ```boost::python```.
 12. An example of the CMake required to build python interfaces to your C++ code, using [pybind11](https://github.com/pybind/pybind11), with credit to [this example](https://github.com/pybind/cmake_example).
 13. An example of the CMake required to export a C-style module into [Unity](https://unity3d.com/).
-14. Support for OpenMP, which is passed through to FLANN, OpenCV and PCL.
+14. Support for OpenMP, which is passed through to FLANN and OpenCV.
 15. Support for CUDA, which is passed through to FLANN, OpenCV and PCL.
 16. Support for MPI, which by default sets up the C++ libraries.
 17. If doing Boost.Python and OpenCV, an example of passing a numpy ndarray to OpenCV, computing something, and returning a cv::Mat as a numpy ndarray, thanks to [Gregory Kramida's pyboostcvconverter](https://github.com/Algomorph/pyboostcvconverter).
@@ -104,7 +104,7 @@ Further Build Instructions
 --------------------------
 
 This project can be configured, using CMake, to build against Eigen, Boost, OpenCV, glog, gflags, 
-VTK and PCL. These were chosen as examples of how to use CMake, and some common
+VTK, PCL and [ArrayFire](https://arrayfire.com/). These were chosen as examples of how to use CMake, and some common
 C++ projects. These dependencies are optional, and this project will compile without them.
 
 Furthermore, these dependencies can be downloaded and built,
