@@ -19,6 +19,8 @@
 #include <ostream>
 #include <sstream>
 
+namespace mp {
+
 void translate_exception(Exception const& e)
 {
   std::ostringstream ss;
@@ -33,3 +35,5 @@ BOOST_PYTHON_MODULE(CMakeCatchTemplatePython)
 {
   boost::python::def("my_first_add_function", mp::MyFirstAddFunction);
 }
+
+}  // end namespace mp
