@@ -35,11 +35,11 @@ endforeach()
 # Setup project name, and version. Version number gets baked into package name.
 ###############################################################################
 if (BUILD_SUPERBUILD)
-  project(CMakeCatchTemplate-SuperBuild)
+  project(MYPROJECT-SuperBuild)
   set(MYPROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
   set(MYPROJECT_BINARY_DIR ${PROJECT_BINARY_DIR})
 else()
-  project(CMakeCatchTemplate VERSION 0.1.0)
+  project(MYPROJECT VERSION 0.1.0)
 endif()
 
 
