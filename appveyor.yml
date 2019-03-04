@@ -17,8 +17,6 @@ version: "{build}"
 init:
   - git config --global core.autocrlf input
 
-# If you use this project as a template to create your own,
-# you will need to rename all instances of CMakeCatchTemplate in this file.
 clone_folder: c:\projects\CMakeCatchTemplate
 
 shallow_clone: false
@@ -86,7 +84,7 @@ before_build:
 build_script:
 - ps: |
     echo --------------------------------------------------------------------------------
-    echo "Building the C++ part of CMakeCatchTemplate: PYTHON=${Env:MB_PYTHON}, COMPILER=${Env:COMPILER}, CONFIGURATION=${Env:CONFIGURATION}"
+    echo "Building the C++ part: PYTHON=${Env:MB_PYTHON}, COMPILER=${Env:COMPILER}, CONFIGURATION=${Env:CONFIGURATION}"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
     ${Env:PATH} = "${Env:MB_PYTHON};${Env:MB_PYTHON}/Scripts;${Env:PATH}"
@@ -114,7 +112,7 @@ test_script:
 after_test:
 - ps: |
     echo --------------------------------------------------------------------------------
-    echo "Building the Python wheel part of CMakeCatchTemplate:"
+    echo "Building the Python wheel part:"
     cd ${Env:APPVEYOR_BUILD_FOLDER}
     pwd
     ${Env:PATH} = "${Env:MB_PYTHON};${Env:MB_PYTHON}/Scripts;${Env:PATH}"
