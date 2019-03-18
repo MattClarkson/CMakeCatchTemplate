@@ -15,9 +15,17 @@
 if(MYPROJECT_USE_OPENMP)
   # Borrowed from PCL-1.8, and modified
   find_package(OpenMP)
-  if(OpenMP_FOUND)
+
+  # Note: Convention would say that for `find_package(OpenMP)`, the variable should be OpenMP_FOUND.
+  # Also: The top of the /usr/local/share/cmake/Modules/FindOpenMP.cmake says it should be OpenMP_FOUND.
+  # But : Both PCL and OpenCV use OPENMP_FOUND, then I checked FindOpenMP.cmake and its OPENMP_FOUND.
+
+  if(OPENMP_FOUND)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    list(APPEND ALL_THIRD_PARTY_LIBRARIES ${OpenMP_CXX_LIBRARIES})
+    message("OpenMP found, CMAKE_CXX_FLAGS=${OpenMP_CXX_FLAGS}")
+    message("OpenMP found, OpenMP_CXX_LIBRARIES=${OpenMP_CXX_LIBRARIES}")
     if(MSVC)
       if(MSVC_VERSION EQUAL 1500)
         set(OPENMP_DLL VCOMP90)
