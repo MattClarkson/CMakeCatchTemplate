@@ -44,7 +44,7 @@ services: docker
 
 env:
   global:
-    - DO_PYTHON_BUILD="true"
+    - DO_PYTHON_BUILD="false"
     - "PS4='+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'"
     - REPO_DIR=.
     - BUILD_COMMIT=HEAD
