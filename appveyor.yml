@@ -131,7 +131,6 @@ after_test:
       if ($LastExitCode -ne 0) {throw $LastExitCode}
       echo "Finished installing python wheel."
       echo "Running python tests."
-      dir c:\python35\lib\site-packages
       &"${Env:MB_PYTHON}/python.exe" -m pip install pytest
       if ($LastExitCode -ne 0) {throw $LastExitCode}
       # Uncomment this when you actually have tests.
