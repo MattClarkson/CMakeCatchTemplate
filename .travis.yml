@@ -122,7 +122,7 @@ before_install:
 
 install: |
     echo "Starting main library build section."
-    if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+    if [ "${DO_PYTHON_BUILD}" == "true" ]; then
 
       echo "DO_PYTHON_BUILD=true, so will do C++ and then build a wheel."
 
@@ -155,7 +155,7 @@ install: |
       # travis documentation, then using various travis type directives
       # like 'addons', which are normally configured at the top of this file.
 
-      source ci_cmake_build.sh
+      source travis_cmake_build.sh
       cmake_build
 
     fi
@@ -163,7 +163,7 @@ install: |
 
 script: |
     echo "Starting to check if we are running tests on installed python wheel."
-    if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+    if [ "${DO_PYTHON_BUILD}" == "true" ]; then
       echo "DO_PYTHON_BUILD is set to true, which means config.sh::run_tests() is called."
       install_run $PLAT
     else
@@ -174,9 +174,9 @@ script: |
 after_success: |
     echo "Starting to check if we are deploying to PyPi"
     if [ -n "$TRAVIS_TAG" ]; then
-      if [ "${DO_PYTHON_BUILD}" = "true" ]; then
+      if [ "${DO_PYTHON_BUILD}" == "true" ]; then
         pip install twine
-        if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then
+        if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
           pip install --upgrade pyOpenSSL
         fi
         twine upload --repository pypi -u ${PYPI_USER} -p ${PYPI_PASS} --skip-existing wheelhouse/*
