@@ -155,7 +155,7 @@ install: |
       # travis documentation, then using various travis type directives
       # like 'addons', which are normally configured at the top of this file.
 
-      source ci_cmake_build.sh
+      source travis_cmake_build.sh
       cmake_build
 
     fi
