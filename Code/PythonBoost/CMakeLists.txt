@@ -41,6 +41,13 @@ if(NOT BUILDING_GUIS)
     list(APPEND MYPROJECT_PYTHON_SRCS mpLibPython.cpp) # Rename as appropriate.
   endif()
 
+  if (WIN32)
+    if(NOT BUILD_SHARED)
+      add_definitions(-DBOOST_PYTHON_STATIC_LIB)
+      add_definitions(-DBOOST_NUMPY_STATIC_LIB)
+    endif()
+  endif()
+
   link_libraries(${ALL_LIBRARIES})
 
   PYTHON_ADD_MODULE(${MYPROJECT_PYTHON_MODULE_NAME} ${MYPROJECT_PYTHON_SRCS})
