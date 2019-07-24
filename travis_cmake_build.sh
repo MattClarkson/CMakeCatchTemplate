@@ -26,7 +26,7 @@ function cmake_build {
   cmake -DMYPROJECT_PYTHON_VERSION:STRING=${PYTHON_VERSION} -DBUILD_SUPERBUILD:BOOL=ON -DBUILD_TESTING:BOOL=ON -DBUILD_Boost:BOOL=ON -DBUILD_Python_Boost:BOOL=ON -DBUILD_Eigen:BOOL=ON -DBUILD_glog:BOOL=ON -DBUILD_gflags:BOOL=ON -DBUILD_VTK:BOOL=OFF -DBUILD_PCL:BOOL=ON -DBUILD_OpenCV:BOOL=ON -DCMAKE_BUILD_TYPE:String=Release ${extra_flags} ..
   make -j 2
   cd MYPROJECT-build
-  ctest .
+  ctest -S CTestContinuous.cmake -V
   cd ../../
   echo "Finished travis_cmake_build.sh"
 }
