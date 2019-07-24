@@ -124,7 +124,7 @@ GetBuildName(build_name)
 GetNumberOfCpuCores(cpu_cores)
 
 if (NOT ${branch_name} STREQUAL "")
-  set(group_name ""${branch_name}-${commit_hash}"")
+  set(group_name "${branch_name}-${commit_hash}")
 else()
   set(group_name "Continuous")
 endif()
