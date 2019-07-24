@@ -250,3 +250,4 @@ Examples Generated With This Template
 -------------------------------------
 
  * [scikit-surgeryopencvcpp](https://github.com/UCL/scikit-surgeryopencvcpp) - image guided surgery functions using OpenCV, wrapped in Python.
+ * [scikit-surgerypclcpp](https://github.com/UCL/scikit-surgerypclcpp) - image guided surgery functions using PCL, wrapped in Python.
