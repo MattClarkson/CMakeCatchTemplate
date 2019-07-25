@@ -29,7 +29,7 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
   set(Python_ADDITIONAL_VERSIONS ${MYPROJECT_PYTHON_VERSION})
 
   find_package(PythonInterp REQUIRED)
-  message("Found python executable: ${PYTHON_EXECUTABLE}")
+  message(STATUS "Found python executable: ${PYTHON_EXECUTABLE}")
 
   execute_process(
     COMMAND "${PYTHON_EXECUTABLE}" -c
@@ -37,17 +37,17 @@ if(BUILD_Python_Boost OR BUILD_Python_PyBind)
             OUTPUT_VARIABLE Py_INCLUDE_FILE)
   get_filename_component(PYTHON_INCLUDE_DIR ${Py_INCLUDE_FILE} DIRECTORY)
 
-  message("Found python include dirs from python executable: ${PYTHON_INCLUDE_DIR}")
+  message(STATUS "Found python include dirs from python executable: ${PYTHON_INCLUDE_DIR}")
 
   find_package(PythonLibs REQUIRED)
 
-  message("Found python include dirs: ${PYTHON_INCLUDE_DIRS}")
-  message("Found python library location: ${PYTHON_LIBRARIES}")
+  message(STATUS "Found python include dirs: ${PYTHON_INCLUDE_DIRS}")
+  message(STATUS "Found python library location: ${PYTHON_LIBRARIES}")
 
   if (NOT PythonLibs_FOUND OR NOT PythonInterp_FOUND)
     set(BUILD_Python_Boost OFF CACHE BOOL "Build boost::python bindings." FORCE)
     set(BUILD_Python_PyBind OFF CACHE BOOL "Build PyBind11 bindings." FORCE)
-    message("Forcing BUILD_Python_Boost and BUILD_Python_PyBind to OFF as no Python libs were found.")
+    message(STATUS "Forcing BUILD_Python_Boost and BUILD_Python_PyBind to OFF as no Python libs were found.")
   endif()
 
   if(BUILD_Python_Boost)
