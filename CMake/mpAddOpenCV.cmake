@@ -16,5 +16,5 @@ option(BUILD_OpenCV "Build OpenCV." OFF)
 
 if(BUILD_VTK AND APPLE AND BUILD_OpenCV AND "${VTK_VERSION}" STREQUAL "${DEFAULT_VTK_VERSION}")
   set(VTK_VERSION "${FALLBACK_VTK_VERSION}")
-  message("Forcing VTK_VERSION to ${VTK_VERSION} as you are on Mac OSX and BUILD_OpenCV is on.")
+  message(STATUS "Forcing VTK_VERSION to ${VTK_VERSION} as you are on Mac OSX and BUILD_OpenCV is on.")
 endif()

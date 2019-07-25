@@ -57,7 +57,7 @@ if(NOT DEFINED PCL_DIR)
 
   if(BUILD_Python_Boost OR BUILD_Python_PyBind)
 
-    message("Building minimum PCL modules, as you want a Python build.")
+    message(STATUS "Building minimum PCL modules, as you want a Python build.")
 
     list(APPEND _additional_options
       -DBUILD_2d:BOOL=OFF
@@ -90,7 +90,7 @@ if(NOT DEFINED PCL_DIR)
     # Otherwise, we will build all default modules,
     # until someone provides more specific config here.
 
-    message("Building mostly default PCL modules")
+    message(STATUS "Building mostly default PCL modules")
 
     if(BUILD_VTK)
       list(APPEND _additional_options
@@ -169,7 +169,7 @@ if(NOT DEFINED PCL_DIR)
   set(MYPROJECT_PREFIX_PATH ${proj_INSTALL}^^${MYPROJECT_PREFIX_PATH})
   mitkFunctionInstallExternalCMakeProject(${proj})
 
-  message("SuperBuild loading PCL from ${PCL_DIR}")
+  message(STATUS "SuperBuild loading PCL from ${PCL_DIR}")
 
 else()
 

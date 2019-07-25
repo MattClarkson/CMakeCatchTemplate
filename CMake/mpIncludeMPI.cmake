@@ -23,7 +23,7 @@ if(MYPROJECT_USE_MPI)
   list(APPEND CMAKE_EXE_LINKER_FLAGS ${MPI_CXX_LINK_FLAGS})
   list(APPEND ALL_THIRD_PARTY_LIBRARIES ${MPI_CXX_LIBRARIES})
 
-  message("Adding MPI include: ${MPI_CXX_INCLUDE_PATH}.")
-  message("Adding MPI libs: ${MPI_CXX_LIBRARIES}.")
+  message(STATUS "Adding MPI include: ${MPI_CXX_INCLUDE_PATH}.")
+  message(STATUS "Adding MPI libs: ${MPI_CXX_LIBRARIES}.")
 
 endif()
