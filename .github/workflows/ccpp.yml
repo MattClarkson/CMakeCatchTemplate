@@ -1,0 +1,19 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: make build dir
+      run:  mkdir build; cd build
+    - name: cmake
+      run: cmake ..
+    - name: make
+      run: make
+    - name: run tests
+      run: MYPROJECT-build/bin/mpBasicTest
