@@ -11,9 +11,9 @@ jobs:
     - uses: actions/checkout@v1
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
-      with:
-        modules: x11extras
-
+    - name: Install qt x11extras
+      run:  sudo apt-get install libqt5x11extras5
+      
     - name: make build dir
       run:  mkdir build
 
