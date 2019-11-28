@@ -1,4 +1,4 @@
-name: Build with Boost
+name: Build with PyBind
 
 on: [push]
 
@@ -14,9 +14,9 @@ jobs:
     - name: cmake
       run: cd build; cmake .. -DBUILD_Python_PyBind=ON
     - name: make
-      run: cd build; make
+      run: pwd; ls; cd build; make
     - name: run tests
-      run: pwd; ls; build/MYPROJECT-build/bin/mpBasicTest
+      run: build/MYPROJECT-build/bin/mpBasicTest
     - name: install python module
       run:  python setup.py install
     - name: run python code
