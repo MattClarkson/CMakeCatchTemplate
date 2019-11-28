@@ -17,10 +17,7 @@ jobs:
       run: cd build; make
     - name: run tests
       run: build/MYPROJECT-build/bin/mpBasicTest
-      
-     
-     -name: install python module
+    - name: install python module
       run:  python setup.py install
-     
-     -name: run python code
+    - name: run python code
       run:  python -c 'import CMakeCatchTemplatePython as myC; x = myC.my_first_add_function(4,6); print(x)'
