@@ -10,10 +10,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: make build dir
-      run:  mkdir build; cd build; pwd; ls ..
+      run:  mkdir build
     - name: cmake
-      run: cmake ..
+      run: cd build; cmake ..
     - name: make
-      run: make
+      run: cd build; make
     - name: run tests
-      run: MYPROJECT-build/bin/mpBasicTest
+      run: build/MYPROJECT-build/bin/mpBasicTest
