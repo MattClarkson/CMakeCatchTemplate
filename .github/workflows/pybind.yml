@@ -9,12 +9,14 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
+    - name: Checkout submodules
+      uses: textbook/git-checkout-submodule-action@2.0.0
     - name: make build dir
       run:  mkdir build
     - name: cmake
       run: cd build; cmake .. -DBUILD_Python_PyBind=ON
     - name: make
-      run: pwd; ls; cd build; make
+      run: cd build; make
     - name: run tests
       run: build/MYPROJECT-build/bin/mpBasicTest
     - name: install python module
