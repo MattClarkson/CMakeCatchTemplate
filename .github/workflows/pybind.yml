@@ -16,7 +16,7 @@ jobs:
     - name: make
       run: cd build; make
     - name: run tests
-      run: build/MYPROJECT-build/bin/mpBasicTest
+      run: pwd; ls; build/MYPROJECT-build/bin/mpBasicTest
     - name: install python module
       run:  python setup.py install
     - name: run python code
