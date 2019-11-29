@@ -4,24 +4,21 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v1
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v2
-    - name: Install qt x11extras
-      run:  sudo apt-get install libqt5x11extras5
-      
-    - name: make build dir
-      run:  mkdir build
+      - uses: actions/checkout@v1
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
 
-    - name: cmake 
-      run: cd build; cmake .. -DBUILD_QtVTKDemo=ON -DBUILD_VTK=ON
+      - name: make build dir
+        run: mkdir build
 
-    - name: make
-      run: cd build; make
-      
-    - name: run tests
-      run: build/MYPROJECT-build/bin/mpBasicTest
+      - name: cmake
+        run: cd build; cmake .. -DBUILD_QtVTKDemo=ON -DBUILD_VTK=ON -DBUILD_SHARED_LIBS:ON
+
+      - name: make
+        run: cd build; make
+
+      - name: run tests
+        run: build/MYPROJECT-build/bin/mpBasicTest
