@@ -21,7 +21,9 @@ jobs:
           make
 
       - name: Install python module
-        run: python setup.py install
+        run: |
+          pip install six
+          python setup.py install
 
       - name: Test python module
         run: python -c 'import CMakeCatchTemplatePython as myC; x = myC.my_first_add_function(4,6); print(x)'
