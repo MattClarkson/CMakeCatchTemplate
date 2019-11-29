@@ -1,5 +1,7 @@
 name: Build with PyBind
 
+name: Simple build with no options enabled
+
 on: [push]
 
 jobs:
@@ -9,17 +11,20 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: Checkout submodules
-      uses: textbook/git-checkout-submodule-action@2.0.0
-    - name: make build dir
-      run:  mkdir build
-    - name: cmake
-      run: cd build; cmake .. -DBUILD_Python_PyBind=ON
+    - uses: textbook/git-checkout-submodule-action@2.0.0
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.6'
+
     - name: make
-      run: cd build; make
-    - name: run tests
-      run: build/MYPROJECT-build/bin/mpBasicTest
-    - name: install python module
+      run:  |
+        mkdir build
+        cd build
+        cmake .. -DBUILD_Python_PyBind=ON
+        make
+
+    - name: Install python module
       run:  sudo python setup.py install
-    - name: run python code
+
+    - name: Test python module
       run:  python -c 'import CMakeCatchTemplatePython as myC; x = myC.my_first_add_function(4,6); print(x)'
