@@ -1,0 +1,29 @@
+name: Build with PyBoost
+
+on: [push]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: textbook/git-checkout-submodule-action@2.0.0
+      - uses: actions/setup-python@v1.1.1
+        with:
+          python-version: 3.6
+
+      - name: make
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DBUILD_Python_Boost=ON
+          make
+
+      - name: Install python module
+        run: |
+          pip install six
+          python setup.py install
+
+      - name: Test python module
+        run: python -c 'import CMakeCatchTemplatePython as myC; x = myC.my_first_add_function(4,6); print(x)'
