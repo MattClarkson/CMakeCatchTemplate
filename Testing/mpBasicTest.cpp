@@ -82,4 +82,5 @@ TEST_CASE("OpenCV test", "[OpenCV]")
 #ifdef BUILD_OpenCV
   cv::Matx44d mat = cv::Matx44d::eye();
   REQUIRE(cv::determinant(mat) == 1)
+#endif
 }
