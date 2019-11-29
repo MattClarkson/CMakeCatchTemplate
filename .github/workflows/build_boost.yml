@@ -3,7 +3,7 @@ name: Build with Boost support
 on: [push]
 
 jobs:
-  build:
+  build and test:
     runs-on: ubuntu-latest
 
     steps:
@@ -12,7 +12,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DBUILD_BOOST:ON
+          cmake .. -DBUILD_Boost:ON
           make
 
       - name: run tests & sample code
