@@ -12,7 +12,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DBUILD_Python_PyBind:ON
+          cmake ..
           make
 
       - name: run tests & sample code
