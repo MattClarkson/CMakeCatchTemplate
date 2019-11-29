@@ -20,3 +20,4 @@ jobs:
           ./mpBasicTest
           ./mpCommandLineArgsTest 1
           ./mpMyFirstApp
+        working-directory: build/MYPROJECT-build/bin
