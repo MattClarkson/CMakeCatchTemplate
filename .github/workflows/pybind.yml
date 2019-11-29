@@ -9,9 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: textbook/git-checkout-submodule-action@2.0.0
-      - uses: actions/setup-python@v1
-        with:
-          python-version: "3.6"
+      - uses: actions/setup-python@v1.1.1
+          python-version: 3.6
 
       - name: make
         run: |
