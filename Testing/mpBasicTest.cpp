@@ -77,7 +77,7 @@ TEST_CASE("Eigen test", "[Eigen]")
 #endif
 }
 
-TEST_CASE("OpenCV test", "[OpenCV")
+TEST_CASE("OpenCV test", "[OpenCV]")
 {
 #ifdef BUILD_OpenCV
   cv::Matx44d mat = cv::Matx44d::eye();
