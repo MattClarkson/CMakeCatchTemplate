@@ -54,7 +54,7 @@
 /**
  * \brief Demo file to check that includes and library linkage is correct.
  */
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
 
   int returnStatus = EXIT_FAILURE;
@@ -71,19 +71,21 @@ int main(int argc, char** argv)
 #endif
 
 #ifdef BUILD_Eigen
-    Eigen::MatrixXd m(2,2);
-    std::cout << "Printing 2x2 Eigen::MatrixXd ..." << std::endl << m << std::endl;
+    Eigen::MatrixXd m(2, 2);
+    std::cout << "(EIGEN) Printing 2x2 Eigen::MatrixXd ..." << std::endl
+              << m << std::endl;
 #endif
 
 #ifdef BUILD_Boost
-    std::cout << "Rounding to ... " << boost::math::round(0.123) << std::endl;
+    std::cout << "(BOOST) Rounding to ... " << boost::math::round(0.123) << std::endl;
     boost::posix_time::ptime startTime = boost::posix_time::second_clock::local_time();
-    boost::filesystem::path pathname( "/tmp/tmp.txt" );
+    boost::filesystem::path pathname("/tmp/tmp.txt");
 #endif
 
 #ifdef BUILD_OpenCV
     cv::Matx44d matrix = cv::Matx44d::eye();
-    std::cout << "Printing 4x4 matrix ..." << std::endl << matrix << std::endl;
+    std::cout << "(OpenCV) Printing 4x4 matrix ..." << std::endl
+              << matrix << std::endl;
 
 #ifdef MYPROJECT_USE_CUDA
     int deviceCount = cv::cuda::getCudaEnabledDeviceCount();
@@ -116,11 +118,11 @@ int main(int argc, char** argv)
 
     returnStatus = EXIT_SUCCESS;
   }
-  catch (mp::Exception& e)
+  catch (mp::Exception &e)
   {
     std::cerr << "Caught mp::Exception: " << e.GetDescription() << std::endl;
   }
-  catch (std::exception& e)
+  catch (std::exception &e)
   {
     std::cerr << "Caught std::exception: " << e.what() << std::endl;
   }
