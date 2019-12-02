@@ -24,8 +24,7 @@ jobs:
           make
 
           cd WORKFLOWPROJECT-build/bin
-          pwd
 
-          ./mpBasicTest
-          ./mpCommandLineArgsTest 1
-          ./mpMyFirstApp
+          ./wfpBasicTest
+          ./wfpCommandLineArgsTest 1
+          ./wfpMyFirstApp
