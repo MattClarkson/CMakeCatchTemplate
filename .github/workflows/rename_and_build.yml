@@ -14,7 +14,19 @@ jobs:
         run: |
           cd ..
           git clone https://github.com/tdowrick/CMakeTemplateRenamer
-          yes Y | CMakeTemplateRenamer/rename.sh CMakeCatchTemplate WorkflowProject WorkflowProject workflowproject WORKFLOWPROJECT "Tom's project" wfp Y pywfp
+          # Renamer arguments are: Existing folder name new folder name, new project name, project description, new namespace[instead of mp::], delete git history[Y/N], python package name (optional)
+
+          FOLDER_TO_CLONE=CMakeCatchTemplate
+          NEW_FOLDER_NAME=WorkflowProject
+          NEW_PROJECT_NAME_CAMELCASE=WorkflowProject
+          NEW_PROJECT_NAME_LOWER_CASE=${NEW_PROJECT_NAME_CAMELCASE,,}
+          NEW_PROJECT_NAME_CAPS=${NEW_PROJECT_NAME_CAMELCASE^^}
+          NEW_SHORT_DESCRIPTION="Tom's project"
+          NEW_NAMESPACE="tp"
+          DEL_GIT_LOG=Y
+          PYTHON_PACKAGE_NAME=pyTom
+
+          yes Y | CMakeTemplateRenamer/rename.sh FOLDER_TO_CLONE NEW_PROJECT_NAME_CAMELCASE NEW_PROJECT_NAME_LOWER_CASE NEW_PROJECT_NAME_CAPS NEW_SHORT_DESCRIPTION NEW_NAMESPACE DEL_GIT_LOG PYTHON_PACKAGE_NAME
 
           cd WorkflowProject
 
@@ -25,6 +37,7 @@ jobs:
 
           cd WORKFLOWPROJECT-build/bin
 
-          ./wfpBasicTest
-          ./wfpCommandLineArgsTest 1
-          ./wfpMyFirstApp
+          # As we have renamed the project, the 
+          ./tpBasicTest
+          ./tpCommandLineArgsTest 1
+          ./tpMyFirstApp
