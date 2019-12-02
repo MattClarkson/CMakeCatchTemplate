@@ -24,6 +24,7 @@ jobs:
           make
 
           cd WORKFLOWPROJECT-build/bin
+          pwd
 
           ./mpBasicTest
           ./mpCommandLineArgsTest 1
