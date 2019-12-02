@@ -23,7 +23,7 @@ jobs:
           cmake ..
           make
 
-          cd build/WORKFLOWPROJECT-build/bin
+          cd WORKFLOWPROJECT-build/bin
 
           ./mpBasicTest
           ./mpCommandLineArgsTest 1
