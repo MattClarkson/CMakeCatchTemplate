@@ -62,6 +62,11 @@ TEST_CASE("Simple add", "[MyFirstAddFunction]")
   REQUIRE(mp::MyFirstAddFunction(1, 2) == 3);
 }
 
+TEST_CASE("Simple multiply", "[MyFirstMultiplyFunction]")
+{
+  REQUIRE(mp::MyFirstMultiplicationFunction(3, 4) == 12);
+}
+
 TEST_CASE("Boost test", "[Boost]")
 {
 #ifdef BUILD_Boost

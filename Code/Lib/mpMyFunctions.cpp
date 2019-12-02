@@ -15,7 +15,8 @@
 #include "mpMyFunctions.h"
 #include <iostream>
 
-namespace mp {
+namespace mp
+{
 
 //-----------------------------------------------------------------------------
 int MyFirstAddFunction(int a, int b)
@@ -23,4 +24,9 @@ int MyFirstAddFunction(int a, int b)
   return a + b;
 }
 
-} // end namespace
+int MyFirstMultiplicationFunction(int a, int b)
+{
+  return a * b;
+}
+
+} // namespace mp

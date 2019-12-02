@@ -29,7 +29,8 @@ namespace mp
 * \brief My first function, adds two integers.
 */
 MYPROJECT_WINEXPORT int MyFirstAddFunction(int a, int b);
+MYPROJECT_WINEXPORT int MyFirstMultiplicationFunction(int a, int b);
 
-} // end namespace
+} // namespace mp
 
 #endif
