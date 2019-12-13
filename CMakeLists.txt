@@ -156,6 +156,13 @@ include(${CMAKE_SOURCE_DIR}/Utilities/CppCheck/MYPROJECTCppCheck.cmake)
 ######################################################################
 include(mpAddDocs)
 
+######################################################################
+# Check for Doxygen at Superbuild stage, so we don't get unexpected
+# build failures later on.
+######################################################################
+if (BUILD_Docs)
+  find_package(Doxygen REQUIRED)
+endif()
 
 ######################################################################
 # Setting supported build types. Should ONLY be Release or Debug.

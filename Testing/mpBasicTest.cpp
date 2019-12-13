@@ -77,7 +77,7 @@ TEST_CASE("Boost test", "[Boost]")
 TEST_CASE("Eigen test", "[Eigen]")
 {
 #ifdef BUILD_Eigen
-  Eigen::Matrix4d mat = Eigen::Matrix4d.Identity();
+  Eigen::Matrix4d mat = Eigen::Matrix4d::Identity();
   REQUIRE(mat.determinant() == 1);
 #endif
 }
