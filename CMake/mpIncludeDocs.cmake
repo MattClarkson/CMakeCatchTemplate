@@ -11,9 +11,7 @@
 #  See LICENSE.txt in the top level directory for details.
 #
 #============================================================================*/
-
 if(BUILD_Docs)
-  find_package(Doxygen REQUIRED)
   configure_file(${CMAKE_SOURCE_DIR}/Utilities/Doxygen/myprojectdoxygen.pl.in ${CMAKE_BINARY_DIR}/myprojectdoxygen.pl)
 
   # See comment in mpAddDocs.cmake.

@@ -1,0 +1,23 @@
+name: Build with Boost support
+
+on: [push]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: make
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DBUILD_Boost=ON
+          make
+
+      - name: run tests & sample code
+        run: |
+          ./mpBasicTest
+          ./mpCommandLineArgsTest 1
+          ./mpMyFirstApp
+        working-directory: build/MYPROJECT-build/bin

@@ -1,0 +1,33 @@
+name: Rename project using CMakeTemplateRenamer before building.
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: textbook/git-checkout-submodule-action@2.0.0
+
+      - name: Rename project, build, test
+        run: |
+          cd ..
+          git clone https://github.com/tdowrick/CMakeTemplateRenamer
+
+          # Renamer arguments are: Existing folder name, new folder name, new project name, project description, new namespace[instead of mp::], delete git history[Y/N], python package name (optional)
+          yes Y | CMakeTemplateRenamer/rename.sh CMakeCatchTemplate WorkflowProject WorkflowProject "Tom's project" tp Y pyTom
+          
+          cd WorkflowProject
+
+          mkdir build
+          cd build
+          cmake ..
+          make
+
+          cd WORKFLOWPROJECT-build/bin
+
+          # As we have renamed the project, the 
+          ./tpBasicTest
+          ./tpCommandLineArgsTest 1
+          ./tpMyFirstApp

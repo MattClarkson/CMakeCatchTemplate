@@ -14,7 +14,10 @@
 
 add_subdirectory(Lib)
 add_subdirectory(CommandLineApps) # Must go before GuiApps for fixup_bundle to work.
-add_subdirectory(GuiApps)
+
+if (BUILD_QtVTKDemo OR BUILD_QMLVTKDemo OR BUILD_QOpenGLDemo)
+  add_subdirectory(GuiApps)
+endif()
 
 if(BUILD_Python_Boost)
   add_subdirectory(PythonBoost)

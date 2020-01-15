@@ -33,9 +33,6 @@ if(BUILD_PYTHON_BINDINGS AND BUILD_QOpenGLDemo)
   message("Forcing BUILD_QOpenGLDemo to OFF as you want a python module.")
 endif()
 
-option(MYPROJECT_USE_QT "Use Qt." OFF)
-mark_as_advanced(MYPROJECT_USE_QT) # Qt gets baked into VTK, so really developers should not fiddle with this.
-
 if(BUILD_QtVTKDemo AND NOT MYPROJECT_USE_QT)
   set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt." FORCE)
   message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QtVTKDemo being ON.")
@@ -64,6 +61,11 @@ endif()
 if(BUILD_QOpenGLDemo AND NOT MYPROJECT_USE_QT)
   set(MYPROJECT_USE_QT ON CACHE BOOL "Use Qt." FORCE)
   message("Forcing MYPROJECT_USE_QT to ON due to BUILD_QOpenGLDemo being ON.")
+endif()
+
+if(NOT BUILD_QOpenGLDemo AND NOT BUILD_QMLVTKDemo AND NOT BUILD_QtVTKDemo AND MYPROJECT_USE_QT)
+	set(MYPROJECT_USE_QT OFF CACHE BOOL "Use Qt." FORCE)
+  message("Setting MYPROJECT_USE_QT to OFF as nothing requires it")
 endif()
 
 ######################################################################
