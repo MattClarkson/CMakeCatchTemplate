@@ -13,7 +13,7 @@ jobs:
       - name: Rename project, build, test
         run: |
           cd ..
-          git clone https://github.com/tdowrick/CMakeTemplateRenamer
+          git clone https://github.com/MattClarkson/CMakeTemplateRenamer
 
           # Renamer arguments are: Existing folder name, new folder name, new project name, project description, new namespace[instead of mp::], delete git history[Y/N], python package name (optional)
           yes Y | CMakeTemplateRenamer/rename.sh CMakeCatchTemplate WorkflowProject WorkflowProject "Tom's project" tp Y pyTom
