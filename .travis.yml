@@ -17,10 +17,6 @@
 #        and : https://github.com/thompson318/ndicapi-wheels
 
 language: python
-# The Travis Python version is unrelated to the version we build and test
-# with.  We set our desired python version with the MB_PYTHON_VERSION variable.
-python: 3.6
-sudo: required
 dist: xenial
 services: docker
 
