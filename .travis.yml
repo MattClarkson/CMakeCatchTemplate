@@ -16,7 +16,7 @@
 #        and : https://github.com/matthew-brett/multibuild
 #        and : https://github.com/thompson318/ndicapi-wheels
 
-language: python
+language: generic
 dist: xenial
 services: docker
 
@@ -57,12 +57,17 @@ matrix:
       language: generic
       env:
         - MB_PYTHON_VERSION=3.6
-        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
+        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.9"
     - os: osx
       language: generic
       env:
         - MB_PYTHON_VERSION=3.7
-        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
+        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.9"
+    - os: osx
+      language: generic
+      env:
+        - MB_PYTHON_VERSION=3.8
+        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.9"
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.6
@@ -76,6 +81,13 @@ matrix:
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.7
+        - PLAT=i686
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.8
+    - os: linux
+      env:
+        - MB_PYTHON_VERSION=3.8
         - PLAT=i686
 
 before_install:
