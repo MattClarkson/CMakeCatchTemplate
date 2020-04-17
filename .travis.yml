@@ -57,17 +57,14 @@ matrix:
       language: generic
       env:
         - MB_PYTHON_VERSION=3.6
-        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.9"
     - os: osx
       language: generic
       env:
         - MB_PYTHON_VERSION=3.7
-        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.9"
     - os: osx
       language: generic
       env:
         - MB_PYTHON_VERSION=3.8
-        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.9"
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.6
