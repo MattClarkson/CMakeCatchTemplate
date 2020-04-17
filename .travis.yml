@@ -18,10 +18,10 @@
 
 language: python
 # The Travis Python version is unrelated to the version we build and test
-# with.  This is set with the MB_PYTHON_VERSION variable.
+# with.  We set our desired python version with the MB_PYTHON_VERSION variable.
 python: 3.6
 sudo: required
-dist: trusty
+dist: xenial
 services: docker
 
 # To Do: Where to put these?
@@ -56,16 +56,7 @@ env:
 
 matrix:
   fast_finish: true
-  exclude:
-    # Exclude the default Python 3.6 build
-    - python: 3.6
   include:
-    # Builds for MacOS
-    - os: osx
-      language: generic
-      env:
-        - MB_PYTHON_VERSION=2.7
-        - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
     - os: osx
       language: generic
       env:
@@ -76,30 +67,6 @@ matrix:
       env:
         - MB_PYTHON_VERSION=3.7
         - BDIST_PARAMS="-- -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=10.7"
-   # Builds for Linux
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=2.7
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=2.7
-        - UNICODE_WIDTH=16
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=2.7
-        - PLAT=i686
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=2.7
-        - PLAT=i686
-        - UNICODE_WIDTH=16
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=3.5
-    - os: linux
-      env:
-        - MB_PYTHON_VERSION=3.5
-        - PLAT=i686
     - os: linux
       env:
         - MB_PYTHON_VERSION=3.6
