@@ -100,6 +100,7 @@ setup(
     version=versioneer.get_version(),
     author='Matt Clarkson',
     author_email='m.clarkson@ucl.ac.uk',
+    url='https://github.com/MattClarkson/CMakeCatchTemplate',
     description='A template project, to enable people to build nicely structured C++ projects.',
     long_description=long_description,
     long_description_content_type='text/markdown',
