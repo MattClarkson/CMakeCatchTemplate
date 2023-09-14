@@ -23,7 +23,7 @@ and [Dr. Matt Clarkson](https://iris.ucl.ac.uk/iris/browse/profile?upi=MJCLA42).
 Main Features
 -------------
 
-The main idea of this project is to try and help a C++ algorithm developer write their algorithm in a
+The main idea of this project is to try and help a C++ algorithm developer write their algorithm in a 
 C++ library and then deploy the C++ library in a variety of scenarios. 
 
 The main features provided are:
